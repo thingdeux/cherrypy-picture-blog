@@ -1,0 +1,21 @@
+body {
+	background: black;
+	font-size: 16px;
+	font-family: Serif;
+	color: white;
+}
+
+#large_j
+{
+	position: relative;
+	left: 40%;
+}
+.very_large_text {
+	color: white;
+	font-size: 500px;
+}
+
+#picture_scroller {
+	position: absolute;
+	bottom: 0;
+}
