@@ -1,36 +1,37 @@
 import cherrypy
-import os
 from mako.template import Template
 from mako.lookup import TemplateLookup
+import os
+import src.logger as logger
+import src.database as database
+import src.pictureConverter as pictureConverter
+import src.locations as locations
 
-current_folder = os.path.dirname(os.path.abspath(__file__))
 
 cherrypy.config.update({ 'server.socket_host': '0.0.0.0',
                          'server.socket_port': 1234,
                          })
 
 
-conf = {         
+conf = {        
         '/static': { 'tools.staticdir.on' : True,
-                      'tools.staticdir.dir': os.path.join(current_folder, 'static')
+                      'tools.staticdir.dir': os.path.join(locations.current_folder(), 'static')
                     },
          '/static/css': { 'tools.staticdir.on' : True,
-                          'tools.staticdir.dir': os.path.join(current_folder, 'static/css')
+                          'tools.staticdir.dir': os.path.join(locations.current_folder(), 'static/css')
                         },
          '/js': { 'tools.staticdir.on' : True,
-                      'tools.staticdir.dir': os.path.join(current_folder, 'js')
+                      'tools.staticdir.dir': os.path.join(locations.current_folder(), 'js')
                     },
          '/js/lib': { 'tools.staticdir.on' : True,
-                          'tools.staticdir.dir': os.path.join(current_folder, 'js/lib')
+                          'tools.staticdir.dir': os.path.join(locations.current_folder(), 'js/lib')
                         },
         'favicon.ico': {
                         'tools.staticfile.on': True,
-                        'tools.staticfile.filename': os.path.join(current_folder, "/static/favicon.ico")
-        },
+                        'tools.staticfile.filename': os.path.join(locations.current_folder(), "static/favicon.ico")
+                    },
 
         }
-
-
 
 
 class web_server(object):
@@ -47,4 +48,11 @@ class web_server(object):
     
         
 
-cherrypy.quickstart(web_server(), config=conf)
+
+try:
+  #database.verify_database_existence()
+  cherrypy.quickstart(web_server(), config=conf)
+  #logger.log('Punk')
+except:
+  print("no dice")
+
