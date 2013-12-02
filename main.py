@@ -7,6 +7,7 @@ import src.database as database
 import src.pictureConverter as pictureConverter
 import src.locations as locations
 
+server_mode = "debug"
 
 cherrypy.config.update({ 'server.socket_host': '0.0.0.0',
                          'server.socket_port': 1234,
@@ -51,12 +52,19 @@ class web_server(object):
 def startServer():
 
   if database.verify_database_existence():
-    database.verify_folder_existence()  #If the images and thumbnails folder don't exist create them
-    cherrypy.quickstart(web_server(), config=conf)    
+    try:
+      database.verify_folder_existence()  #If the images and thumbnails folder don't exist create them
+      cherrypy.quickstart(web_server(), config=conf)
+    except Exception, err:
+      for error in err:
+        log("Unable to start Webserver" + str(error))
   else:
     database.create_fresh_tables()
+    if server_mode is "debug":
+        database.create_test_data()
+
     startServer()
 
 
-startServer()
 
+#startServer()
