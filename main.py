@@ -53,18 +53,21 @@ def startServer():
 
   if database.verify_database_existence():
     try:
-      database.verify_folder_existence()  #If the images and thumbnails folder don't exist create them
+      database.verify_folder_existence()  #If the images and thumbnails folder don't exist create them.
+      
+      if server_mode is "debug":
+        if database.get_latest_image_id() is 1:
+          database.create_test_data()
+
       cherrypy.quickstart(web_server(), config=conf)
     except Exception, err:
       for error in err:
         log("Unable to start Webserver" + str(error))
-  else:
-    database.create_fresh_tables()
-    if server_mode is "debug":
-        database.create_test_data()
 
+  else:
+    database.create_fresh_tables()       
     startServer()
 
 
 
-#startServer()
+startServer()

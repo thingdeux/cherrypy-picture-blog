@@ -26,7 +26,7 @@ def create_fresh_tables():
 	db = db_connection.cursor()
 		
 	db.execute('''CREATE TABLE images 
-			(id INTEGER PRIMARY KEY, name TEXT, location TEXT, date_added INTEGER,
+			(id INTEGER PRIMARY KEY, name TEXT, image_location TEXT, thumb_location, date_added INTEGER,
 				date_taken INTEGER, caption TEXT)''')
 	db.execute('''CREATE TABLE tags (id INTEGER PRIMARY KEY, image_id integer, tag TEXT)''')
 	db.execute('''CREATE TABLE alerts (id INTEGER PRIMARY KEY, alert TEXT, status TEXT, date_added INTEGER, inactive_date INTEGER)''')
@@ -36,6 +36,7 @@ def create_fresh_tables():
 
 
 	db_connection.commit()
+	log("Database: Created DB Schema")
 	db_connection.close()
 
 def connect_to_database():
@@ -55,12 +56,15 @@ def create_test_data():
 	db_connection = connect_to_database()
 	db = db_connection.cursor()
 
+	isave = locations.image_save_location()
+	tsave = locations.thumbnail_save_location()
+
 	#Buid data string to insert
 	imageData = [
-		(None, 'Callie Hanging out', os.path.join(locations.image_save_location(), '1.jpg'), get_time(), get_time(), "Callie hanging out"),
-		(None, 'Callie Christmas', os.path.join(locations.image_save_location(), '2.jpg'), get_time(), get_time(), ""),
-		(None, 'Boop', os.path.join(locations.image_save_location(), '3.jpg'), get_time(), get_time(), ""),
-		(None, 'Squeak', os.path.join(locations.image_save_location(), '4.jpg'), get_time(), get_time(), ""),		
+		(None, 'Callie Hanging out', os.path.join(isave, '1.jpg'), os.path.join(tsave, '1.jpg'),get_time(), get_time(), "Callie hanging out"),
+		(None, 'Callie Christmas', os.path.join(isave, '2.jpg'), os.path.join(tsave, '2.jpg'),get_time(), get_time(), ""),
+		(None, 'Boop', os.path.join(isave, '3.jpg'), os.path.join(tsave, '3.jpg'),get_time(), get_time(), ""),
+		(None, 'Squeak', os.path.join(isave, '4.jpg'), os.path.join(tsave, '4.jpg'),get_time(), get_time(), ""),		
 	]		
 
 	tagData = [
@@ -79,7 +83,7 @@ def create_test_data():
 
 	]
 
-	db.executemany('INSERT INTO images VALUES (?,?,?,?,?,?)', imageData)
+	db.executemany('INSERT INTO images VALUES (?,?,?,?,?,?,?)', imageData)
 	db.executemany('INSERT INTO tags VALUES (?,?,?)', tagData)
 	db.executemany('INSERT INTO alerts VALUES (?,?,?,?,?)', alertData)
 
@@ -127,3 +131,20 @@ def get_latest_image_id():
 		for error in err:
 			log("DataBase: Unable to get images table count " + str(error) )
 			return (False)
+
+
+def insert_image_record(**kwargs):
+	imageData = [
+		(None, 'Callie Hanging out', os.path.join(locations.image_save_location(), '1.jpg'), get_time(), get_time(), "Callie hanging out"),
+	]
+
+	name = kwargs.get('name')
+	image_location = kwargs.get('image_location')
+	thumb_location = kwargs.get('thumb_location')
+	date_added = get_time()
+	#date_taken = 
+
+
+
+
+#insert_image_record(test = "Blah")
