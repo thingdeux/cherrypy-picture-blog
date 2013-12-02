@@ -26,7 +26,7 @@ def create_fresh_tables():
 	db = db_connection.cursor()
 		
 	db.execute('''CREATE TABLE images 
-			(id INTEGER PRIMARY KEY, name TEXT, image_location TEXT, thumb_location, date_added INTEGER,
+			(id INTEGER PRIMARY KEY, name TEXT, image_location TEXT, thumb_location TEXT, date_added INTEGER,
 				date_taken INTEGER, caption TEXT)''')
 	db.execute('''CREATE TABLE tags (id INTEGER PRIMARY KEY, image_id integer, tag TEXT)''')
 	db.execute('''CREATE TABLE alerts (id INTEGER PRIMARY KEY, alert TEXT, status TEXT, date_added INTEGER, inactive_date INTEGER)''')
@@ -133,18 +133,27 @@ def get_latest_image_id():
 			return (False)
 
 
-def insert_image_record(**kwargs):
-	imageData = [
-		(None, 'Callie Hanging out', os.path.join(locations.image_save_location(), '1.jpg'), get_time(), get_time(), "Callie hanging out"),
-	]
+def insert_image_record(*args, **kwargs):
 
-	name = kwargs.get('name')
+	db_connection = connect_to_database()
+	db = db_connection.cursor()
+
+	name = kwargs.get('name')	
 	image_location = kwargs.get('image_location')
 	thumb_location = kwargs.get('thumb_location')
 	date_added = get_time()
-	#date_taken = 
+	date_taken =  kwargs.get('date_taken')
+	caption = kwargs.get('caption')
 
+	imageData = [
+		(None, name, image_location, thumb_location, date_added, date_taken, caption),
+	]
 
-
-
-#insert_image_record(test = "Blah")
+	try:
+		db.executemany('INSERT INTO images VALUES (?,?,?,?,?,?,?)', imageData)
+		db_connection.commit()
+		db_connection.close()
+	except Exception, err:
+		for error in err:			
+			log("Database: Unable to insert image record - " + str(error))
+			db_connection.close()
