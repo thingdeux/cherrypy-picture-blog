@@ -118,9 +118,9 @@ def get_latest_image_id():
 	try:
 		db.execute('''SELECT Count(*) from images''')
 		the_count = db.fetchone()
-
 		db_connection.close()
-		return (the_count[0])
+
+		return (the_count[0] + 1)
 	except Exception, err:
 		db_connection.close()
 		
