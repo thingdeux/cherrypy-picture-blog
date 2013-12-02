@@ -1,6 +1,7 @@
 from PIL import Image
 import os
 import sys
+from database import get_latest_image_id
 from logger import log
 from locations import thumbnail_save_location
 from locations import image_save_location
@@ -13,9 +14,10 @@ def return_image_object(location):
 	try:
 		picObject = Image.open(location)
 		return (picObject)
-	except:
-		log ("Unable to open picture")
-		return (False)
+	except Exception, err:
+		for error in err:
+			log ("Unable to open picture" + str(err))
+			return (False)
 
 def convert_image_to_thumbnail(picObject):	
 		
@@ -24,11 +26,11 @@ def convert_image_to_thumbnail(picObject):
 		picObject.thumbnail( thumbnail_size )
 		
 		#Get latest DB id and append to the filename 
-		save_location = os.path.join(thumbnail_save_location(), '1' + '.jpg')		
+		save_location = os.path.join(thumbnail_save_location(), str(get_latest_image_id) + '.jpg')		
 		picObject.save(save_location, "JPEG")
 	except Exception, err:
 		for error in err:
-			log ("Thumbnail Save Error - " + str(error) )
+			log ("Thumbnail Save Error" + str(error) )
 
 
 #def create_watermark(location):
