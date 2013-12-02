@@ -5,9 +5,9 @@ def current_folder():
 	return (the_current_folder.rstrip('src'))
 
 def image_save_location():
-	current_folder = os.path.dirname(os.path.abspath(__file__))
-	os.path.join(current_folder, 'images')
+	save_location = os.path.join(current_folder(), 'images')
+	return (save_location)
 
 def thumbnail_save_location():
-	current_folder = os.path.dirname(os.path.abspath(__file__))
-	os.path.join(current_folder, 'thumbnails')
+	save_location = os.path.join(current_folder(), 'thumbnails')
+	return (save_location)

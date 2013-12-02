@@ -48,11 +48,15 @@ class web_server(object):
     
         
 
+def startServer():
 
-try:
-  #database.verify_database_existence()
-  cherrypy.quickstart(web_server(), config=conf)
-  #logger.log('Punk')
-except:
-  print("no dice")
+  if database.verify_database_existence():
+    database.verify_folder_existence()  #If the images and thumbnails folder don't exist create them
+    cherrypy.quickstart(web_server(), config=conf)    
+  else:
+    database.create_fresh_tables()
+    startServer()
+
+
+startServer()
 
