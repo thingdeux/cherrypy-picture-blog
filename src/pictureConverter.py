@@ -25,7 +25,8 @@ class WebsiteImage:
 
 		try:
 			self.save_uploaded_images()
-			#insert_image_record(self.image_location, self.thumb_location)
+			insert_image_record(name = "Test", image_location=self.image_location, thumb_location=self.thumb_location,
+								date_taken=self.date_taken, caption="Test Caption")
 		except Exception, err:
 			for error in err:
 				log("Image: Unable to save images" + str(error))
@@ -93,11 +94,15 @@ class WebsiteImage:
 				log("Image: Unable to save images " + str(error))
 
 	def get_date_taken(self):
-		exif_data = self.picObject._getexif()
+		try:
+			exif_data = self.picObject._getexif()
 
-		#Get the 'date taken' exif data and return it
-		return ( exif_data.get(36867) )		
+			#Get the 'date taken' exif data and return it
+			return ( exif_data.get(36867) )		
+		except:
+			log("Unable to get EXIF")
+			return(0)
 
 
-WebsiteImage('C:\Users\Thing2\Pictures\Blackup.jpg')
+WebsiteImage('C:\Users\Thing2\Pictures\HowdySailor.png')
 
