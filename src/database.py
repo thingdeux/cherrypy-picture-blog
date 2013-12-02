@@ -1,13 +1,12 @@
 import sqlite3
 import os
-from . import logger
-#import src.database.debug
+import locations
+from logger import log
 
-current_path = os.path.dirname(os.path.abspath(__file__)	)
-db_path = os.path.join(current_path, '.database.db')
+db_path = os.path.join(locations.current_folder(), '.database.db')
 
 def verify_database_existence():
-#Check to see if DB exists
+	#Check to see if DB exists
 	if (os.path.isfile(db_path) ):
 		try:
 			db_connection = sqlite3.connect(db_path)
@@ -24,13 +23,12 @@ def create_fresh_tables():
 	db_connection = sqlite3.connect(db_path)
 	db = db_connection.cursor()
 		
-	db.execute('''CREATE TABLE jobs 
-			(id INTEGER PRIMARY KEY, url TEXT, status TEXT, time_left INTEGER,
-				time_queued INTEGER, source TEXT)''')
-	db.execute('''CREATE TABLE config 
-			(id INTEGER PRIMARY KEY, config_type TEXT, name TEXT, value TEXT, html_tag TEXT, html_display_name)''')
-	db.execute(''' CREATE INDEX sourceIndex ON jobs(source ASC) ''')
-	db.execute(''' CREATE INDEX statusIndex ON jobs(status ASC) ''')
+	db.execute('''CREATE TABLE images 
+			(id INTEGER PRIMARY KEY, name TEXT, location TEXT, date_added INTEGER,
+				date_taken INTEGER, caption TEXT)''')
+	db.execute('''CREATE TABLE tags (id, tag TEXT)''')
+	#db.execute(''' CREATE INDEX sourceIndex ON jobs(source ASC) ''')
+	#db.execute(''' CREATE INDEX statusIndex ON jobs(status ASC) ''')
 
 	db_connection.commit()
 	db_connection.close()
@@ -49,7 +47,7 @@ def connect_to_database():
 
 def create_test_data():
 	
-	db_connection = connectToDB()
+	db_connection = connect_to_database()
 	db = db_connection.cursor()
 
 	#Buid data string to insert
@@ -70,7 +68,7 @@ def create_test_data():
 	configData = [
 		(None,'E-Mail', 'email_username', 'pydownloadserver', 'text', 'GMail Username:'),
 		(None,'E-Mail', 'email_password', 'Kaiser123', 'password', 'Gmail Password:'),
-		(None,'General', 'download_path', current_path, 'text', "Download Location:"),
+		(None,'General', 'download_path', current_folder, 'text', "Download Location:"),
 		(None,'Server', 'server_host', '0.0.0.0', 'text', "Host:"),
 		(None,'Server', 'server_port', '12334', 'text', "Port")
 		
@@ -87,3 +85,31 @@ def create_test_data():
 		for error in err:
 			logger.log("Unable to insert test data" + error)
 			db_connection.close()			
+
+def verify_folder_existence():
+
+	if not os.path.isdir(locations.image_save_location()):
+		try:
+			os.mkdir( locations.image_save_location() )
+		except OSError, err:
+			for error in err:
+				log(error)
+
+
+
+	if not os.path.isdir(locations.thumbnail_save_location()):		
+		try:
+			os.mkdir( locations.thumbnail_save_location() )
+		except OSError, err:
+			for error in err:
+				log(error)
+
+
+
+def get_latest_image_id():
+	db_connection = connect_to_database()
+	db = db_connection.cursor()
+
+	the_count = db.execute('''COUNT tables''')
+	db_connect.close()
+	return (the_count)
