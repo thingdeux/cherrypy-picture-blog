@@ -1,0 +1,15 @@
+Create DB Schema:
+	*Seperate Tag table with id *Not auto incrementing* and tag.  So you can say give me image.id 1's tags
+
+	table example:
+	id	|	tag
+
+
+	1	,	josh
+	1	,	linz
+	1	,	callie
+
+
+	SELECT tag FROM tags WHERE id = 1
+
+
