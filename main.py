@@ -46,9 +46,26 @@ class web_server(object):
     self.mako_template_render = mako_template.render()                    
 
     return self.mako_template_render
-    
-        
 
+  @cherrypy.expose
+  def upload(self, **arguments):
+    #Create the below template using index.html (and looking up in the static folder)
+    mako_template = Template(filename='static/upload.html')
+    
+    #Render the mako template
+    self.mako_template_render = mako_template.render()                   
+
+    return self.mako_template_render
+
+  @cherrypy.expose
+  def uploadPicture(self, **kwargs):
+    #Takes a binary file and places it in the 'queue' folder for image processing
+    returned_body = kwargs.get('file')    
+    tempFile = open(os.path.join(locations.queue_save_location(), returned_body.filename), 'wb')    
+    tempFile.write(returned_body.file.read())       
+    tempFile.close()        
+
+      
 def startServer():
 
   if database.verify_database_existence():

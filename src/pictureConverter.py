@@ -19,17 +19,21 @@ class WebsiteImage:
 			self.thumbnail = self.convert_image_to_thumbnail()
 			self.date_taken = self.get_date_taken()
 
+			try:
+				self.save_uploaded_images()
+
+				#Change name and caption to be real values
+				insert_image_record(name = "Test", image_location=self.image_location, thumb_location=self.thumb_location,
+									date_taken=self.date_taken, caption="Test Caption")
+			except Exception, err:
+				for error in err:
+					log("Image: Unable to save images" + str(error))
+
 		except Exception, err:
 			for error in err:
 				log("Image: Unable to process image - " + str(error))
 
-		try:
-			self.save_uploaded_images()
-			insert_image_record(name = "Test", image_location=self.image_location, thumb_location=self.thumb_location,
-								date_taken=self.date_taken, caption="Test Caption")
-		except Exception, err:
-			for error in err:
-				log("Image: Unable to save images" + str(error))
+
 
 	def return_image_object(self):
 		try:
@@ -37,7 +41,7 @@ class WebsiteImage:
 			return (pictureObject)
 		except Exception, err:
 			for error in err:
-				log ("Unable to open picture" + str(err))
+				log ("Unable to open picture - " + str(err))
 				return (False)
 
 	def convert_image_to_thumbnail(self):
@@ -102,7 +106,4 @@ class WebsiteImage:
 		except:
 			log("Unable to get EXIF")
 			return(0)
-
-
-WebsiteImage('C:\Users\Thing2\Pictures\HowdySailor.png')
 

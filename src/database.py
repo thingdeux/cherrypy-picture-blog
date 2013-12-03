@@ -105,14 +105,20 @@ def verify_folder_existence():
 			for error in err:
 				log(error)
 
-
-
 	if not os.path.isdir(locations.thumbnail_save_location()):		
 		try:
 			os.mkdir( locations.thumbnail_save_location() )
 		except OSError, err:
 			for error in err:
 				log(error)
+
+	if not os.path.isdir(locations.queue_save_location()):
+		try:
+			os.mkdir( locations.queue_save_location() )
+		except OSError, err:
+			for error in err:
+				log(error)
+
 
 
 
