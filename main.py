@@ -63,7 +63,7 @@ class web_server(object):
     returned_body = kwargs.get('file')    
     tempFile = open(os.path.join(locations.queue_save_location(), returned_body.filename), 'wb')    
     tempFile.write(returned_body.file.read())       
-    tempFile.close()        
+    tempFile.close()
 
       
 def startServer():
