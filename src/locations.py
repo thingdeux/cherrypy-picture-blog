@@ -11,3 +11,7 @@ def image_save_location():
 def thumbnail_save_location():
 	save_location = os.path.join(current_folder(), 'thumbnails')
 	return (save_location)
+
+def queue_save_location():
+	save_location = os.path.join(current_folder(), 'queue')
+	return (save_location)
