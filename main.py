@@ -3,6 +3,7 @@ from mako.template import Template
 from mako.lookup import TemplateLookup
 import os
 import src.logger as logger
+from src.logger import log
 import src.database as database
 import src.pictureConverter as pictureConverter
 import src.locations as locations
@@ -60,12 +61,18 @@ class web_server(object):
   @cherrypy.expose
   def uploadPicture(self, **kwargs):
     #Takes a binary file and places it in the 'queue' folder for image processing
-    returned_body = kwargs.get('file')    
-    tempFile = open(os.path.join(locations.queue_save_location(), returned_body.filename), 'wb')    
-    tempFile.write(returned_body.file.read())       
-    tempFile.close()
 
-      
+    try:
+      uploadObj = kwargs.get('file[]')          
+    
+      for cherrypyObj in uploadObj:      
+        tempFile = open(os.path.join(locations.queue_save_location(), cherrypyObj.filename), 'wb')    
+        tempFile.write(cherrypyObj.file.read()) 
+        tempFile.close()
+    except Exception, err:
+      for error in err:
+        log("Unable to receive upload - " + error)
+        
 def startServer():
 
   if database.verify_database_existence():
