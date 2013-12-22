@@ -33,13 +33,15 @@ $(document).ready(function() {
 Dropzone.options.uploadDropzone = {
 
   // Prevents Dropzone from uploading dropped files immediately, waits for click of upload button
-  autoProcessQueue: false,  
+  autoProcessQueue: false,    
   dictDefaultMessage: "",  
   acceptedFiles: "image/*",
   thumbnailWidth: 65,
   thumbnailHeight: 65,
   uploadMultiple: true,
   parallelUploads: 20,
+  maxThumbnailFilesize: 1,
+  maxFilesize: 8, //In MB
 
 
 

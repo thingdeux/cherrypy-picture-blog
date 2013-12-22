@@ -61,18 +61,44 @@ class web_server(object):
   @cherrypy.expose
   def uploadPicture(self, **kwargs):
     #Takes a binary file and places it in the 'queue' folder for image processing
+    def write_uploaded_image_file(location):
+      tempFile = open(location, 'wb')
+      tempFile.write(cherrypyObj.file.read()) 
+      tempFile.close()
+
+    def get_duplicate_image_file_count(location, filename):
+      filename_found_count = 0
+      filename_without_extension = filename.split('.')[0]
+
+      for image_file in os.listdir(location):
+        print(filename_without_extension + " in " + image_file)
+
+        if filename_without_extension in image_file:
+          filename_found_count = filename_found_count + 1
+
+      return (filename_found_count)
+
 
     try:
+      #Object of each file passed to the server via post
       uploadObj = kwargs.get('file[]')          
-    
-      for cherrypyObj in uploadObj:      
-        tempFile = open(os.path.join(locations.queue_save_location(), cherrypyObj.filename), 'wb')    
-        tempFile.write(cherrypyObj.file.read()) 
-        tempFile.close()
+
+      for cherrypyObj in uploadObj:
+        #Save each file in the queue_save_location folder as its own filename
+
+        #If a duplicate filename is found append -1 to the file and write it anyhow      
+        if not os.path.isfile( os.path.join(locations.queue_save_location(), cherrypyObj.filename) ):
+          print("No File exists")
+          write_uploaded_image_file( os.path.join(locations.queue_save_location(), cherrypyObj.filename) )
+        else:          
+          count = get_duplicate_image_file_count(locations.queue_save_location(), cherrypyObj.filename)
+          filename_with_count = cherrypyObj.filename.replace('.', '-' + str(count) + '.')
+          write_uploaded_image_file( os.path.join(locations.queue_save_location(),  filename_with_count) )
+
     except Exception, err:
       for error in err:
         log("Unable to receive upload - " + error)
-        
+      
 def startServer():
 
   if database.verify_database_existence():
