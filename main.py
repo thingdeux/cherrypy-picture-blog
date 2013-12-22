@@ -59,6 +59,28 @@ class web_server(object):
     return self.mako_template_render
 
   @cherrypy.expose
+  def process(self, **arguments):
+    #Create the below template using index.html (and looking up in the static folder)
+    mako_template = Template(filename='static/process.html')
+    
+    #Render the mako template
+    self.mako_template_render = mako_template.render()                   
+
+    return self.mako_template_render
+
+  @cherrypy.expose
+  def manage(self, **arguments):
+    #Create the below template using index.html (and looking up in the static folder)
+    mako_template = Template(filename='static/manage.html')
+    
+    #Render the mako template
+    self.mako_template_render = mako_template.render()                   
+
+    return self.mako_template_render
+
+
+
+  @cherrypy.expose
   def uploadPicture(self, **kwargs):
     #Takes a binary file and places it in the 'queue' folder for image processing
     def write_uploaded_image_file(location):
@@ -87,10 +109,11 @@ class web_server(object):
         #Save each file in the queue_save_location folder as its own filename
 
         #If a duplicate filename is found append -1 to the file and write it anyhow      
-        if not os.path.isfile( os.path.join(locations.queue_save_location(), cherrypyObj.filename) ):
-          print("No File exists")
+        if not os.path.isfile( os.path.join(locations.queue_save_location(), cherrypyObj.filename) ):          
           write_uploaded_image_file( os.path.join(locations.queue_save_location(), cherrypyObj.filename) )
-        else:          
+        else:
+          #Find out how many files exist with the same name and append a count of the files to the filename - super hacky!!   
+          #Known problem of fuzzy matching between already existing files.  Not serious as copy will be made either way.
           count = get_duplicate_image_file_count(locations.queue_save_location(), cherrypyObj.filename)
           filename_with_count = cherrypyObj.filename.replace('.', '-' + str(count) + '.')
           write_uploaded_image_file( os.path.join(locations.queue_save_location(),  filename_with_count) )
