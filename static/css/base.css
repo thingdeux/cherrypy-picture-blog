@@ -54,6 +54,8 @@ body {
 
 #statistics {
 	position: absolute;
-	right: 20%;
-	top: 0;
+	right: 0%;
+	top: 0;		
+	text-align: center;
+	width: 15%;
 }
