@@ -1,3 +1,23 @@
+[WEB]
+
+
+Create process page
+Create manage page
+
+
+
+
+
+
+
+[Code]
+
+
+
+
+
+
+[DB]
 Create DB Schema:
 	*Seperate Tag table with id *Not auto incrementing* and tag.  So you can say give me image.id 1's tags
 

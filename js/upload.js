@@ -4,6 +4,8 @@ function hide_dropzone_junk()
   $(".dz-success-mark").hide();
   $(".dz-error-mark").hide();
   $(".dz-size").hide();
+  $(".dz-filename").hide();
+  $(".dropzone-previews > .dz-error").hide();  //Hide all previews that caused errors  
 }
 
 function modify_upload_button(show_or_hide)
@@ -36,12 +38,14 @@ Dropzone.options.uploadDropzone = {
   autoProcessQueue: false,    
   dictDefaultMessage: "",  
   acceptedFiles: "image/*",
-  thumbnailWidth: 65,
-  thumbnailHeight: 65,
+  thumbnailWidth: 75,
+  thumbnailHeight: 75,
   uploadMultiple: true,
-  parallelUploads: 20,
+  maxFiles: 30,
+  parallelUploads: 30,
   maxThumbnailFilesize: 1,
   maxFilesize: 8, //In MB
+  previewsContainer: "#dropzonePreview",
 
 
 

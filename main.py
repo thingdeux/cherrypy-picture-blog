@@ -92,8 +92,7 @@ class web_server(object):
       filename_found_count = 0
       filename_without_extension = filename.split('.')[0]
 
-      for image_file in os.listdir(location):
-        print(filename_without_extension + " in " + image_file)
+      for image_file in os.listdir(location):        
 
         if filename_without_extension in image_file:
           filename_found_count = filename_found_count + 1
