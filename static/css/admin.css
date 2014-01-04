@@ -2,23 +2,34 @@ body {
 	background: black;
 	font-size: 16px;
 	font-family: Serif;
-	color: white;	
+	color: white;
+	padding-left: 2%;
+	padding-right: 2%;
 }
 
 #dropzone_area {
-	width: 50%;
-	height: 50%;
-	max-width: 50%;
-	max-height: 50%;
+	position: relative;
+}
+
+#dropzonePreview{
+	padding: 40px;
 }
 
 #uploadDropzone {	
-	background-image: url("/static/UploadButton.gif");
-  	background-repeat: no-repeat;  	
+	/*background-image: url("/static/UploadButton.gif");
+  	background-repeat: no-repeat;  	*/
+  	width: 5%;
+	height: 5%;	
+	max-width: 5%;
+	max-height: 5%;
+
+	/*border-style: solid;
+  	border-width: 1px;
+  	padding: 2px;  	  	 */
+  	
 }
 
-#picture_upload_button{
-	position: absolute;
+#picture_upload_button{	
 	left: 0;	
 }
 
@@ -27,12 +38,12 @@ body {
 	color: gray;	
 }
 
-.dz-details {	
-	position: relative;
-    top: -80px;
-    left: 100px;
-	float: left;
+.dz-details {		
+	float: left;	
 	padding: 10px;
+	/*
+	position: relative;    
+	*/
 }
 
 .dz-error-message{
@@ -42,24 +53,15 @@ body {
 	bottom: 0;
 }
 
-#statistics {
-	position: absolute;
-	right: 0%;
-	top: 4%;		
-	text-align: center;
-	width: 15%;
-}
-
 #navigation {
 	font-size: 20px;
-	padding-bottom: 2%;
+	padding-bottom: 1%;
 	padding-top: 2%;
 }
 
 .silent_link{	
 	padding-left: 20px;
 }
-
 
 a.silent_link:link {text-decoration: none; color:white;}
 a.silent_link:visited {text-decoration: none; color:white;}
