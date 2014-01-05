@@ -163,3 +163,27 @@ def insert_image_record(*args, **kwargs):
 		for error in err:			
 			log("Database: Unable to insert image record - " + str(error))
 			db_connection.close()
+
+#Get a list of all tags in the DB
+def get_tags():
+	db_connection = connect_to_database()
+	db = db_connection.cursor()
+	try:		
+		db.execute('''SELECT DISTINCT tag from tags''')
+		the_tags = db.fetchall()
+		db_connection.close()
+
+		returned_list = []
+		#Make the DB records prettier/easier to work with by removing unicode tags and commas
+		for ugly_tag in the_tags:
+			for pretty_tag in ugly_tag:
+				returned_list.append(pretty_tag)
+
+		return(returned_list)
+
+	except Exception, err:
+		db_connection.close()
+		
+		for error in err:
+			log("DataBase: Unable to get tags: " + str(error) )
+			return (False)

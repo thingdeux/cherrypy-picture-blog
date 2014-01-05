@@ -7,6 +7,7 @@ from logger import log
 from locations import thumbnail_save_location
 from locations import image_save_location
 from locations import current_folder
+import filesystem
 
 
 class WebsiteImage:
@@ -106,4 +107,3 @@ class WebsiteImage:
 		except:
 			log("Unable to get EXIF")
 			return(0)
-

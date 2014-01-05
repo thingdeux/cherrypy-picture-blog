@@ -7,6 +7,7 @@ from src.logger import log
 import src.database as database
 import src.pictureConverter as pictureConverter
 import src.locations as locations
+import src.filesystem as filesystem
 
 server_mode = "debug"
 
@@ -62,9 +63,11 @@ class web_server(object):
   def process(self, **arguments):
     #Create the below template using index.html (and looking up in the static folder)
     mako_template = Template(filename='static/process.html')
+    queued_files = filesystem.get_queue_directory_list()
+    tags = database.get_tags()
     
     #Render the mako template
-    self.mako_template_render = mako_template.render()                   
+    self.mako_template_render = mako_template.render(queued_files = queued_files, tags = tags)
 
     return self.mako_template_render
 
@@ -102,7 +105,7 @@ class web_server(object):
 
     try:
       #Object of each file passed to the server via post
-      uploadObj = kwargs.get('file[]')          
+      uploadObj = kwargs.get('file[]')
 
       for cherrypyObj in uploadObj:
         #Save each file in the queue_save_location folder as its own filename
@@ -120,7 +123,16 @@ class web_server(object):
     except Exception, err:
       for error in err:
         log("Unable to receive upload - " + error)
-      
+  
+  @cherrypy.expose
+  def processPicture(self, **kwargs):    
+    for field, data in kwargs.iteritems():
+      print (str(field) + ": " + str(data) )
+
+  @cherrypy.expose
+  def deletePicture(self, **kwargs):
+    print kwargs
+
 def startServer():
 
   if database.verify_database_existence():

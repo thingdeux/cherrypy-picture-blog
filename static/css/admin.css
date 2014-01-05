@@ -30,6 +30,10 @@ body {
   	
 }
 
+#process_files {
+	padding: 5%;
+}
+
 .header {
 	font-size: 25px;
 	color: gray;	
@@ -37,10 +41,7 @@ body {
 
 .dz-details {		
 	float: left;	
-	padding: 10px;
-	/*
-	position: relative;    
-	*/
+	padding: 10px;	
 }
 
 .dz-error-message{
@@ -59,12 +60,16 @@ body {
 }
 
 .silent_link{	
-	padding-left: 20px;
+	/*padding-left: 20px;*/
 }
 
 #bottomNav{
 	padding-top: 6%;
 	padding-left: 40%;
+}
+
+.queued_file{	
+	padding-bottom: 1%;
 }
 
 a.silent_link:link {text-decoration: none; color:white;}
