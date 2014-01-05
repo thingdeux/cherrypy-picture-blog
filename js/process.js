@@ -1,29 +1,21 @@
-function silentlySendDataWithPost(data)
-{		
-	//var form_data = $("#queued_file_form").val();
-	//var form_data = $(data).val();
-	console.log(data);
-	//$.post("/processPicture", form_data);	
+function silentlySendDataWithPost(location, data)
+{				
+	$.post(location, data);
 }
 
 
 $(document).ready(function() {
 		
-	//Handler for queue button being clicked on index page.
-	$("#process_picture_button").click(function() {
-		button = $(this);
-		console.log(button.val());
-		silentlySendDataWithPost(  );				
+	//Handler for 'process' button being clicked - will pass the form data over to cherrypy.
+	$("#process_picture_button").click(function() {																				
+		silentlySendDataWithPost("/processPicture", $(this.form).serializeArray() );				
 	});
 
-
-
-	//Handler for enter being pressed after inputting url
+	//Prevent enter from causing submission
 	$("#process_picture_button").keypress(function( event ){
 			if (event.which == 13)
-			{
-				//Stop enter from doing what it normally does
-				event.preventDefault();				
+			{				
+				event.preventDefault();
 			}
 	});
 
