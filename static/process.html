@@ -1,0 +1,67 @@
+<HTML>
+<title>
+	JoshandLinz
+</title>
+
+<head>
+	<link rel="icon" type="image/png" href="/static/favicon.ico">
+	<link rel="stylesheet" href="/static/css/admin.css" type="text/css">
+    <link rel="stylesheet" href="/static/css/normalize.css" type="text/css">
+    <script type="text/javascript" src="/js/lib/jquery-1.10.2.min.js"></script>    
+    <script type="text/javascript" src="/js/process.js"></script>
+
+    <span class ="header">Admin Menu</span>
+</head>
+
+<body>
+	<div id = "navigation">		
+		
+		<a href="/upload" class="silent_link">Upload</a> | 
+		<span style="color:purple">Process</span> | 		
+		<a href="/manage" class="silent_link">Manage</a> | 			
+		
+	</div>
+
+	<div id = "container">
+		<div id = "process_files" class = "files_to_process">
+			%for i, filename in enumerate(queued_files):
+				<table>	
+					<span class = "queued_file">${filename}</span>
+					<div id = "queued_file_data">
+						<form id = "queued_file_form" name = ${i}>
+							
+							<tr><td>Name:</td>  <td><input type = "text" id = "name" name = "picture_name"> </td></tr>
+							<tr><td>Caption:</td>  <td><input type = "text" id = "caption" name = "picture_caption"> </td></tr>
+							<tr><td>Date Taken:</td> <td><input type = "text" id = "date_taken" name = "picture_date"> </td></tr>
+							<tr><td>Tags</td> <td><select name="tag_selection" multiple>												
+													%for tag in tags:
+														<option value=${tag}</option>${tag}
+													%endfor
+												  </select></td></tr>
+							<td><input type ="button" id = "process_picture_button" value="Process"></button></td>
+						</form>
+
+						<form action="deletePicture" id = "queued_file_delete">
+							<td><button id="delete_picture_button">Delete</button></td>
+						</form>
+					</div>
+				</table>
+			%endfor	
+		</div>
+
+	</div>
+
+	<div id = "bottomNav">
+		
+		
+	</div>
+	
+	
+</body>
+
+
+
+
+
+
+</HTML>
