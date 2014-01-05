@@ -5,7 +5,7 @@ function hide_dropzone_junk()
   $(".dz-error-mark").hide();
   $(".dz-size").hide();
   $(".dz-filename").hide();
-  $(".dropzone-previews > .dz-error").hide();  //Hide all previews that caused errors  
+  $(".dropzone-previews > .dz-error").hide();  //Hide all previews that caused  
 }
 
 function modify_upload_button(show_or_hide)
@@ -43,8 +43,8 @@ Dropzone.options.uploadDropzone = {
   uploadMultiple: true,
   maxFiles: 30,
   parallelUploads: 30,
-  maxThumbnailFilesize: 1,
-  maxFilesize: 8, //In MB
+  maxThumbnailFilesize: 2,
+  maxFilesize: 2, //In MB
   previewsContainer: "#dropzonePreview",
 
 
@@ -74,8 +74,11 @@ Dropzone.options.uploadDropzone = {
 
       //If the queue is empty and the complete event fires set upload progress text to 'complete'
       if (queued_files.length < 1)
-      {
-        $("#dropzone_upload_progress").html("Upload Progress: Complete");  
+      {        
+        $("#dropzone_upload_progress").html("Upload Progress: Complete");
+        $(".dropzone-previews > .dz-image-preview").hide();  //Hide all previews that caused                  
+        //Clean up queue files (though there should be none....dropzone problem)
+        this.removeAllFiles();
       }      
 
 
@@ -91,12 +94,6 @@ Dropzone.options.uploadDropzone = {
       //Total progress in 1-100 - can be used to show upload status of all pictures
       $("#dropzone_upload_progress").html("Upload Progress: " + parseInt(upload_progress) + "%");
     });
-
-    this.on("reset", function(self) {
-      alert("Done!");
-    });
-
-
     
   }
 };
