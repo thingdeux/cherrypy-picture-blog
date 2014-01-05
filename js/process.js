@@ -4,19 +4,29 @@ function silentlySendDataWithPost(location, data)
 }
 
 
+
+
 $(document).ready(function() {
 		
 	//Handler for 'process' button being clicked - will pass the form data over to cherrypy.
-	$("#process_picture_button").click(function() {																				
-		silentlySendDataWithPost("/processPicture", $(this.form).serializeArray() );				
-	});
+	$(":button").click(function() {
 
-	//Prevent enter from causing submission
-	$("#process_picture_button").keypress(function( event ){
-			if (event.which == 13)
-			{				
-				event.preventDefault();
-			}
+		
+		if ( $(this).is("#process_picture_button") )
+		{
+			silentlySendDataWithPost("/processPicture", $(this.form).serializeArray() );			
+		}
+		else if ( $(this).is("#delete_picture_button") )
+		{			
+			var verifyDelete = confirm("Delete this file without processing?");
+			if (verifyDelete)
+			{
+				silentlySendDataWithPost("/deletePicture", $(this.form).serializeArray() );
+			} //On cancel do nothing
+
+		}	
+
+		
 	});
 
 })
