@@ -1,8 +1,15 @@
 [WEB]
 
+Be paranoid: Never trust your users
 
-Create process page
-Create manage page
+So, how do you fight these threats? This is a topic far beyond this guide; however there are a few rules it's good to keep in mind. The most important rule is: never ever trust your users, including yourself; even a trusted user could have been hijacked.
+
+All data that comes to your server must be checked and sanitized. Always. No exception.
+
+    Escape potentially dangerous characters. The specific characters you should be cautious with vary depending on the context in which the data is used and the server platform you employ, but all server-side languages have functions for this.
+    Limit the incoming amount of data to allow only what's necessary.
+    Sandbox uploaded files (store them on a different server and allow access to the file only through a different subdomain or even better through a fully different domain name).
+   
 
 
 

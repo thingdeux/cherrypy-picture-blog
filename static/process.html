@@ -27,24 +27,23 @@
 			%for i, filename in enumerate(queued_files):
 				<table>	
 					<span class = "queued_file">${filename}</span>
-					<div id = "queued_file_data">
-						<form id = "queued_file_form" name = ${i}>
-							
-							<tr><td>Name:</td>  <td><input type = "text" id = "name" name = "picture_name"> </td></tr>
+						
+						<form id = "queued_file_form" name = ${i} class = "submission_data">							
+							<tr><td>Name:</td>  <td><input type = "text" id = "name" name = "picture_name" value="${filename}"> </td></tr>
 							<tr><td>Caption:</td>  <td><input type = "text" id = "caption" name = "picture_caption"> </td></tr>
 							<tr><td>Date Taken:</td> <td><input type = "text" id = "date_taken" name = "picture_date"> </td></tr>
 							<tr><td>Tags</td> <td><select name="tag_selection" multiple>												
 													%for tag in tags:
-														<option value=${tag}</option>${tag}
+														<option value=${tag}>${tag}</option>
 													%endfor
 												  </select></td></tr>
 							<td><input type ="button" id = "process_picture_button" value="Process"></button></td>
 						</form>
+						
 
 						<form action="deletePicture" id = "queued_file_delete">
 							<td><button id="delete_picture_button">Delete</button></td>
-						</form>
-					</div>
+						</form>					
 				</table>
 			%endfor	
 		</div>
