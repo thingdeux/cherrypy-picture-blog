@@ -32,6 +32,7 @@ body {
 
 #process_files {
 	padding: 5%;
+	background-color: #666699;
 }
 
 .header {
@@ -68,14 +69,28 @@ body {
 	padding-left: 40%;
 }
 
+#queue_file_info{	
+	margin-right: 50%;
+	margin-bottom: 4%;
+	background-color: #E0E0EB;
+	width: 1000px;
+}
+
 .queued_file{	
-	padding-bottom: 1%;
+	padding-bottom: 1%;	
 }
 
 .queue_thumbnail{
 	float: left;
-	padding-right: 4%;		
+	margin-left: 1%;
+	margin-top: 1%;
+	padding-right: 5%;	
 }
+
+.caption_box{
+	height: 100px;
+}
+
 
 a.silent_link:link {text-decoration: none; color:white;}
 a.silent_link:visited {text-decoration: none; color:white;}
