@@ -23,37 +23,43 @@
 	</div>
 
 	<div id = "container">
-		<div id = "process_files" class = "files_to_process">
+		<div id = "process_files">
 			
 			%for i, filename in enumerate(queued_files):
-			<span class = "queue_thumbnail"><tr><td><img src="${filename[2]}"></img></tr></td></span>
-				<table>	
-					<span class = "queued_file">${filename[0]}</span>						
+			<div id = "queue_file_info">
+				<span class = "queue_thumbnail"><tr><td><img src="${filename[2]}" height="200"></img></tr></td></span>
+					<table>							
 
-						<form id = "queued_file_form" name = ${i} class = "submission_data">							
-							<tr><td>Name:</td>  <td><input type = "text" id = "name" name = "picture_name" value="${filename[0]}"> </td></tr>
-							<tr><td>Caption:</td>  <td><input type = "text" id = "caption" name = "picture_caption"> </td></tr>
-							<tr><td>Date Taken:</td> <td><input type = "text" id = "date_taken" name = "picture_date"> </td></tr>
-							<tr><td>Tags</td> <td><select name="tag_selection" multiple>												
-													%for tag in tags:
-														<option value=${tag}>${tag}</option>
-													%endfor
-												  </select></td></tr>
-							<td><input type ="button" id = "process_picture_button" value="Process"></input></td>
-							<td><input type ="button" id="delete_picture_button" value ="Delete"></input></td>
-							<input type = "hidden" name="FileLocation" value = "${filename[1]}"></input>
-						</form>
-																	
-				</table>				
+							<form id = "queued_file_form" name = ${i} class = "submission_data">				
+								<tr><td><span style="color:black">Name:</span></td>  <td><input type = "text" id = "name" name = "picture_name" value="${filename[0]}" size="31"> </td></tr>				
+								<tr><td><span style="color:purple">Caption:</span></td>  <td><textarea rows = 4 cols="30" id = "caption" name = "picture_caption"></textarea> </td></tr>
+								<tr><td><span style="color:black">Date Taken:</span></td> <td><input type = "text" id = "date_taken" name = "picture_date" size="8"> 
+									<span style="color:black">(Date Format: MM/DD/YY)</span></td></tr>		
+								<tr><td><span style="color:purple">Tags</span></td> 
+												<td><select name="tag_selection" multiple>												
+														%for tag in tags:
+															<option value=${tag}>${tag}</option>
+														%endfor
+													  </select>
+
+													&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+													<input type ="button" id = "process_picture_button" value="Process"></input>
+													&nbsp;&nbsp;
+													<input type ="button" id="delete_picture_button" value ="Delete"></input>
+												</td>													
+								</tr>
+								
+
+								<input type = "hidden" name="FileLocation" value = "${filename[1]}"></input>
+							</form>
+																		
+					</table>
+			</div>
 			%endfor				
 		</div>
 
 	</div>
-
-	<div id = "bottomNav">
-		
-		
-	</div>
+	
 	
 	
 </body>
