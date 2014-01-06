@@ -107,18 +107,25 @@ class web_server(object):
       #Object of each file passed to the server via post
       uploadObj = kwargs.get('file[]')
 
-      for cherrypyObj in uploadObj:
+      for cherrypyObj in uploadObj:        
         #Save each file in the queue_save_location folder as its own filename
 
-        #If a duplicate filename is found append -1 to the file and write it anyhow      
-        if not os.path.isfile( os.path.join(locations.queue_save_location(), cherrypyObj.filename) ):          
-          write_uploaded_image_file( os.path.join(locations.queue_save_location(), cherrypyObj.filename) )
+        #If a duplicate filename is found append a number to the file and write it anyhow      
+        if not os.path.isfile( os.path.join(locations.queue_save_location(), cherrypyObj.filename) ):
+          file_location = os.path.join(locations.queue_save_location(), cherrypyObj.filename)          
+          write_uploaded_image_file( file_location ) 
+          #Create Thumbnail for queue process page             
+          pictureConverter.create_queue_thumbnail( file_location,locations.queue_save_location() )          
+
         else:
           #Find out how many files exist with the same name and append a count of the files to the filename - super hacky!!   
-          #Known problem of fuzzy matching between already existing files.  Not serious as copy will be made either way.
+          #Known "problem" of fuzzy matching between already existing files.  Not serious as copy will be made either way.
           count = get_duplicate_image_file_count(locations.queue_save_location(), cherrypyObj.filename)
           filename_with_count = cherrypyObj.filename.replace('.', '-' + str(count) + '.')
-          write_uploaded_image_file( os.path.join(locations.queue_save_location(),  filename_with_count) )
+          file_location = os.path.join(locations.queue_save_location(),  filename_with_count)     
+          write_uploaded_image_file( file_location )
+          #Create Thumbnail for queue process page          
+          pictureConverter.create_queue_thumbnail( file_location, locations.queue_save_location() )          
 
     except Exception, err:
       for error in err:
