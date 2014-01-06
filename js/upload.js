@@ -41,6 +41,7 @@ Dropzone.options.uploadDropzone = {
   thumbnailWidth: 75,
   thumbnailHeight: 75,
   uploadMultiple: true,
+  createImageThumbnails: true,
   maxFiles: 30,
   parallelUploads: 30,
   maxThumbnailFilesize: 2,

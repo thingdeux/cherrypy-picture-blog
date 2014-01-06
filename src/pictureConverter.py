@@ -107,3 +107,21 @@ class WebsiteImage:
 		except:
 			log("Unable to get EXIF")
 			return(0)
+
+
+
+def create_queue_thumbnail(file_location,save_location):	
+	try:
+		#Break the location into chunks then take the filename
+		filename_chunks = file_location.split('/')
+		filename = filename_chunks[len(filename_chunks) - 1]
+		filename = filename.split('.')[0]
+		
+		size = 128, 128
+		queue_image = Image.open(file_location)
+		queue_image.thumbnail(size, Image.ANTIALIAS)		
+		queue_image.save(os.path.join(save_location, filename + ".thumbnail" ), "JPEG")
+
+	except Exception, err:
+		for error in err:
+			log ("Thumbnail Save Error: " + str(error) )

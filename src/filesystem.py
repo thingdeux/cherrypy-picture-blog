@@ -5,6 +5,7 @@ import locations
 def delete_file(filename):
 	test = "test"
 
+
 def get_queue_directory_list():
 	returned_list = []     
 
@@ -21,9 +22,6 @@ def get_queue_directory_list():
 	return (returned_list)	
 
 
-
-
-
 def get_queued_directory_locations():
 	returned_list = []     
 
@@ -33,3 +31,4 @@ def get_queued_directory_locations():
 		returned_list.append(location)
 
 	return (returned_list)
+
