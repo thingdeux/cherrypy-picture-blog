@@ -72,6 +72,11 @@ body {
 	padding-bottom: 1%;
 }
 
+.queue_thumbnail{
+	float: left;
+	padding-right: 4%;		
+}
+
 a.silent_link:link {text-decoration: none; color:white;}
 a.silent_link:visited {text-decoration: none; color:white;}
 a.silent_link:hover {text-decoration: none; color:white;}

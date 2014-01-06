@@ -26,6 +26,10 @@ conf = {
          '/js': { 'tools.staticdir.on' : True,
                       'tools.staticdir.dir': os.path.join(locations.current_folder(), 'js')
                     },
+         '/queue': { 'tools.staticdir.on' : True,
+                      'tools.staticdir.dir': os.path.join(locations.current_folder(), 'queue'),
+                      'tools.staticdir.content_types': {'jpg': 'image/jpeg'}
+                        },
          '/js/lib': { 'tools.staticdir.on' : True,
                           'tools.staticdir.dir': os.path.join(locations.current_folder(), 'js/lib')
                         },

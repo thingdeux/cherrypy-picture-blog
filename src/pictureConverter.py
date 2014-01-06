@@ -117,7 +117,7 @@ def create_queue_thumbnail(file_location,save_location):
 		filename = filename_chunks[len(filename_chunks) - 1]
 		filename = filename.split('.')[0]
 		
-		size = 128, 128
+		size = 260, 260
 		queue_image = Image.open(file_location)
 		queue_image.thumbnail(size, Image.ANTIALIAS)		
 		queue_image.save(os.path.join(save_location, filename + ".thumbnail" ), "JPEG")
