@@ -26,9 +26,10 @@
 		<div id = "process_files" class = "files_to_process">
 			
 			%for i, filename in enumerate(queued_files):
+			<span class = "queue_thumbnail"><tr><td><img src="${filename[2]}"></img></tr></td></span>
 				<table>	
-					<span class = "queued_file">${filename[0]}</span>
-						
+					<span class = "queued_file">${filename[0]}</span>						
+
 						<form id = "queued_file_form" name = ${i} class = "submission_data">							
 							<tr><td>Name:</td>  <td><input type = "text" id = "name" name = "picture_name" value="${filename[0]}"> </td></tr>
 							<tr><td>Caption:</td>  <td><input type = "text" id = "caption" name = "picture_caption"> </td></tr>
@@ -43,7 +44,7 @@
 							<input type = "hidden" name="FileLocation" value = "${filename[1]}"></input>
 						</form>
 																	
-				</table>
+				</table>				
 			%endfor				
 		</div>
 
