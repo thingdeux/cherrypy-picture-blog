@@ -1,6 +1,7 @@
 import os
 import logger
 import locations
+from pictureConverter import get_date_exif
 
 def delete_file(filename):
 	test = "test"
@@ -15,14 +16,15 @@ def get_queue_directory_list():
 	    #Exclude the .thumbnail files
 	    if 'thumbnail' not in filename_without_extension[1]:
 	    	
-		    image_location = os.path.join(locations.queue_save_location(), image_file)
+		    #image_location = os.path.join(locations.queue_save_location(), image_file)
 		    thumbnail_location = os.path.join("/queue", filename_without_extension[0] + ".thumbnail")		    
 		    
 		    #Create list with the filename (for displaying on the site) and actual file system location (for backend work)
 		    inner_list = []
 		    inner_list.append(filename_without_extension[0])
-		    inner_list.append(image_location)
+		    inner_list.append(image_file)
 		    inner_list.append(thumbnail_location)
+		    inner_list.append(get_date_exif(image_file))
 		    
 		    returned_list.append(inner_list)
 

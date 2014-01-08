@@ -7,7 +7,7 @@ from logger import log
 from locations import thumbnail_save_location
 from locations import image_save_location
 from locations import current_folder
-import filesystem
+from locations import queue_save_location
 
 
 class WebsiteImage:
@@ -125,3 +125,20 @@ def create_queue_thumbnail(file_location,save_location):
 	except Exception, err:
 		for error in err:
 			log ("Thumbnail Save Error: " + str(error) )
+
+def get_date_exif(image_name):
+	try:
+		filename = os.path.join(queue_save_location(), image_name)
+		
+		queue_image = Image.open(filename)
+		exif_data = queue_image._getexif()
+		formatted_date = exif_data.get(36867).split(':')		
+
+		built_date_string = formatted_date[1] + "/" + formatted_date[2].split(' ')[0] + "/" + formatted_date[0]
+				
+		#Get the 'date taken' exif data and return it
+		return (  built_date_string )				
+	except Exception, err:
+		for error in err:
+			log("Unable to get EXIF" + error)
+			return("Unknown")

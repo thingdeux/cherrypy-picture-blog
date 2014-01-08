@@ -1,3 +1,15 @@
+Have the date taken pulled from the image for the process page (if available)
+Make Name and tags mandatory for submission
+
+
+
+
+
+
+
+
+
+
 [WEB]
 
 Be paranoid: Never trust your users
@@ -9,15 +21,13 @@ All data that comes to your server must be checked and sanitized. Always. No exc
     Escape potentially dangerous characters. The specific characters you should be cautious with vary depending on the context in which the data is used and the server platform you employ, but all server-side languages have functions for this.
     Limit the incoming amount of data to allow only what's necessary.
     Sandbox uploaded files (store them on a different server and allow access to the file only through a different subdomain or even better through a fully different domain name).
-   
-
-
 
 
 
 
 
 [Code]
+
 
 
 
