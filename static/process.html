@@ -33,7 +33,7 @@
 							<form id = "queued_file_form" name = ${i} class = "submission_data">				
 								<tr><td><span style="color:black">Name:</span></td>  <td><input type = "text" id = "name" name = "picture_name" value="${filename[0]}" size="31"> </td></tr>				
 								<tr><td><span style="color:purple">Caption:</span></td>  <td><textarea rows = 4 cols="30" id = "caption" name = "picture_caption"></textarea> </td></tr>
-								<tr><td><span style="color:black">Date Taken:</span></td> <td><input type = "text" id = "date_taken" name = "picture_date" size="8"> 
+								<tr><td><span style="color:black">Date Taken:</span></td> <td><input type = "text" id = "date_taken" name = "picture_date" size="8" value="${filename[3]}"> 
 									<span style="color:black">(Date Format: MM/DD/YY)</span></td></tr>		
 								<tr><td><span style="color:purple">Tags</span></td> 
 												<td><select name="tag_selection" multiple>												
