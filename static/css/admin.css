@@ -73,7 +73,7 @@ body {
 	margin-right: 50%;
 	margin-bottom: 4%;
 	background-color: #E0E0EB;
-	width: 1000px;
+	width: 85%;
 }
 
 .queued_file{	
@@ -89,6 +89,19 @@ body {
 
 .caption_box{
 	height: 100px;
+}
+
+#sub_tag_text{
+	position: relative;
+    color: black;
+    left: 5px;
+    top: -30px;    
+}
+
+#event_tag_text{
+	color: black;
+	position: relative; 
+	left: 20px;
 }
 
 
