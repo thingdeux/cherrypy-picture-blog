@@ -59,7 +59,7 @@ class web_server(object):
     mako_template = Template(filename='static/upload.html')
     
     #Render the mako template
-    self.mako_template_render = mako_template.render()                   
+    self.mako_template_render = mako_template.render()                 
 
     return self.mako_template_render
 
@@ -68,10 +68,13 @@ class web_server(object):
     #Create the below template using index.html (and looking up in the static folder)
     mako_template = Template(filename='static/process.html')
     queued_files = filesystem.get_queue_directory_list()
-    tags = database.get_tags()
+    tags = database.get_tags()    
+    sub_tags = database.get_sub_tags()
+    event_tags = database.get_event_tags()
+
     
     #Render the mako template
-    self.mako_template_render = mako_template.render(queued_files = queued_files, tags = tags)
+    self.mako_template_render = mako_template.render(queued_files = queued_files, tags = tags, sub_tags = sub_tags, event_tags = event_tags)
 
     return self.mako_template_render
 
