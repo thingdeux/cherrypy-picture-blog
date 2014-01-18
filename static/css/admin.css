@@ -24,15 +24,18 @@ body {
   	width: 2%;
 	height: 2%;
 	max-width: 2%;
-	max-height: 2%;
-	
+	max-height: 2%;	
   	padding: 2px;
   	
 }
 
 #process_files {
+	margin-left: 20%;
+	margin-right: 20%;
 	padding: 5%;
 	background-color: #666699;
+	min-width: 925px;
+	max-width: 925px;
 }
 
 .header {
@@ -53,7 +56,7 @@ body {
 	bottom: 0;
 }
 
-#navigation {
+#navigation {	
 	font-size: 20px;
 	padding-bottom: 1%;
 	padding-top: 2%;
@@ -69,11 +72,12 @@ body {
 	padding-left: 40%;
 }
 
-#queue_file_info{	
-	margin-right: 50%;
+#queue_file_info{
+	
 	margin-bottom: 4%;
-	background-color: #E0E0EB;
-	width: 85%;
+	background-color: #E0E0EB;	
+	min-width: 900px;
+	max-width: 900px;
 }
 
 .queued_file{	
@@ -94,15 +98,14 @@ body {
 #sub_tag_text{
 	position: relative;
     color: black;
-    
+
     left: 5px;
     top: -30px;    
 }
 
 #event_tag_text{
 	color: black;
-	position: relative; 
-	left: 20px;
+	position: relative;		
 }
 
 

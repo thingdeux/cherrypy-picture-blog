@@ -144,14 +144,14 @@ class web_server(object):
       tagsList = tagsString.split(';')
 
       if len(tagsList) == 3:
-        print ("3 Tags Found: ")
+        test = 'test' #Set event tag on photo
       elif len(tagsList) == 2:
-        print ("2 Tags Found: ")
+        test = 'test'  #Set sub_tag on photo
       elif len(tagsList) == 1:
-        print ("1 Tag Found: ")
+        test = 'test'  #Set primary tag
 
     for field, data in kwargs.iteritems():
-      print (str(field) + ": " + str(data)  + " - type: " + str(type(data)))
+      print (str(field) + ": " + str(data)  + " - " + str(type(data)))
 
       if "event_tag_selection" in field or "tag_selection" in field or "sub_tag_selection" in field:  
         #Handler for multiple tags being selected
