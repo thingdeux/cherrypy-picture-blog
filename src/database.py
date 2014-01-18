@@ -206,7 +206,7 @@ def get_tags():
 		#Make the DB records prettier/easier to work with by removing unicode tags and commas
 		for ugly_tag in the_tags:
 			for pretty_tag in ugly_tag:
-				returned_list.append(pretty_tag)
+				returned_list.append(pretty_tag.encode('utf-8'))
 
 		return(returned_list)
 
@@ -229,7 +229,7 @@ def get_sub_tags():
 		returned_list = []
 		#Make the DB records prettier/easier to work with by removing unicode tags and commas
 		for ugly_tag in the_tags:
-			returned_list.append( [ ugly_tag[0], ugly_tag[1] ] )										
+			returned_list.append( [ ugly_tag[0].encode('utf-8'), ugly_tag[1].encode('utf-8') ] )										
 
 		return(returned_list)
 
@@ -252,7 +252,7 @@ def get_event_tags():
 		returned_list = []
 		#Make the DB records prettier/easier to work with by removing unicode tags and commas
 		for ugly_tag in the_tags:			
-			returned_list.append([ ugly_tag[0], ugly_tag[1], ugly_tag[2] ])
+			returned_list.append([ ugly_tag[0].encode('utf-8'), ugly_tag[1].encode('utf-8'), ugly_tag[2].encode('utf-8') ])
 
 		return(returned_list)
 

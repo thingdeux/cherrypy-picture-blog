@@ -139,9 +139,30 @@ class web_server(object):
         log("Unable to receive upload - " + error)
   
   @cherrypy.expose
-  def processPicture(self, **kwargs):    
+  def processPicture(self, **kwargs):
+    def break_tags_apart(tagsString):
+      tagsList = tagsString.split(';')
+
+      if len(tagsList) == 3:
+        print ("3 Tags Found: ")
+      elif len(tagsList) == 2:
+        print ("2 Tags Found: ")
+      elif len(tagsList) == 1:
+        print ("1 Tag Found: ")
+
     for field, data in kwargs.iteritems():
-      print (str(field) + ": " + str(data) )
+      print (str(field) + ": " + str(data)  + " - type: " + str(type(data)))
+
+      if "event_tag_selection" in field or "tag_selection" in field or "sub_tag_selection" in field:  
+        #Handler for multiple tags being selected
+        if isinstance(data, list):
+          for tags in data:
+            break_tags_apart(tags)
+        else:          
+          break_tags_apart(data)
+
+        
+
 
   @cherrypy.expose
   def deletePicture(self, **kwargs):
