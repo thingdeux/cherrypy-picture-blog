@@ -42,29 +42,31 @@
 												%for tag in tags:
 													<option value=${tag}>${tag}</option>
 												%endfor
-											  </select>
+											</select>
 
-											<span id = "sub_tag_text">Sub-Tags: </span>
+											<span class = "sub_tag_info" id = "sub_tag_text">Sub-Tags: </span>
+											
 
-											<span style="position: relative; left: 5px">
-												<select name="sub_tag_selection" multiple>
+											<span class = "sub_tag_info" style="position: relative; left: 5px">
+												<select class = "sub_tag_info" name="sub_tag_selection" multiple>
 													%for parent_tag, sub_tag in sub_tags:
 														<% subPassValue = parent_tag + ";" + sub_tag %>
-														<option value="${subPassValue}"> ${parent_tag}->${sub_tag}
+														<option class = "sub_tag_values" value="${subPassValue}"> ${parent_tag}->${sub_tag}</option>
 													%endfor
 												</select>
 											</span>
+											
 										</td>
 								</tr>
 
-								<tr><td><span id = "event_tag_text">Event Tags: </td>
+								<tr><td><span class = "event_tag_info" id = "event_tag_text">Event Tags:</td>
 										
 
-										<td><select name="event_tag_selection" multiple>
+										<td><select class = "event_tag_info" name="event_tag_selection" multiple>
 											%for parent_tag, parent_sub_tag, event_tag in event_tags:
 												<% eventPassValue = parent_tag + ";" + parent_sub_tag + ";" + event_tag %>
 
-												<option value="${eventPassValue}"> ${parent_sub_tag}-> ${event_tag}</option>													
+												<option class = "event_tag_values" value="${eventPassValue}"> ${parent_sub_tag}-> ${event_tag}</option>													
 											%endfor												
 										</select></span></td>
 								</tr>	
