@@ -1,7 +1,5 @@
-Have the date taken pulled from the image for the process page (if available)
 Make Name and tags mandatory for submission
-
-
+Make SURE no ' or " characters are used for tags
 
 
 
@@ -25,10 +23,8 @@ All data that comes to your server must be checked and sanitized. Always. No exc
 
 
 
-
 [Code]
-
-
+CLEAN UP Formatting on html files
 
 
 
@@ -51,3 +47,4 @@ Create DB Schema:
 
 
 
+Complete: Have the date taken pulled from the image for the process page (if available)
