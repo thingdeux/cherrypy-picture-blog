@@ -40,3 +40,13 @@ def get_queued_directory_locations():
 		returned_list.append(location)
 
 	return (returned_list)
+
+
+def delete_queued_image_and_thumbnail(image_name):
+	image_location = os.path.join(locations.queue_save_location(), image_name)
+	thumb_name = image_name.split(".")
+	thumbnail_location = os.path.join(locations.queue_save_location(), thumb_name[0] + ".thumbnail")
+
+	os.remove(image_location)
+	os.remove(thumbnail_location)
+

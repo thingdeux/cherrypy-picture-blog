@@ -5,6 +5,9 @@ Don't let pictures be processed without at least a sub-tag
 USE JQUERY UI for Index page
 
 
+[low]
+Sanitize POST data (so SQL commands can't be run from inputs)
+
 
 
 
