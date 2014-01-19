@@ -140,26 +140,12 @@ class web_server(object):
   
   @cherrypy.expose
   def processPicture(self, **kwargs):
-    def break_tags_apart(tagsString):
-      tagsList = tagsString.split(';')
+    sentPOST = database.Posted_Data(kwargs, "process")
 
-      if len(tagsList) == 3:
-        test = 'test' #Set event tag on photo
-      elif len(tagsList) == 2:
-        test = 'test'  #Set sub_tag on photo
-      elif len(tagsList) == 1:
-        test = 'test'  #Set primary tag
+    if sentPOST.isSuccesful == True:
+      print("Processed succesfully - delete picture now")
 
-    for field, data in kwargs.iteritems():
-      print (str(field) + ": " + str(data)  + " - " + str(type(data)))
 
-      if "event_tag_selection" in field or "tag_selection" in field or "sub_tag_selection" in field:  
-        #Handler for multiple tags being selected
-        if isinstance(data, list):
-          for tags in data:
-            break_tags_apart(tags)
-        else:          
-          break_tags_apart(data)
 
         
 

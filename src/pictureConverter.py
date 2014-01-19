@@ -11,26 +11,38 @@ from locations import queue_save_location
 
 
 class WebsiteImage:
-	def __init__(self, location):		
-		self.location = location		
+	def __init__(self, location, *args, **kwargs):
+		if args:
+			self.location = os.path.join(queue_save_location(), location)
+			self.postData = args[0]		
+		else:			
+			self.location = location
 
 		try:
 			self.picObject = self.return_image_object()
-			self.watermarked_image = self.create_watermark()
-			self.thumbnail = self.convert_image_to_thumbnail()
-			self.date_taken = self.get_date_taken()
 
-			try:
-				self.save_uploaded_images()
+			if self.picObject:
+				self.watermarked_image = self.create_watermark()
+				self.thumbnail = self.convert_image_to_thumbnail()				
 
-				#Change name and caption to be real values
-				insert_image_record(name = "Test", image_location=self.image_location, thumb_location=self.thumb_location,
-									date_taken=self.date_taken, caption="Test Caption")
-			except Exception, err:
-				for error in err:
-					log("Image: Unable to save images" + str(error))
+				try:
+					isUploaded = self.save_uploaded_images()
+					
+
+					if isUploaded:
+						self.picture_row_id = insert_image_record(name = self.postData.picture_name, 
+							image_location=self.image_location, thumb_location=self.thumb_location,
+							date_taken=self.postData.date_taken, caption=self.postData.picture_caption)
+						
+						self.isSuccesful = True
+
+				except Exception, err:
+					self.isSuccesful = False
+					for error in err:
+						log("Image: Unable to save images" + str(error))
 
 		except Exception, err:
+			self.isSuccesful = False
 			for error in err:
 				log("Image: Unable to process image - " + str(error))
 
@@ -41,7 +53,8 @@ class WebsiteImage:
 			pictureObject = Image.open(self.location)
 			return (pictureObject)
 		except Exception, err:
-			for error in err:
+			self.isSuccesful = False
+			for error in err:				
 				log ("Unable to open picture - " + str(err))
 				return (False)
 
@@ -56,9 +69,9 @@ class WebsiteImage:
 			return(picObject)
 
 		except Exception, err:
+			self.isSuccesful = False
 			for error in err:
 				log ("Thumbnail Save Error" + str(error) )
-
 
 	def create_watermark(self):
 		try:
@@ -84,29 +97,24 @@ class WebsiteImage:
 			return(picObject)
 
 		except Exception, err:
+			self.isSuccesful = False
 			for error in err:
 				log("Image: Unable to create watermark " + error)
 
 	def save_uploaded_images(self):	
 		self.thumb_location = os.path.join(thumbnail_save_location(), str(get_latest_image_id() ) + '.jpg')	
-		self.image_location = os.path.join(image_save_location(), str(get_latest_image_id() ) + '.jpg')
+		self.image_location = os.path.join(image_save_location(), str(get_latest_image_id() ) + '.jpg')	
 
 		try:		
 			self.watermarked_image.save(self.image_location, "JPEG")	
 			self.thumbnail.save(self.thumb_location, "JPEG")
+			return (True)
 		except Exception, err:
+			self.isSuccesful = False
 			for error in err:
 				log("Image: Unable to save images " + str(error))
 
-	def get_date_taken(self):
-		try:
-			exif_data = self.picObject._getexif()
-
-			#Get the 'date taken' exif data and return it
-			return ( exif_data.get(36867) )		
-		except:
-			log("Unable to get EXIF")
-			return(0)
+			return (False)
 
 
 

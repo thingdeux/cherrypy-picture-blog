@@ -1,6 +1,8 @@
 Make Name and tags mandatory for submission
 Make SURE no ' or " characters are used for tags
 
+Don't let pictures be processed without at least a sub-tag
+USE JQUERY UI for Index page
 
 
 
