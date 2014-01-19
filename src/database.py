@@ -149,8 +149,6 @@ def verify_folder_existence():
 				log(error)
 
 
-
-
 def get_latest_image_id():
 	db_connection = connect_to_database()
 	db = db_connection.cursor()
@@ -180,18 +178,34 @@ def insert_image_record(*args, **kwargs):
 	date_taken =  kwargs.get('date_taken')
 	caption = kwargs.get('caption')
 
-	imageData = [
-		(None, name, image_location, thumb_location, date_added, date_taken, caption),
-	]
-
-	try:
-		db.executemany('INSERT INTO images VALUES (?,?,?,?,?,?,?)', imageData)
-		db_connection.commit()
+	try:		
+		db.execute('INSERT INTO images VALUES (?,?,?,?,?,?,?)', (None, name, image_location, thumb_location, date_added, date_taken, caption) )
+		last_row = db.lastrowid
+		db_connection.commit()	
 		db_connection.close()
+		return(last_row)	
 	except Exception, err:
 		for error in err:			
 			log("Database: Unable to insert image record - " + str(error))
 			db_connection.close()
+
+def insert_tag(image_id, tagData):
+	db_connection = connect_to_database()
+	db = db_connection.cursor()		
+		
+	if tagData['tag_type'] is 'main':
+		db.execute('INSERT INTO tags VALUES (?, ?, ?)', (None, image_id, tagData['main_tag']) )				
+	elif tagData['tag_type'] is 'sub':
+		db.execute('INSERT INTO sub_tags VALUES (?, ?, ?, ?)', (None, image_id, tagData['main_tag'], tagData['sub_tag']) )
+	elif tagData['tag_type'] is 'event':
+		db.execute('INSERT INTO event_tags VALUES (?, ?, ?, ?, ?)', (None, image_id, tagData['main_tag'], tagData['sub_tag'], tagData['event_tag']) )
+
+	try:
+		db_connection.commit()
+		db_connection.close()
+	except Exception, err:
+		for error in err:
+			log("Unable to add tags: " + error)
 
 #Get a list of all tags in the DB
 def get_tags():
@@ -262,3 +276,72 @@ def get_event_tags():
 		for error in err:
 			log("DataBase: Unable to get tags: " + str(error) )
 			return (False)
+
+
+
+
+class Posted_Data:
+	def __init__(self, data, dataType):
+		self.postedData = data
+		self.dataType = dataType
+
+		if "process" in dataType:
+			try:
+				self.image_processor()					
+			except Exception, err:
+				self.isSuccesful = False
+				for error in err:
+					log("Unable to completely process image: " + error)
+
+	def image_processor(self):
+
+		def parse_tags():
+			def break_tags_apart(tagsString):
+				tagsList = tagsString.split(';')
+
+				#Return tag dictionaries with tag info passed from POST
+				if len(tagsList) == 3:
+					tagDict = {'tag_type': 'event','event_tag': tagsList[2],'sub_tag': tagsList[1],'main_tag': tagsList[0]}
+					return (tagDict)
+				elif len(tagsList) == 2:
+					#Set sub_tag on photo
+					tagDict = {'tag_type': 'sub','sub_tag': tagsList[1],'main_tag': tagsList[0]}
+					return (tagDict)
+				elif len(tagsList) == 1:
+					tagDict = {'tag_type': 'main','main_tag': tagsList[0]}
+					return (tagDict)
+
+			tagList = []
+			for field, data in self.postedData.iteritems():
+				#print (str(field) + ": " + str(data) )
+				if "event_tag_selection" in field or "tag_selection" in field or "sub_tag_selection" in field:
+					#Handler for multiple tags being selected
+					if isinstance(data, list):
+						tempTagList = []
+						for tags in data:
+							tempTagList.append( break_tags_apart(tags) )
+
+						#Write one clean dictionary per tag hierarchy to the tag list
+						for tag in tempTagList:														
+							tagList.append(tag)
+
+					else:          
+						tagList.append( break_tags_apart(data) )
+			return ( tagList )
+						 
+		self.tagList = parse_tags()  #List of tag dictionaries
+		self.picture_name = self.postedData['picture_name']		
+		self.picture_caption = self.postedData['picture_caption']
+		self.file_location = self.postedData['FileLocation']
+		self.date_taken = self.postedData['picture_date']
+		import pictureConverter
+		convertedPicture = pictureConverter.WebsiteImage(self.file_location, self)
+
+		#If PIL has processed the image
+		if convertedPicture.isSuccesful == True:			
+
+			for tag in self.tagList:			
+				insert_tag( convertedPicture.picture_row_id, tag )				
+			self.isSuccesful = True
+		else:
+			self.isSuccesful = False
