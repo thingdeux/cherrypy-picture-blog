@@ -143,7 +143,8 @@ class web_server(object):
     sentPOST = database.Posted_Data(kwargs, "process")
 
     if sentPOST.isSuccesful == True:
-      print("Processed succesfully - delete picture now")
+      filesystem.delete_queued_image_and_thumbnail(kwargs['FileLocation'])
+      return (True)    
 
 
 
