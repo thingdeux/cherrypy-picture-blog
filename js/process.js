@@ -41,13 +41,12 @@ $(document).ready(function() {
 		jQueryTableObject.parentsUntil('#process_files').fadeTo(300, .50);				
 		
 		var processingText = jQueryTableObject.closest('div').after('<span class = "proccesingText">Processing ...</span>');
-		processingText = processingText.next('.proc');			
+		processingText = processingText.next('.proc');	
 	}
 
 	function checkProcessingQueue(image_id, isCleared, jQueryObject) {		
 
-		if (isCleared == 1)
-		{										
+		if (isCleared == 1) 	{										
 			$.get( ("/checkProcessingQueue" + "/" + image_id), function ( data ) {								
 				var isQueueClear = Number(data);
 
@@ -68,6 +67,32 @@ $(document).ready(function() {
 		jQueryTableObject.parentsUntil('#process_files').hide();
 	}
 
+	function verifyRequiredFields(data) {		
+		var image_name = "";
+		var  main_tag = "";
+		var sub_tag = "";
+
+		for (i=0; i < data.length;i++) {
+			if (data[i].name == "picture_name") {
+				image_name = data[i].value;			
+			}
+			else if (data[i].name == "tag_selection") {
+				main_tag = data[i].value;
+			}
+			else if (data[i].name == "sub_tag_selection") {
+				sub_tag = data[i].value;
+			}
+		}
+		
+
+
+		if (image_name.length > 0 && main_tag.length > 0 && sub_tag.length > 0) {
+			return(true);
+		}
+
+		return(false);
+	}
+
 
 	hideAllTagBoxes();
 	
@@ -75,19 +100,24 @@ $(document).ready(function() {
 	$(":button").click(function() {
 		
 		//'process' button
-		if ( $(this).is("#process_picture_button") )
-		{
+		if ( $(this).is("#process_picture_button") )	{
 			var data_array = $(this.form).serializeArray()
-			var buttonObject = $(this); //Have to declare this in order to pass it in settimeout
-			silentlySendDataWithPost("/processPicture", data_array );
-			fadeFormAndReplaceWithProcessing( $(this) );
 
-			//In one second check to see if the queue is cleared
-			setTimeout(function() { checkProcessingQueue( data_array[0].value, 1, buttonObject) }, 1000);
+			//Verify that 3 required fields are populated before submission (name | main tags | sub_tags)
+			if ( verifyRequiredFields(data_array) ) {		
+				var buttonObject = $(this); //Have to declare this in order to pass it in settimeout
+				silentlySendDataWithPost("/processPicture", data_array );
+				fadeFormAndReplaceWithProcessing( $(this) );
+
+				//In one second check to see if the queue is cleared
+				setTimeout(function() { checkProcessingQueue( data_array[0].value, 1, buttonObject) }, 1000);
+			}
+			else {
+				alert("You must fill out/select all required fields");
+			}
 
 		}
-		else if ( $(this).is("#delete_picture_button") )
-		{			
+		else if ( $(this).is("#delete_picture_button") )	{			
 			var verifyDelete = confirm("Delete this file without processing?");
 			if (verifyDelete)
 			{

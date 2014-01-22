@@ -280,8 +280,7 @@ def get_event_tags():
 
 def check_for_processing_image(passed_image_name):
 	db_connection = connect_to_database()
-	db = db_connection.cursor()
-	print(passed_image_name)
+	db = db_connection.cursor()	
 
 	try:		
 		db.execute('SELECT image_name FROM processing_queue WHERE image_name = ?', (passed_image_name,) )

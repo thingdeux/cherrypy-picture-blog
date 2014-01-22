@@ -3,15 +3,12 @@ Clear ALL selections made on the process page after back navigation is used. (Ba
 	*Captions
 	....etc
 
-Don't let pictures be processed without at least a sub-tag
-Make Name and tags mandatory for submission
-
-
 Make SURE no ' or " characters are used for tags
 USE JQUERY UI for Index page
 
 
 [medium]
+ERROR CHECKING FOR EVERYTHING!!
 Write cleanup job for erroneous / old process queue entries
 
 
@@ -64,4 +61,7 @@ Create DB Schema:
 
 
 
-Complete: Have the date taken pulled from the image for the process page (if available)
+Completed: 
+Have the date taken pulled from the image for the process page (if available)
+Don't let pictures be processed without at least a sub-tag
+Make Name and tags mandatory for submission
