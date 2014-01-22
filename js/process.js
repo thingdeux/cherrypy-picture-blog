@@ -30,10 +30,23 @@ $(document).ready(function() {
 		}
 		else if (tagType == "sub_tag_selection") {	
 			var splitTags = tagName.split(";");
-			tagName = splitTags[1]
+			tagName = splitTags[1];
 
-			findAndShowRelatedTag(".event_tag_info", ".event_tag_values")
+			findAndShowRelatedTag(".event_tag_info", ".event_tag_values");
 		}
+	}
+
+	function fadeFormAndReplaceWithProcessing(jQueryTableObject)
+	{
+		//Fade the block to .50 opacity
+		jQueryTableObject.parentsUntil('#process_files').fadeTo(300, .50);				
+		
+		var processingText = jQueryTableObject.closest('div').after('<span class = "proccesingText">Processing ...</span>');
+		processingText = processingText.next('.proc');
+
+		//Hides the whole block
+		//jQueryTableObject.parentsUntil('#process_files').hide();
+		
 	}
 
 
@@ -45,7 +58,8 @@ $(document).ready(function() {
 		//'process' button
 		if ( $(this).is("#process_picture_button") )
 		{
-			silentlySendDataWithPost("/processPicture", $(this.form).serializeArray() );			
+			silentlySendDataWithPost("/processPicture", $(this.form).serializeArray() );
+			fadeFormAndReplaceWithProcessing( $(this) );
 		}
 		else if ( $(this).is("#delete_picture_button") )
 		{			
@@ -65,9 +79,9 @@ $(document).ready(function() {
 		
 		//Re-evaluate the current selection boxes highlighted options and only show the sub or event tags that match selections
 		$( "select option:selected" ).each(function() {			
-			var tagType = $(this).parents("select").attr("name");	
+			var tagType = $(this).parents("select").attr("name");
 			//Walk up the DOM and find the main table for the selected option
-			var selectedOptionsTable = $(this).parentsUntil("table");						
+			var selectedOptionsTable = $(this).parentsUntil("table");					
 			hideOrShowTagBoxes( selectedOptionsTable, tagType, this );
 		});		
 	});

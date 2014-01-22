@@ -35,6 +35,7 @@ def create_fresh_tables():
 	db.execute('''CREATE TABLE event_tags (id INTEGER PRIMARY KEY, image_id INTEGER NOT NULL, parent_tag TEXT NOT NULL, parent_sub_tag NOT NULL, event_tag NOT NULL)''')
 
 	db.execute('''CREATE TABLE alerts (id INTEGER PRIMARY KEY, alert TEXT, status TEXT, date_added INTEGER, inactive_date INTEGER)''')
+	db.execute('''CREATE TABLE processing_queue (id INTEGER PRIMARY KEY, image_name TEXT)''')
 
 	#Create index on tags
 	db.execute(''' CREATE INDEX tagIndex ON tags(tag ASC) ''')
@@ -43,7 +44,7 @@ def create_fresh_tables():
 
 
 	db_connection.commit()
-	log("Database: Created DB Schema")
+	log("Database did not exist: Created DB")
 	db_connection.close()
 
 def connect_to_database():
@@ -277,17 +278,65 @@ def get_event_tags():
 			log("DataBase: Unable to get tags: " + str(error) )
 			return (False)
 
+def get_currently_processing_queue():
+	db_connection = connect_to_database()
+	db = db_connection.cursor()
 
+	try:		
+		db.execute('''SELECT image_name FROM processing_queue''')
+		processing_queue = db.fetchall()
+		db_connection.close()
 
+		return (processing_queue)
+		
+	except Exception, err:
+		db_connection.close()
+		
+		for error in err:
+			log("DataBase: Unable query processing queue: " + str(error) )
+			return (False)
 
+def insert_currently_processing_job(image_name):
+	db_connection = connect_to_database()
+	db = db_connection.cursor()
+		
+	db.execute('INSERT INTO processing_queue VALUES (?, ?)', (None, str(image_name) ) )
+
+	try:
+		db_connection.commit()
+		db_connection.close()
+	except Exception, err:
+		for error in err:
+			log("Unable to add job to processing_queue tags: " + error)
+
+def delete_currently_processing_job(image):
+	db_connection = connect_to_database()
+	db = db_connection.cursor()
+
+	try:		
+		db.execute('DELETE FROM processing_queue WHERE image_name = ?', (image,) )
+		db_connection.commit()
+		db_connection.close()
+		return (True)
+
+	except Exception, err:
+		db_connection.close()
+		
+		for error in err:
+			log("DataBase: Unable to delete processing job: " + str(error) )
+			return (False)
+
+#Class used for breaking down data from process submission POST
 class Posted_Data:
 	def __init__(self, data, dataType):
-		self.postedData = data
+				
+
+		self.postedData = data		
 		self.dataType = dataType
 
 		if "process" in dataType:
 			try:
-				self.image_processor()					
+				self.image_processor()				
 			except Exception, err:
 				self.isSuccesful = False
 				for error in err:
@@ -328,9 +377,10 @@ class Posted_Data:
 					else:          
 						tagList.append( break_tags_apart(data) )
 			return ( tagList )
-						 
+
+		insert_currently_processing_job(self.postedData['picture_name'])						 
 		self.tagList = parse_tags()  #List of tag dictionaries
-		self.picture_name = self.postedData['picture_name']		
+		self.picture_name = self.postedData['picture_name']
 		self.picture_caption = self.postedData['picture_caption']
 		self.file_location = self.postedData['FileLocation']
 		self.date_taken = self.postedData['picture_date']
@@ -345,3 +395,4 @@ class Posted_Data:
 			self.isSuccesful = True
 		else:
 			self.isSuccesful = False
+

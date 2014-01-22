@@ -27,7 +27,7 @@ body {
 }
 
 #process_files {
-	margin-left: 12%;
+	margin-left: 20%;
 	margin-right: 20%;
 	padding: 5%;
 	background-color: #666699;
@@ -98,6 +98,14 @@ body {
 #event_tag_text{
 	color: black;
 	position: relative;		
+}
+
+.proccesingText{
+	position: absolute;
+	color: black;
+	font-size: 40px;
+	margin-top: -200px;
+	margin-left: 450px;	
 }
 
 
