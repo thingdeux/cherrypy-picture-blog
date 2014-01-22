@@ -1,7 +1,14 @@
-Make Name and tags mandatory for submission
-Make SURE no ' or " characters are used for tags
+Clear ALL selections made on the process page after back navigation is used. (Basically on load)
+	*Option selections
+	*Captions
+	....etc
 
 Don't let pictures be processed without at least a sub-tag
+Make Name and tags mandatory for submission
+
+
+
+Make SURE no ' or " characters are used for tags
 USE JQUERY UI for Index page
 
 
@@ -13,7 +20,10 @@ Sanitize POST data (so SQL commands can't be run from inputs)
 
 
 
-[WEB]
+[SECURITY]
+
+----instead of directly deleting files (opening the server up to attack) - perhaps run a backend job that checks for renamed files or that 
+queuries the DB for files to delete and have it delete them.  Don't use the web server at all for that.
 
 Be paranoid: Never trust your users
 

@@ -143,17 +143,15 @@ class web_server(object):
     sentPOST = database.Posted_Data(kwargs, "process")
 
     if sentPOST.isSuccesful == True:
-      filesystem.delete_queued_image_and_thumbnail(kwargs['FileLocation'])
-      return (True)    
+      #Delete job from queue
+      if ( database.delete_currently_processing_job(sentPOST.picture_name) ):
+        #filesystem.delete_queued_image_and_thumbnail(kwargs['FileLocation'])      
+        print ("Has been deleted")   
 
-
-
-        
-
-
+    
   @cherrypy.expose
-  def deletePicture(self, **kwargs):
-    print kwargs
+  def checkProcessingQueue(self):
+    return (database.check_currently_processing_queue)
 
 def startServer():
 
@@ -173,7 +171,6 @@ def startServer():
   else:
     database.create_fresh_tables()       
     startServer()
-
 
 
 startServer()

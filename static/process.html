@@ -14,12 +14,10 @@
 </head>
 
 <body>
-	<div id = "navigation">		
-		
+	<div id = "navigation">				
 		<a href="/upload" class="silent_link">Upload</a> | 
 		<span style="color:purple">Process</span> | 		
-		<a href="/manage" class="silent_link">Manage</a> | 			
-		
+		<a href="/manage" class="silent_link">Manage</a> | 					
 	</div>
 
 	<div id = "container">
@@ -27,7 +25,7 @@
 			
 			%for i, filename in enumerate(queued_files):
 			<div id = "queue_file_info">
-				<span class = "queue_thumbnail"><tr><td><img src="${filename[2]}" height="200"></img></tr></td></span>
+				<span class = "queue_thumbnail"><img src="${filename[2]}" height="200"></img></span>
 					<table>							
 						<form id = "queued_file_form" name = ${i} class = "submission_data">
 
@@ -75,14 +73,14 @@
 								&nbsp;&nbsp;
 								<input type ="button" id="delete_picture_button" value ="Delete"></input> </td></tr>
 
-						<input type = "hidden" name="FileLocation" value = "${filename[1]}"></input>
-						
-																		
+						<input type = "hidden" name="FileLocation" value = "${filename[1]}"></input>												
 					</table>															
-
 					</form>
+					
 			</div>
+
 			%endfor				
+
 		</div>
 
 	</div>
