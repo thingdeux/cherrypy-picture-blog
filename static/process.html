@@ -32,11 +32,11 @@
 					<table>							
 						<form id = "queued_file_form" name = ${i} class = "submission_data">
 
-							<tr><td><span style="color:black">Name:</span></td>  <td><input type = "text" class = "image_name" name = "picture_name" value="${filename[0]}" size="31"> </td></tr>
+							<tr><td><span style="color:black"><span class="required_mark">*</span>Name:</td>  <td><input type = "text" class = "image_name" name = "picture_name" value="${filename[0]}" size="31"> </td></tr>
 							<tr><td><span style="color:purple">Caption:</span></td>  <td><textarea rows = 4 cols="30" id = "caption" name = "picture_caption"></textarea> </td></tr>
 							<tr><td><span style="color:black">Date Taken:</span></td> <td><input type = "text" id = "date_taken" name = "picture_date" size="8" value="${filename[3]}"> 
 								<span style="color:black">(Date Format: MM/DD/YY)</span></td></tr>
-							<tr><td><span style="color:purple">Main Tags: </span></td> 
+							<tr><td><span style="color:purple"><span class="required_mark">*</span>Main Tags: </span></td> 
 
 									<td><select name="tag_selection" multiple>												
 											%for tag in tags:
@@ -44,7 +44,7 @@
 											%endfor
 										</select>
 
-										<span class = "sub_tag_info" id = "sub_tag_text">Sub-Tags: </span>
+										<span class = "sub_tag_info" id = "sub_tag_text"><span class="required_mark">*</span>Sub-Tags: </span>
 										
 
 										<span class = "sub_tag_info" style="position: relative; left: 5px">
