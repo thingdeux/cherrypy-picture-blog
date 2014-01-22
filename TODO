@@ -7,14 +7,16 @@ Don't let pictures be processed without at least a sub-tag
 Make Name and tags mandatory for submission
 
 
-
 Make SURE no ' or " characters are used for tags
 USE JQUERY UI for Index page
 
 
+[medium]
+Write cleanup job for erroneous / old process queue entries
+
+
 [low]
 Sanitize POST data (so SQL commands can't be run from inputs)
-
 
 
 

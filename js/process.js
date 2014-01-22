@@ -13,7 +13,7 @@ $(document).ready(function() {
 	function hideAllTagOptions(optionJQueryObject) {	
 		var selectedTable = $(optionJQueryObject).parentsUntil("table");
 		selectedTable.find(".sub_tag_values").hide();
-		selectedTable.find(".event_tag_values").hide();	
+		selectedTable.find(".event_tag_values").hide();
 	}
 
 	function hideOrShowTagBoxes(selectedTable, tagType, optionJQueryObject) {	
@@ -36,17 +36,36 @@ $(document).ready(function() {
 		}
 	}
 
-	function fadeFormAndReplaceWithProcessing(jQueryTableObject)
-	{
+	function fadeFormAndReplaceWithProcessing(jQueryTableObject) {
 		//Fade the block to .50 opacity
 		jQueryTableObject.parentsUntil('#process_files').fadeTo(300, .50);				
 		
 		var processingText = jQueryTableObject.closest('div').after('<span class = "proccesingText">Processing ...</span>');
-		processingText = processingText.next('.proc');
+		processingText = processingText.next('.proc');			
+	}
 
+	function checkProcessingQueue(image_id, isCleared, jQueryObject) {		
+
+		if (isCleared == 1)
+		{										
+			$.get( ("/checkProcessingQueue" + "/" + image_id), function ( data ) {								
+				var isQueueClear = Number(data);
+
+				if (isQueueClear == 1)  {
+					setTimeout(function() { checkProcessingQueue(image_id, 1, jQueryObject) }, 2000);
+				}
+				else  {					
+					hideQueueBox(jQueryObject);
+				}
+			
+			});									
+		}
+
+	}
+
+	function hideQueueBox(jQueryTableObject) {		
 		//Hides the whole block
-		//jQueryTableObject.parentsUntil('#process_files').hide();
-		
+		jQueryTableObject.parentsUntil('#process_files').hide();
 	}
 
 
@@ -58,8 +77,14 @@ $(document).ready(function() {
 		//'process' button
 		if ( $(this).is("#process_picture_button") )
 		{
-			silentlySendDataWithPost("/processPicture", $(this.form).serializeArray() );
+			var data_array = $(this.form).serializeArray()
+			var buttonObject = $(this); //Have to declare this in order to pass it in settimeout
+			silentlySendDataWithPost("/processPicture", data_array );
 			fadeFormAndReplaceWithProcessing( $(this) );
+
+			//In one second check to see if the queue is cleared
+			setTimeout(function() { checkProcessingQueue( data_array[0].value, 1, buttonObject) }, 1000);
+
 		}
 		else if ( $(this).is("#delete_picture_button") )
 		{			

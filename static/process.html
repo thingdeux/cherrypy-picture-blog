@@ -7,7 +7,10 @@
 	<link rel="icon" type="image/png" href="/static/favicon.ico">
 	<link rel="stylesheet" href="/static/css/admin.css" type="text/css">
     <link rel="stylesheet" href="/static/css/normalize.css" type="text/css">
-    <script type="text/javascript" src="/js/lib/jquery-1.10.2.min.js"></script>    
+    <!-- <script type="text/javascript" src="/js/lib/jquery-1.10.2.min.js"></script> !-->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> 
+    
+
     <script type="text/javascript" src="/js/process.js"></script>
 
     <span class ="header">Admin Menu</span>
@@ -29,7 +32,7 @@
 					<table>							
 						<form id = "queued_file_form" name = ${i} class = "submission_data">
 
-							<tr><td><span style="color:black">Name:</span></td>  <td><input type = "text" id = "name" name = "picture_name" value="${filename[0]}" size="31"> </td></tr>
+							<tr><td><span style="color:black">Name:</span></td>  <td><input type = "text" class = "image_name" name = "picture_name" value="${filename[0]}" size="31"> </td></tr>
 							<tr><td><span style="color:purple">Caption:</span></td>  <td><textarea rows = 4 cols="30" id = "caption" name = "picture_caption"></textarea> </td></tr>
 							<tr><td><span style="color:black">Date Taken:</span></td> <td><input type = "text" id = "date_taken" name = "picture_date" size="8" value="${filename[3]}"> 
 								<span style="color:black">(Date Format: MM/DD/YY)</span></td></tr>
@@ -76,7 +79,7 @@
 						<input type = "hidden" name="FileLocation" value = "${filename[1]}"></input>												
 					</table>															
 					</form>
-					
+
 			</div>
 
 			%endfor				
