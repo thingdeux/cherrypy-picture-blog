@@ -278,23 +278,28 @@ def get_event_tags():
 			log("DataBase: Unable to get tags: " + str(error) )
 			return (False)
 
-def get_currently_processing_queue():
+def check_for_processing_image(passed_image_name):
 	db_connection = connect_to_database()
 	db = db_connection.cursor()
+	print(passed_image_name)
 
 	try:		
-		db.execute('''SELECT image_name FROM processing_queue''')
+		db.execute('SELECT image_name FROM processing_queue WHERE image_name = ?', (passed_image_name,) )
 		processing_queue = db.fetchall()
 		db_connection.close()
 
-		return (processing_queue)
+		if len(processing_queue) > 0:			
+			return (1); #If the passed image_name is currently being processed return true.
+		else:			
+			return (0);
+		
 		
 	except Exception, err:
 		db_connection.close()
 		
 		for error in err:
 			log("DataBase: Unable query processing queue: " + str(error) )
-			return (False)
+			return (1)
 
 def insert_currently_processing_job(image_name):
 	db_connection = connect_to_database()
@@ -336,6 +341,7 @@ class Posted_Data:
 
 		if "process" in dataType:
 			try:
+				insert_currently_processing_job(self.postedData['picture_name'])
 				self.image_processor()				
 			except Exception, err:
 				self.isSuccesful = False
@@ -377,8 +383,7 @@ class Posted_Data:
 					else:          
 						tagList.append( break_tags_apart(data) )
 			return ( tagList )
-
-		insert_currently_processing_job(self.postedData['picture_name'])						 
+		
 		self.tagList = parse_tags()  #List of tag dictionaries
 		self.picture_name = self.postedData['picture_name']
 		self.picture_caption = self.postedData['picture_caption']
@@ -395,4 +400,3 @@ class Posted_Data:
 			self.isSuccesful = True
 		else:
 			self.isSuccesful = False
-

@@ -88,8 +88,6 @@ class web_server(object):
 
     return self.mako_template_render
 
-
-
   @cherrypy.expose
   def uploadPicture(self, **kwargs):
     #Takes a binary file and places it in the 'queue' folder for image processing
@@ -145,13 +143,19 @@ class web_server(object):
     if sentPOST.isSuccesful == True:
       #Delete job from queue
       if ( database.delete_currently_processing_job(sentPOST.picture_name) ):
-        #filesystem.delete_queued_image_and_thumbnail(kwargs['FileLocation'])      
-        print ("Has been deleted")   
+        filesystem.delete_queued_image_and_thumbnail(kwargs['FileLocation'])      
 
     
   @cherrypy.expose
-  def checkProcessingQueue(self):
-    return (database.check_currently_processing_queue)
+  def checkProcessingQueue(self, *arguments, **kwargs):
+    #Take a GET request with the image_name passed as a parameter and check to see if its being ..
+    #  ...  processed
+    if len(arguments) > 0:
+      processing_image = arguments[0]
+    else:
+      processing_image = ""
+
+    return ( str( database.check_for_processing_image(processing_image) ) )
 
 def startServer():
 
