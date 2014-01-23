@@ -71,7 +71,6 @@ class web_server(object):
     tags = database.get_tags()    
     sub_tags = database.get_sub_tags()
     event_tags = database.get_event_tags()
-
     
     #Render the mako template
     self.mako_template_render = mako_template.render(queued_files = queued_files, tags = tags, sub_tags = sub_tags, event_tags = event_tags)
@@ -82,9 +81,12 @@ class web_server(object):
   def manage(self, **arguments):
     #Create the below template using index.html (and looking up in the static folder)
     mako_template = Template(filename='static/manage.html')
-    
+    main_tags = database.get_tags()
+    sub_tags = database.get_sub_tags()
+    event_tags = database.get_event_tags()
+
     #Render the mako template
-    self.mako_template_render = mako_template.render()                   
+    self.mako_template_render = mako_template.render(main_tags = main_tags, sub_tags = sub_tags, event_tags = event_tags)
 
     return self.mako_template_render
 
