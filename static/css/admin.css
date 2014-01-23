@@ -101,6 +101,12 @@ body {
 	position: relative;		
 }
 
+#manage_menu{
+	margin-left: 20%;
+	margin-top: 2%;
+	margin-right: 20%;
+}
+
 .proccesingText{
 	position: absolute;
 	color: black;
@@ -111,7 +117,21 @@ body {
 
 .required_mark {
 	color: red;
-	font-size: 15px;	
+	font-size: 15px;
+}
+
+.ui-menu {	
+	float: left;	
+}
+
+.ui-tabs {
+	margin-left: 20%;
+	margin-right: 20%;
+	overflow: hidden;
+}
+
+.long_event_tag{
+	width: 200px;
 }
 
 
