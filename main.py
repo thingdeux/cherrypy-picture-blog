@@ -42,7 +42,7 @@ conf = {
 
 
 class web_server(object):
-  
+
   @cherrypy.expose	
   def index(self, **arguments):
   	#Create the below template using index.html (and looking up in the static folder)
@@ -146,7 +146,6 @@ class web_server(object):
       #Delete job from queue
       if ( database.delete_currently_processing_job(sentPOST.picture_name) ):
         filesystem.delete_queued_image_and_thumbnail(kwargs['FileLocation'])      
-
     
   @cherrypy.expose
   def checkProcessingQueue(self, *arguments, **kwargs):
@@ -159,11 +158,15 @@ class web_server(object):
 
     return ( str( database.check_for_processing_image(processing_image) ) )
 
+  @cherrypy.expose
+  def getPictures(self, *arguments, **kwargs):
+    return ( database.get_images_by_tag( kwargs ) )
+
 def startServer():
 
   if database.verify_database_existence():
     try:
-      database.verify_folder_existence()  #If the images and thumbnails folder don't exist create them.
+      database.verify_folder_existence()  #If the images /thumbnails / queue folders don't exist create them.
       
       if server_mode is "debug":
         if database.get_latest_image_id() is 1:
