@@ -46,6 +46,33 @@
 			<div id = "images">
 				<ul id = "image_tag_menu" class = "ui_menu">
 					%for tag in main_tags:					
+						<li main="${tag}"><a> ${tag} </a>
+							<ul>
+								%for main_tag, sub_tag in sub_tags:									
+									%if main_tag in tag:
+
+										<li main="${main_tag}" sub="${sub_tag}"><a> ${sub_tag} </a>
+											<ul>
+											%for event_main_tag, event_sub_tag, event_tag in event_tags:
+												%if event_sub_tag in sub_tag:
+													<li main="${main_tag}" sub="${sub_tag}" event="${event_tag}" class="long_event_tag">
+														<a> ${event_tag} </a>
+												    </li>
+												%endif
+											%endfor											
+											</ul>
+										</li>
+									%endif
+								%endfor
+							</ul>
+						</li>		
+					%endfor
+				</ul>				
+			</div>
+
+			<div id = "tags">
+				<ul id = "tags_tag_menu" class = "ui_menu">
+					%for tag in main_tags:					
 						<li><a> ${tag} </a>
 							<ul>
 								%for main_tag, sub_tag in sub_tags:									
@@ -65,23 +92,12 @@
 							</ul>
 						</li>		
 					%endfor
-				</ul>				
-			</div>
-
-			<div id = "tags">
-				<ul id = "tags_tag_menu" class = "ui_menu">
-					%for tag in main_tags:					
-						<li><a> ${tag} </a></li>						
-
-					%endfor
 				</ul>
 				
 			</div>
 
-			<div id = "alerts">
-				<ul id = "tags_tag_menu" class = "ui_menu">
-					<li>THIS IS A REALLY REALLY LONG THING</li>		
-				</ul>
+			<div id = "alerts">				
+				THIS IS A REALLY REALLY LONG THING				
 			</div>
 
 			<div id = "db">
@@ -91,11 +107,6 @@
 			<div id = "logs">
 				This is a test of the emergency broadcast system (logs)
 			</div>
-
-
-
-
-
 				
 			
 		</div

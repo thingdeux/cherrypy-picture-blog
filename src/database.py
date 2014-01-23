@@ -58,7 +58,6 @@ def connect_to_database():
 			logger.log("DataBase: Unable to connect" + error)
 			return (False)
 
-
 def create_test_data():
 	
 	db_connection = connect_to_database()
@@ -111,7 +110,7 @@ def create_test_data():
 
 	]
 
-	db.executemany('INSERT INTO images VALUES (?,?,?,?,?,?,?)', imageData)
+	#db.executemany('INSERT INTO images VALUES (?,?,?,?,?,?,?)', imageData)
 	db.executemany('INSERT INTO tags VALUES (?,?,?)', tagData)
 	db.executemany('INSERT INTO sub_tags VALUES (?,?,?,?)', subTagData)
 	db.executemany('INSERT INTO event_tags VALUES (?,?,?,?,?)', eventTagData)
@@ -165,7 +164,6 @@ def get_latest_image_id():
 		for error in err:
 			log("DataBase: Unable to get images table count " + str(error) )
 			return (False)
-
 
 def insert_image_record(*args, **kwargs):
 
@@ -231,7 +229,7 @@ def get_tags():
 		for error in err:
 			log("DataBase: Unable to get tags: " + str(error) )
 			return (False)
-
+#Get a list of all sub tags in the DB
 def get_sub_tags():
 	db_connection = connect_to_database()
 	db = db_connection.cursor()
@@ -254,7 +252,7 @@ def get_sub_tags():
 		for error in err:
 			log("DataBase: Unable to get tags: " + str(error) )
 			return (False)
-
+#Get a list of all event tags in the DB
 def get_event_tags():
 	db_connection = connect_to_database()
 	db = db_connection.cursor()
@@ -329,6 +327,51 @@ def delete_currently_processing_job(image):
 		for error in err:
 			log("DataBase: Unable to delete processing job: " + str(error) )
 			return (False)
+
+def get_images_by_tag(*args, **kwargs):
+	tags = args[0]
+
+	#Check to see if the argument contains an event_tag or just a sub
+	try:
+		event_tag = tags['event_tag']
+		sub_tag = tags['sub_tag']
+	except:
+		event_tag = False
+		try:
+			sub_tag = tags['sub_tag']
+		except:
+			sub_tag = False		
+
+	#Main will always exist
+	main_tag = tags['main_tag']
+	
+	db_connection = connect_to_database()
+	db = db_connection.cursor()
+
+	try:		
+		if event_tag:
+			db.execute('SELECT * from images WHERE id IN (SELECT image_id FROM event_tags WHERE event_tag == (?) )', (event_tag,) )			
+		elif sub_tag:
+			db.execute('SELECT * from images WHERE id IN (SELECT image_id FROM sub_tags WHERE sub_tag == (?) )', (sub_tag,) )			
+		elif main_tag:
+			db.execute('SELECT * from images WHERE id IN (SELECT image_id FROM tags WHERE tag == (?) )', (main_tag,) )	
+	except Exception, err:
+		db_connection.close()
+		for error in err:
+			log("Unable to query images: " + error)
+
+	query = db.fetchall()
+	db_connection.close()
+
+	return (query)
+		
+
+	
+
+
+
+
+	
 
 #Class used for breaking down data from process submission POST
 class Posted_Data:
