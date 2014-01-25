@@ -350,9 +350,9 @@ def get_images_by_tag(*args, **kwargs):
 
 	try:		
 		if event_tag:
-			db.execute('SELECT * from images WHERE id IN (SELECT image_id FROM event_tags WHERE event_tag == (?) )', (event_tag,) )			
+			db.execute('SELECT * from images WHERE id IN (SELECT image_id FROM event_tags WHERE parent_tag == (?) AND sub_tag == (?) AND event_tag == (?) )', (main_tag, sub_tag, event_tag,) )			
 		elif sub_tag:
-			db.execute('SELECT * from images WHERE id IN (SELECT image_id FROM sub_tags WHERE sub_tag == (?) )', (sub_tag,) )			
+			db.execute('SELECT * from images WHERE id IN (SELECT image_id FROM sub_tags WHERE parent_tag == (?) AND sub_tag == (?) )', (main_tag, sub_tag,) )			
 		elif main_tag:
 			db.execute('SELECT * from images WHERE id IN (SELECT image_id FROM tags WHERE tag == (?) )', (main_tag,) )	
 	except Exception, err:
@@ -360,17 +360,31 @@ def get_images_by_tag(*args, **kwargs):
 		for error in err:
 			log("Unable to query images: " + error)
 
-	query = db.fetchall()
+		return ("")
+
+	query = db.fetchall()	
 	db_connection.close()
 
-	return (query)
+	return ( query )
 		
 
 	
+def get_image_by_id(image_id):
+	db_connection = connect_to_database()
+	db = db_connection.cursor()
 
+	try:
+		db.execute('SELECT * FROM images WHERE id == (?)', (image_id,) )
+	except Exception, err:
+		db.connection.close()
+		for error in err:
+			log("Unable to get image by ID: " + error)		
+		return ("")
 
+	query = db.fetchall()
+	db.connection.close()
 
-
+	return (query)
 	
 
 #Class used for breaking down data from process submission POST

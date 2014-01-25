@@ -1,10 +1,13 @@
+FIX 'Processing' not dissapearing if it's used on a block in the middle of process.
+
+
 Clear ALL selections made on the process page after back navigation is used. (Basically on load)
 	*Option selections
 	*Captions
 	....etc
 
 Make SURE no ' or " characters are used for tags
-USE JQUERY UI for Index page
+
 
 
 [medium]
@@ -14,8 +17,6 @@ Write cleanup job for erroneous / old process queue entries
 
 [low]
 Sanitize POST data (so SQL commands can't be run from inputs)
-
-
 
 
 
@@ -40,24 +41,6 @@ All data that comes to your server must be checked and sanitized. Always. No exc
 [Code]
 CLEAN UP Formatting on html files
 
-
-
-
-
-[DB]
-Create DB Schema:
-	*Seperate Tag table with id *Not auto incrementing* and tag.  So you can say give me image.id 1's tags
-
-	table example:
-	id	|	tag
-
-
-	1	,	josh
-	1	,	linz
-	1	,	callie
-
-
-	SELECT tag FROM tags WHERE id = 1
 
 
 

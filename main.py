@@ -30,6 +30,14 @@ conf = {
                       'tools.staticdir.dir': os.path.join(locations.current_folder(), 'queue'),
                       'tools.staticdir.content_types': {'jpg': 'image/jpeg'}
                         },
+          '/images': { 'tools.staticdir.on' : True,
+                      'tools.staticdir.dir': os.path.join(locations.current_folder(), 'images'),
+                      'tools.staticdir.content_types': {'jpg': 'image/jpeg'}
+                        },
+          '/thumbnails': { 'tools.staticdir.on' : True,
+                      'tools.staticdir.dir': os.path.join(locations.current_folder(), 'thumbnails'),
+                      'tools.staticdir.content_types': {'jpg': 'image/jpeg'}
+                        },
          '/js/lib': { 'tools.staticdir.on' : True,
                           'tools.staticdir.dir': os.path.join(locations.current_folder(), 'js/lib')
                         },
@@ -159,8 +167,23 @@ class web_server(object):
     return ( str( database.check_for_processing_image(processing_image) ) )
 
   @cherrypy.expose
-  def getPictures(self, *arguments, **kwargs):
-    return ( database.get_images_by_tag( kwargs ) )
+  def getPictures(self, *arguments, **kwargs):    
+    returned_data = database.get_images_by_tag( kwargs )
+    mako_template = Template(filename='static/templates/manage_images.tmpl')    
+
+    self.mako_template_render = mako_template.render(image_data = returned_data, menu_location = "list")
+
+    return self.mako_template_render
+
+  @cherrypy.expose
+  def getOnePicture(self, *arguments, **kwargs):   
+    image_id =  kwargs.keys()[0]
+    returned_data = database.get_image_by_id ( image_id )
+    mako_template = Template(filename='static/templates/manage_images.tmpl')    
+
+    self.mako_template_render = mako_template.render(image_data = returned_data, menu_location = "selected")
+
+    return self.mako_template_render
 
 def startServer():
 
