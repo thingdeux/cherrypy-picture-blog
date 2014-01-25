@@ -36,12 +36,12 @@
 
 		});
 
-		shortenImageNames( $('.image_menu_name') );
+		//Shorten the image names so they are only 10 characters and ...'s
+		shortenImageNames( $('.image_menu_name') );		
 
 	</script>
 
 %endif
-
 
 
 
@@ -50,9 +50,26 @@
 	%for id, name, image_location, thumb_location, date_added, date_taken, caption in image_data:			
 		<table class="ui-widget ui-widget-content">			
 			<% thumbpath = thumb_location.split('/') %>
-			<tr><td imageID = "${id}" class = "image_menu_link" name = "image_id">${name}</td></tr>
-			<tr><td imageID = "${id}" class = "image_menu_link" name = "image_id"><img src="${'/' + thumbpath[6] + '/' + thumbpath[7]}"></img></td></tr>	
+			<th></th><th>Added to site ${date_added} &nbsp;&nbsp;&nbsp;&nbsp;</th>
+			<tr><td>&nbsp;</td></tr>
+			<tr><td>Name: </td><td><input id = "name" name = "picture_name" value="${name}"></td></tr>
+			<tr><td>Caption:</td>  <td><textarea name = "caption" rows = 2 cols="30">${caption}</textarea> </td></tr>
+			<tr><td>Date Taken:</td> <td><input type = "text" id = "date_taken" name = "picture_date" size="8" value="${date_taken}"></input>  
+				(Date Format: MM/DD/YY)</td>			
+			<tr><td></td><td>				
+				<input type ="button" value="Update"></input>				
+				<input type = "button" value="Delete"></input>
+			</td></tr>			
 		</table>
-	%endfor
+	%endfor	
+
+	<script>
+		$(':button').button();
+		$(':button').css({
+							"margin-top": "30px",
+							"margin-left": "20px",							
+							"font-size": "15px"
+						});
+	</script>
 
 %endif

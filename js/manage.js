@@ -25,14 +25,6 @@ $(document).ready(function() {
 			}
 		return (  tags_to_submit  );
 	}
-
-	
-
-
-
-	
-
-
 	
 	//Reset the width on event tags (they're typically longer) - wordwrap looks wrong
 	$(".long_event_tag").width(200);
