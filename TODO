@@ -9,6 +9,8 @@ Clear ALL selections made on the process page after back navigation is used. (Ba
 Make SURE no ' or " characters are used for tags
 
 
+Have the picture transposer get current year instead of hard-coding the year
+
 
 [medium]
 ERROR CHECKING FOR EVERYTHING!!
