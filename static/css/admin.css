@@ -134,6 +134,11 @@ body {
 	width: 200px;
 }
 
+#image_picture_menu {
+	float: left;
+}
+
+
 
 a.silent_link:link {text-decoration: none; color:white;}
 a.silent_link:visited {text-decoration: none; color:white;}

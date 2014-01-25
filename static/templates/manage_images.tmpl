@@ -1,0 +1,58 @@
+%if menu_location == "list":
+
+	<table class="ui-widget ui-widget-content">
+		%for id, name, image_location, thumb_location, date_added, date_taken, caption in image_data:			
+						
+			<% thumbpath = thumb_location.split('/') %>
+			<tr><td imageID = "${id}" class = "image_menu_link image_menu_name">${name}</td></tr>
+			<tr><td imageID = "${id}" class = "image_menu_link"><img src="${'/' + thumbpath[6] + '/' + thumbpath[7]}"></img></td></tr>	
+		
+		%endfor	
+	</table>
+
+	<script>
+
+		function shortenImageNames(jQueryObject) {			
+
+			for (i=0; i < jQueryObject.length; i++) {
+				var image_text = $(jQueryObject[i]).html();
+				var new_image_text = image_text.slice(0, 9);
+				
+				$(jQueryObject[i]).html(new_image_text + " ... ");
+			}
+		}
+
+		$('.image_menu_link').click(function() {
+			var image_id = $(this).attr('imageID');
+			var returnedData = $.ajax({
+								type: "POST",
+								url: "/getOnePicture/",
+								data: image_id
+							});						
+
+			returnedData.done(function ( response, textStatus, jqXHR) {
+				$("#selected_picture").html(response);
+			});
+
+		});
+
+		shortenImageNames( $('.image_menu_name') );
+
+	</script>
+
+%endif
+
+
+
+
+%if menu_location == "selected":	
+	
+	%for id, name, image_location, thumb_location, date_added, date_taken, caption in image_data:			
+		<table class="ui-widget ui-widget-content">			
+			<% thumbpath = thumb_location.split('/') %>
+			<tr><td imageID = "${id}" class = "image_menu_link" name = "image_id">${name}</td></tr>
+			<tr><td imageID = "${id}" class = "image_menu_link" name = "image_id"><img src="${'/' + thumbpath[6] + '/' + thumbpath[7]}"></img></td></tr>	
+		</table>
+	%endfor
+
+%endif
