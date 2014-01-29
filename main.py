@@ -185,6 +185,12 @@ class web_server(object):
 
     return self.mako_template_render
 
+  @cherrypy.expose
+  def updateImageData(self, *arguments, **kwargs):
+    if len(kwargs) > 0:          
+      database.update_image_data(kwargs)
+    
+
 def startServer():
 
   if database.verify_database_existence():

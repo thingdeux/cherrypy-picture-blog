@@ -16,24 +16,36 @@ $(document).ready(function() {
 		selectedTable.find(".event_tag_values").hide();
 	}
 
-	function hideOrShowTagBoxes(selectedTable, tagType, optionJQueryObject) {	
-		var tagName = optionJQueryObject.value;
+	function hideOrShowTagBoxes(selectedTable, tagType, optionJQueryObject) {			
+		function findAndShowRelatedTag(tag_selection_box, tag_value_name, mainTag, subTag) {			
+			//build a jQuery find statement to only display event tags that pertain to the passed tag_value	
+			if (tag_value_name == ".sub_tag_values") {
+				var builtQuery = tag_value_name + ":" + 'contains("' + mainTag + '"' + ")";
+				selectedTable.find(builtQuery).show();			
+			}
+			else if (tag_value_name == ".event_tag_values") {
+				var subTagQuery = tag_value_name + ":" + 'contains("' + subTag + '"' + ")";
+				var mainTagQuery = ":" + 'contains("' + mainTag + '"' + ")";										
+				
+				selectedTable.find(subTagQuery + mainTagQuery).show();
+			}
 
-		function findAndShowRelatedTag(tag_selection_box, tag_value_name) {		
-			var builtQuery = tag_value_name + ":" + 'contains("' + tagName + '"' + ")"		
-			selectedTable.find(builtQuery).show();
 			selectedTable.find(tag_selection_box).show(200);
 		}
-
-		if (tagType == "tag_selection") {		
-			findAndShowRelatedTag(".sub_tag_info", ".sub_tag_values")
+		
+		if (tagType == "tag_selection") {					
+			findAndShowRelatedTag(".sub_tag_info", ".sub_tag_values", optionJQueryObject.value, undefined);
 		}
-		else if (tagType == "sub_tag_selection") {	
-			var splitTags = tagName.split(";");
-			tagName = splitTags[1];
+		else if (tagType == "sub_tag_selection") {
+			//The passed name of the option selected tag 
+			var splitTags = optionJQueryObject.value.split(";");
+			//Split the built string of tag hierarchy that was passed so that the 2nd element (sub_tag) is used
+			var parentTagName = splitTags[0];			
+			var subTagName = splitTags[1];								
 
-			findAndShowRelatedTag(".event_tag_info", ".event_tag_values");
-		}
+			//Return every event tag that matches the sub
+			findAndShowRelatedTag(".event_tag_info", ".event_tag_values", parentTagName, subTagName);
+		}		
 	}
 
 	function fadeFormAndReplaceWithProcessing(jQueryTableObject) {
@@ -93,6 +105,15 @@ $(document).ready(function() {
 		return(false);
 	}
 
+	function prettifyTagsByStrippingParents(jQueryObject)
+	{			
+		var split_tag = $(jQueryObject).text().split('->');
+		if (split_tag.length > 1) {								
+			$(jQueryObject).text(split_tag[split_tag.length - 1]);
+		}		
+		
+	}
+
 
 	hideAllTagBoxes();
 	
@@ -109,7 +130,7 @@ $(document).ready(function() {
 				silentlySendDataWithPost("/processPicture", data_array );
 				fadeFormAndReplaceWithProcessing( $(this) );
 
-				//In one second check to see if the queue is cleared
+				//In one second check to see if the queue is cleared --recursively perform this check
 				setTimeout(function() { checkProcessingQueue( data_array[0].value, 1, buttonObject) }, 1000);
 			}
 			else {
@@ -127,7 +148,7 @@ $(document).ready(function() {
 		}	
 	});
 
-	//Hanlder for when any tag option is selected
+	//Handler for when any tag option is selected
 	$("select").change(function() {
 		//Hide all tag options - (see below)
 		hideAllTagOptions(this);		
@@ -138,6 +159,7 @@ $(document).ready(function() {
 			//Walk up the DOM and find the main table for the selected option
 			var selectedOptionsTable = $(this).parentsUntil("table");					
 			hideOrShowTagBoxes( selectedOptionsTable, tagType, this );
+			//prettifyTagsByStrippingParents(  this  ); //Will work on later
 		});		
 	});
 

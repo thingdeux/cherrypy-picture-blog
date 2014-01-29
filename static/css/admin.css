@@ -112,7 +112,7 @@ body {
 	color: black;
 	font-size: 40px;
 	margin-top: -200px;
-	margin-left: 450px;	
+	margin-left: 450px;
 }
 
 .required_mark {
@@ -125,6 +125,7 @@ body {
 }
 
 .ui-tabs {
+	min-width: 700px;
 	margin-left: 20%;
 	margin-right: 20%;
 	overflow: hidden;

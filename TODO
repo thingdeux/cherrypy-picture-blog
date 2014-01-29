@@ -1,5 +1,7 @@
 FIX 'Processing' not dissapearing if it's used on a block in the middle of process.
 
+(MANAGE PAGE) FIX selected picture deselecting once a new tag is clicked.
+
 
 Clear ALL selections made on the process page after back navigation is used. (Basically on load)
 	*Option selections

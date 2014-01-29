@@ -53,8 +53,8 @@
 
 										<li main="${main_tag}" sub="${sub_tag}"><a> ${sub_tag} </a>
 											<ul>
-											%for event_main_tag, event_sub_tag, event_tag in event_tags:
-												%if event_sub_tag in sub_tag:
+											%for event_main_tag, event_sub_tag, event_tag in event_tags:												
+												%if event_sub_tag in sub_tag and event_main_tag in main_tag:												
 													<li main="${main_tag}" sub="${sub_tag}" event="${event_tag}" class="long_event_tag">
 														<a> ${event_tag} </a>
 												    </li>
