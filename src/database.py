@@ -349,8 +349,8 @@ def get_images_by_tag(*args, **kwargs):
 	db = db_connection.cursor()
 
 	try:		
-		if event_tag:
-			db.execute('SELECT * from images WHERE id IN (SELECT image_id FROM event_tags WHERE parent_tag == (?) AND sub_tag == (?) AND event_tag == (?) )', (main_tag, sub_tag, event_tag,) )			
+		if event_tag:			
+			db.execute('SELECT * from images WHERE id IN (SELECT image_id FROM event_tags WHERE parent_tag == (?) AND parent_sub_tag == (?) AND event_tag == (?) )', (main_tag, sub_tag, event_tag,) )			
 		elif sub_tag:
 			db.execute('SELECT * from images WHERE id IN (SELECT image_id FROM sub_tags WHERE parent_tag == (?) AND sub_tag == (?) )', (main_tag, sub_tag,) )			
 		elif main_tag:
@@ -386,6 +386,34 @@ def get_image_by_id(image_id):
 
 	return (query)
 	
+def update_image_data(*args):
+	data = args[0]
+	
+	try:
+		image_id = data['image_id']
+		if data['delete_requested']:
+			db_connection = connect_to_database()
+			db = db_connection.cursor()
+
+			try:
+				db.execute('DELETE FROM images WHERE id == ?', (image_id,)  )
+				db.execute('DELETE FROM tags WHERE image_id == ?', (image_id,)  )
+				db.execute('DELETE FROM sub_tags WHERE image_id == ?', (image_id,)  )
+				db.execute('DELETE FROM event_tags WHERE image_id == ?', (image_id,)  )
+				db_connection.commit()		
+				db_connection.close()
+			except Exception, err:
+				for error in err:
+					log("Unable to delete image " + image_id + " - " + error)
+
+
+
+
+	except:
+		name = data['name']
+		caption = data['caption']
+		date_taken = data['date_taken']
+		print("Updating: " + str(image_id) + "  -  " + str(name) + " | " + str(caption) + " | " + str(date_taken))
 
 #Class used for breaking down data from process submission POST
 class Posted_Data:

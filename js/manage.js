@@ -34,6 +34,6 @@ $(document).ready(function() {
 		var parsedTags = parseTagsReceived( $(ui).attr('item') );
 		silentlySendDataWithPost("/getPictures/", parsedTags);
 	});
-
+	
 
 });
