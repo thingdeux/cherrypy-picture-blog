@@ -384,16 +384,16 @@ def get_image_by_id(image_id):
 
 	return (query)
 
-def get_image_tags_by_id(image_id):
+def get_image_tags_by_image_id(image_id):
 	db_connection = connect_to_database()
 	db = db_connection.cursor()
 
 	try:
-		db.execute('SELECT tag FROM tags WHERE image_id == (?)', (image_id,) )
+		db.execute('SELECT id, tag FROM tags WHERE image_id == (?)', (image_id,) )
 		main_tags = db.fetchall()
-		db.execute('SELECT parent_tag, sub_tag FROM sub_tags WHERE image_id == (?)', (image_id,) )
+		db.execute('SELECT id, parent_tag, sub_tag FROM sub_tags WHERE image_id == (?)', (image_id,) )
 		sub_tags = db.fetchall()
-		db.execute('SELECT parent_tag, parent_sub_tag, event_tag FROM event_tags WHERE image_id == (?)', (image_id,) )
+		db.execute('SELECT id, parent_tag, parent_sub_tag, event_tag FROM event_tags WHERE image_id == (?)', (image_id,) )
 		event_tags = db.fetchall()
 		db.connection.close()
 
@@ -434,11 +434,11 @@ def delete_image_tags(*args):
 			db.commit()
 			db.execute('DELETE FROM tags WHERE image_id = ? AND tag = ?', (image_id, main_tag,) )
 			db.commit()
-		db.connection.close()
+		db_connection.close()
 		return (True)
 
 	except Exception, err:
-		db.connection.close()
+		db_connection.close()
 		for error in err:
 			log("Unable to delete tag: " + error)
 		

@@ -48,7 +48,7 @@
 
 %if menu_location == "selected":	
 	<form id = 'update_data' name = 'updated_image_data'>
-		%for id, name, image_location, thumb_location, date_added, date_taken, caption in image_data:			
+		%for image_id, name, image_location, thumb_location, date_added, date_taken, caption in image_data:			
 				<table class="ui-widget ui-widget-content">			
 					<% thumbpath = thumb_location.split('/') %>
 					<th></th><th>Added to site ${date_added} &nbsp;&nbsp;&nbsp;&nbsp;</th>
@@ -61,28 +61,24 @@
 					<tr><td></td><td align='center'> Associated Tags </td></tr><tr><td>&nbsp;</td></tr>
 
 					
-					%for tag in main_tags:
-						<tr><td>${tag[0]}</td>
-							%for main_tag, sub_tag in sub_tags:
-								%if main_tag in tag:
-									<td> <span style="color: #665874">-></span> 
-										<span class = "tags" dataMainTag = "${tag[0]}" dataSubTag = "${sub_tag}">${sub_tag}</span>
-									%for parent_main_tag, parent_sub_tag, event_tag in event_tags:
+					%for sub_id, main_tag, sub_tag in sub_tags:
+						<tr><td>Tag:</td>
+								<td class = "tags">${main_tag}														
+									<span style="color: #665874">-></span><span class = "sub_tag_id" dataSubID = "${sub_id}">${sub_tag}</span>
+
+									%for event_id, parent_main_tag, parent_sub_tag, event_tag in event_tags:
 										%if parent_sub_tag in sub_tag:
-											<span style="color: #665874">-></span> <span class = "tags event_tag" dataEventTag="${event_tag}">${event_tag}</span>
-										%endif
-									%endfor									
-									<input id = "${id}" type = "button" align="center" class = "tag_delete_button" value ="X"></input>									
-									</td>
-								%endif								
-							%endfor								
-					%endfor	
+											<span style="color: #665874">-></span> <span class = "event_tag_id" dataEventID = "${event_id}">${event_tag}</span></td>
+										%endif										
+									%endfor
+									<td><input id = "${image_id}" type = "button" align="center" class = "tag_delete_button" value ="X"></input></td>
+					%endfor
 					
 
 					<tr><td></td><td>
 						<input id = "update_image_button" type ="button" class = "image_button" value="Update"></input>				
 						<input id = "delete_image_button" type = "button" class = "image_button" value="Delete"></input>
-						<input id = "id" name = "image_id" type="hidden" value=${id}></input>
+						<input name = "image_id" type="hidden" value="${image_id}"></input>
 					</td></tr>		
 				</table>
 		%endfor
@@ -103,7 +99,7 @@
 							"margin-left": "40px",							
 							"font-size": "15px"
 						});
-		$('.tag_button').css({
+		$('.tag_delete_button').css({
 							"margin-left": "3px",
 							"font-size": "10px"
 		});
@@ -136,14 +132,14 @@
 
 		$(".tag_delete_button").click(function() {
 			var images_id = $(this).attr('id');
-			var tags_to_post = $(this).parentsUntil('tr').find('.tags');			
+			//Get all of the span elements to the left of the delete button
+			var tags_to_post = $(this).closest('tr').children().filter('.tags').children();			
 			
 			//Prepare array to pass server for deletion of ID's.
 			var arrayToPush = {
-							id: images_id,
-							main_tag: $(tags_to_post).attr('dataMainTag'),
-							sub_tag: $(tags_to_post).attr('dataSubTag'),				
-							event_tag: $(tags_to_post).filter('.event_tag').attr('dataEventTag')
+							image_id: images_id, 				
+							sub_tag_id: $(tags_to_post).filter('.sub_tag_id').attr('dataSubID'),							
+							event_tag_id: $(tags_to_post).filter('.event_tag_id').attr('dataEventID')
 			}
 
 			sendPostData('/deleteTags/', arrayToPush);
