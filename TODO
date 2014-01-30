@@ -1,3 +1,6 @@
+-Refactor tag deletion to use ID for exact deletions instead of fuzzy matching
+
+
 -FIX 'Processing' not dissapearing if it's used on a block in the middle of process.
 
 -(MANAGE PAGE) FIX selected picture deselecting once a new tag is clicked.

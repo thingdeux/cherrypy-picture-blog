@@ -395,6 +395,7 @@ def get_image_tags_by_id(image_id):
 		sub_tags = db.fetchall()
 		db.execute('SELECT parent_tag, parent_sub_tag, event_tag FROM event_tags WHERE image_id == (?)', (image_id,) )
 		event_tags = db.fetchall()
+		db.connection.close()
 
 	except Exception, err:
 		db.connection.close()
@@ -411,6 +412,36 @@ def get_image_tags_by_id(image_id):
 	return(returnedList)
 	db.connection.close()
 
+def delete_image_tags(*args):
+	try:
+		data = args[0]
+		image_id = data['id']
+		main_tag = data['main_tag']
+		sub_tag = data['sub_tag']	
+		try:			
+			event_tag = data['event_tag']
+		except:
+			event_tag = False
+
+		db_connection = connect_to_database()
+		db = db_connection.cursor()
+
+		if event_tag:
+			db.execute('DELETE FROM event_tags WHERE image_id = ? AND event_tag = ?', (image_id, event_tag,))
+			db.commit()
+		elif not event_tag:
+			db.execute('DELETE FROM sub_tags WHERE image_id = ? AND parent_tag = ? AND sub_tag = ?', (image_id, main_tag, event_tag,) )
+			db.commit()
+			db.execute('DELETE FROM tags WHERE image_id = ? AND tag = ?', (image_id, main_tag,) )
+			db.commit()
+		db.connection.close()
+		return (True)
+
+	except Exception, err:
+		db.connection.close()
+		for error in err:
+			log("Unable to delete tag: " + error)
+		
 	
 def update_image_data(*args):
 	data = args[0]
