@@ -367,8 +367,6 @@ def get_images_by_tag(*args, **kwargs):
 
 	return ( query )
 		
-
-	
 def get_image_by_id(image_id):
 	db_connection = connect_to_database()
 	db = db_connection.cursor()
@@ -385,6 +383,34 @@ def get_image_by_id(image_id):
 	db.connection.close()
 
 	return (query)
+
+def get_image_tags_by_id(image_id):
+	db_connection = connect_to_database()
+	db = db_connection.cursor()
+
+	try:
+		db.execute('SELECT tag FROM tags WHERE image_id == (?)', (image_id,) )
+		main_tags = db.fetchall()
+		db.execute('SELECT parent_tag, sub_tag FROM sub_tags WHERE image_id == (?)', (image_id,) )
+		sub_tags = db.fetchall()
+		db.execute('SELECT parent_tag, parent_sub_tag, event_tag FROM event_tags WHERE image_id == (?)', (image_id,) )
+		event_tags = db.fetchall()
+
+	except Exception, err:
+		db.connection.close()
+		for error in err:
+			log("Unable to get image by ID: " + error)		
+		return ("")
+
+	returnedList = [
+						main_tags,
+						sub_tags,
+						event_tags
+					]
+
+	return(returnedList)
+	db.connection.close()
+
 	
 def update_image_data(*args):
 	data = args[0]

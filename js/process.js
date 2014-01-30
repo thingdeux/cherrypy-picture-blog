@@ -52,6 +52,7 @@ $(document).ready(function() {
 		//Fade the block to .50 opacity
 		jQueryTableObject.parentsUntil('#process_files').fadeTo(300, .50);				
 		
+		//Pop the word processing in front of the current block of content
 		var processingText = jQueryTableObject.closest('div').after('<span class = "proccesingText">Processing ...</span>');
 		processingText = processingText.next('.proc');	
 	}
@@ -105,6 +106,7 @@ $(document).ready(function() {
 		return(false);
 	}
 
+	//To implement later possibly
 	function prettifyTagsByStrippingParents(jQueryObject)
 	{			
 		var split_tag = $(jQueryObject).text().split('->');
@@ -158,8 +160,7 @@ $(document).ready(function() {
 			var tagType = $(this).parents("select").attr("name");
 			//Walk up the DOM and find the main table for the selected option
 			var selectedOptionsTable = $(this).parentsUntil("table");					
-			hideOrShowTagBoxes( selectedOptionsTable, tagType, this );
-			//prettifyTagsByStrippingParents(  this  ); //Will work on later
+			hideOrShowTagBoxes( selectedOptionsTable, tagType, this );			
 		});		
 	});
 
