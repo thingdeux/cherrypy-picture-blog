@@ -179,7 +179,7 @@ class web_server(object):
   def getOnePicture(self, *arguments, **kwargs):   
     image_id =  kwargs.keys()[0]
     returned_data = database.get_image_by_id ( image_id )
-    tag_data = database.get_image_tags_by_id( image_id )
+    tag_data = database.get_image_tags_by_image_id( image_id )
     main_tags = tag_data[0]
     sub_tags = tag_data[1]
     event_tags = tag_data[2]
@@ -197,8 +197,9 @@ class web_server(object):
       database.update_image_data(kwargs)
   
   @cherrypy.expose
-  def deleteTags(self, *arguments, **kwargs):        
-    database.delete_image_tags(kwargs)
+  def deleteTags(self, *arguments, **kwargs):
+    print(kwargs)
+    #database.delete_image_tags(kwargs)
 
 def startServer():
 
