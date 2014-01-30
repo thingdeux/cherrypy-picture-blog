@@ -195,7 +195,10 @@ class web_server(object):
   def updateImageData(self, *arguments, **kwargs):
     if len(kwargs) > 0:          
       database.update_image_data(kwargs)
-    
+  
+  @cherrypy.expose
+  def deleteTags(self, *arguments, **kwargs):        
+    database.delete_image_tags(kwargs)
 
 def startServer():
 
