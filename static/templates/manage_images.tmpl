@@ -56,10 +56,28 @@
 					<tr><td>Name: </td><td><input id = "picture_name" name = "name" value="${name}"></td></tr>
 					<tr><td>Caption:</td>  <td><textarea name = "caption" rows = 2 cols="30">${caption}</textarea> </td></tr>
 					<tr><td>Date Taken:</td> <td><input type = "text" id = "date_taken" name = "date_taken" size="8" value="${date_taken}"></input>  
-						(Date Format: MM/DD/YY)</td>			
-					<tr><td></td><td>				
-						<input id = "update_image_button" type ="button" value="Update"></input>				
-						<input id = "delete_image_button" type = "button" value="Delete"></input>
+						(Date Format: MM/DD/YY)</td>
+					<tr><td></td><td align='center'> TAGS: </td></tr>
+					%for tag in main_tags:
+						<tr><td>${tag[0]}</td>
+							%for main_tag, sub_tag in sub_tags:
+								%if main_tag in tag:
+									<td> -> ${sub_tag}
+									%for parent_main_tag, parent_sub_tag, event_tag in event_tags:
+										%if parent_sub_tag in sub_tag:
+											-> ${event_tag}
+										%endif
+									%endfor									
+									<input type = "button" align="center" class = "tag_button" value ="X"></input>
+									</td>
+								%endif								
+							%endfor								
+					%endfor	
+
+
+					<tr><td></td><td>
+						<input id = "update_image_button" type ="button" class = "image_button" value="Update"></input>				
+						<input id = "delete_image_button" type = "button" class = "image_button" value="Delete"></input>
 						<input id = "id" name = "image_id" type="hidden" value=${id}></input>
 					</td></tr>		
 				</table>
@@ -76,11 +94,16 @@
 		}
 
 		$(':button').button();
-		$(':button').css({
+		$('.image_button').css({
 							"margin-top": "30px",
-							"margin-left": "20px",							
+							"margin-left": "40px",							
 							"font-size": "15px"
 						});
+		$('.tag_button').css({
+							"margin-left": "3px",
+							"font-size": "10px"
+
+		});
 
 		$("#delete_image_button").click(function() {
 			var response = confirm("Are you sure you want to completely delete this image?");
@@ -104,7 +127,7 @@
 				sendPostData("/updateImageData", $(this.form).serializeArray() );
 				location.reload();
 			}
-		});
+		});	
 
 	</script>
 

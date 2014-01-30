@@ -1,20 +1,22 @@
-FIX 'Processing' not dissapearing if it's used on a block in the middle of process.
+-FIX 'Processing' not dissapearing if it's used on a block in the middle of process.
 
-(MANAGE PAGE) FIX selected picture deselecting once a new tag is clicked.
+-(MANAGE PAGE) FIX selected picture deselecting once a new tag is clicked.
+-(MANAGE PAGE) Make deleting the image and thumbnail part of the delete process in manage
 
-
-Clear ALL selections made on the process page after back navigation is used. (Basically on load)
+-Clear ALL selections made on the process page after back navigation is used. (Basically on load)
 	*Option selections
 	*Captions
 	....etc
 
-Make SURE no ' or " characters are used for tags
+-Make SURE no ' or " characters are used for tags
 
 
-Have the picture transposer get current year instead of hard-coding the year
+-Have the picture transposer get current year instead of hard-coding the year
 
 
 [medium]
+-Create AUTH for admin menu
+-Create 404 Pages
 ERROR CHECKING FOR EVERYTHING!!
 Write cleanup job for erroneous / old process queue entries
 

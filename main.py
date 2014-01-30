@@ -179,9 +179,15 @@ class web_server(object):
   def getOnePicture(self, *arguments, **kwargs):   
     image_id =  kwargs.keys()[0]
     returned_data = database.get_image_by_id ( image_id )
+    tag_data = database.get_image_tags_by_id( image_id )
+    main_tags = tag_data[0]
+    sub_tags = tag_data[1]
+    event_tags = tag_data[2]
+
     mako_template = Template(filename='static/templates/manage_images.tmpl')    
 
-    self.mako_template_render = mako_template.render(image_data = returned_data, menu_location = "selected")
+    self.mako_template_render = mako_template.render(image_data = returned_data, main_tags = main_tags, 
+                                sub_tags = sub_tags, event_tags = event_tags, menu_location = "selected")
 
     return self.mako_template_render
 
