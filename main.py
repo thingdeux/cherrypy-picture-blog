@@ -194,7 +194,12 @@ class web_server(object):
   @cherrypy.expose
   def updateImageData(self, *arguments, **kwargs):
     if len(kwargs) > 0:          
-      database.update_image_data(kwargs)
+      isImageDeleted = database.update_image_data(kwargs)
+
+      if isImageDeleted:
+        return ('<span id = "deleted" class = "ui-widget ui-widget-content">Image deleted</span>')
+      else:
+        return ('<span class = "ui-widget ui-widget-content">Image metadata updated</span>')      
   
   @cherrypy.expose
   def deleteTags(self, *arguments, **kwargs):
@@ -216,7 +221,7 @@ class web_server(object):
       return self.mako_template_render
       
     else:      
-      return ("Image Deleted")
+      return ('<span id = "deleted" class = "ui-widget ui-widget-content">Image Deleted</span>')
 
 
 def startServer():

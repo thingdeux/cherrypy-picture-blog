@@ -111,12 +111,22 @@
 
 			if (response == true)
 			{				
+				//Send 'delete_requested' BOOLEAN to server and pass image_ID
 				var data_to_delete = {
 					'delete_requested': 1,
 					'image_id': $(this).parents().children().filter('#image_id').val()					
-				}				
-				sendPostData("/updateImageData", data_to_delete );
-				location.reload();
+				}
+
+				var returnedData = sendPostData("/updateImageData", data_to_delete );
+				
+				returnedData.done(function (response, textStatus, jqXHR) {
+					//If the image has been deleted reload the page
+					if ( $(response).eq(0).html() == "Image Deleted"   ) {
+						location.reload();
+					}
+
+					$("#selected_picture").html(response);
+				});
 			}
 			
 		});
@@ -126,8 +136,11 @@
 			var response = confirm("Update all image metadata?");
 
 			if (response == true) {
-				sendPostData("/updateImageData", $(this.form).serializeArray() );
-				location.reload();
+				var returnedData = sendPostData("/updateImageData", $(this.form).serializeArray() );
+				
+				returnedData.done(function (response, textStatus, jqXHR) {					
+					$("#selected_picture").html(response);
+				});
 			}
 		});	
 
@@ -148,13 +161,15 @@
 
 				var returnedData = sendPostData('/deleteTags/', arrayToPush);
 
-				returnedData.done(function ( response, textStatus, jqXHR) {
-				$("#selected_picture").html(response);				
+				returnedData.done(function ( response, textStatus, jqXHR) {	
+					//If the image has been deleted reload the page
+					if ( $(response).eq(0).html() == "Image Deleted"   ) {
+						location.reload();
+					}
+					$("#selected_picture").html(response);			
 				});
 			}
 		});
-
-
 	</script>
 
 %endif
