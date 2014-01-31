@@ -16,6 +16,10 @@ $(document).ready(function() {
 		selectedTable.find(".event_tag_values").hide();
 	}
 
+	function clearAllOptionSelects() {
+		$('option:selected').prop("selected", false);
+	}
+
 	function hideOrShowTagBoxes(selectedTable, tagType, optionJQueryObject) {			
 		function findAndShowRelatedTag(tag_selection_box, tag_value_name, mainTag, subTag) {			
 			//build a jQuery find statement to only display event tags that pertain to the passed tag_value	
@@ -114,10 +118,7 @@ $(document).ready(function() {
 			$(jQueryObject).text(split_tag[split_tag.length - 1]);
 		}		
 		
-	}
-
-
-	hideAllTagBoxes();
+	}	
 	
 	//Handler for any button being clicked - will pass the form data over to cherrypy.		
 	$(":button").click(function() {
@@ -163,5 +164,10 @@ $(document).ready(function() {
 			hideOrShowTagBoxes( selectedOptionsTable, tagType, this );			
 		});		
 	});
+
+
+	//Run these on page load
+	hideAllTagBoxes();
+	clearAllOptionSelects();
 
 })
