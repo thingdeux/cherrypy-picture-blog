@@ -1,4 +1,3 @@
--(PROCESS PAGE) Clear ALL OPTION selections after back navigation is used. (Basically on load)	
 -(UPLOAD PAGE) FIX file not uploading if only one image is queued.
 
 [medium]
@@ -39,9 +38,9 @@ All data that comes to your server must be checked and sanitized. Always. No exc
 
 
 Completed: 
+-(PROCESS PAGE) Clear ALL OPTION selections after refresh is used.
+
 -(PROCESS PAGE) FIX 'Processing' not dissapearing if it's used on a block in the middle of process.
-
-
 -(MANAGE PAGE) FIX selected picture deselecting once a new tag is clicked
 -(MANAGE PAGE) Refresh page *ONLY* in the event of an image deletion (could further optimize this by rebuilding list -- darn it now I'm going to have to do that)
 -(MANAGE PAGE) Update image metadata updates data across all tables
