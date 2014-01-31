@@ -1,10 +1,15 @@
 import os
-import logger
+from logger import log
 import locations
 from pictureConverter import get_date_exif
 
 def delete_file(filename):
-	test = "test"
+	try:
+		os.remove(filename)
+		log("Deleting: " + str(filename) )
+	except Exception, err:
+		for error in err:
+			log("Unable to delete file: " + filename + " - " + error)
 
 
 def get_queue_directory_list():
