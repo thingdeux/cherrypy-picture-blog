@@ -45,7 +45,7 @@ Dropzone.options.uploadDropzone = {
   maxFiles: 30,
   parallelUploads: 30,
   maxThumbnailFilesize: 2,
-  maxFilesize: 2, //In MB
+  maxFilesize: 4, //In MB
   previewsContainer: "#dropzonePreview",
 
 
@@ -55,7 +55,7 @@ Dropzone.options.uploadDropzone = {
     var upload_button = document.querySelector("#picture_upload_button")
         uploadDropzone = this;
 
-    //Hide upload button and upload files when 'upload' html button is clicked
+    //Hide upload button and upload files when 'upload' button is clicked
     upload_button.addEventListener("click", function() {
       uploadDropzone.processQueue(); // Tell Dropzone to process all queued files.      
       modify_upload_button("hide");
@@ -67,9 +67,8 @@ Dropzone.options.uploadDropzone = {
       modify_upload_button("show");           
     });
 
-    this.on("complete", function(self) {
-      //Kickoff event after all files finish uploading
-      
+    //Kickoff event after all files finish uploading
+    this.on("complete", function(self) {          
       //Return array of all queued files for length checking
       queued_files = this.getQueuedFiles();      
 

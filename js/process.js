@@ -125,7 +125,7 @@ $(document).ready(function() {
 		
 		//'process' button
 		if ( $(this).is("#process_picture_button") )	{
-			var data_array = $(this.form).serializeArray()
+			var data_array = $(this.form).serializeArray()			
 
 			//Verify that 3 required fields are populated before submission (name | main tags | sub_tags)
 			if ( verifyRequiredFields(data_array) ) {		
@@ -145,7 +145,8 @@ $(document).ready(function() {
 			var verifyDelete = confirm("Delete this file without processing?");
 			if (verifyDelete)
 			{
-				silentlySendDataWithPost("/deletePicture", $(this.form).serializeArray() );
+				silentlySendDataWithPost("/deleteProcessingPicture", $(this.form).serializeArray() );
+				location.reload();
 			}
 
 		}	
