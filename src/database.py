@@ -412,47 +412,94 @@ def get_image_tags_by_image_id(image_id):
 	return(returnedList)
 	db.connection.close()
 
+def does_image_have_at_least_one_tag(image_id):
+	db_connection = connect_to_database()
+	db = db_connection.cursor()
+
+	try:
+		db.execute('SELECT COUNT(*) FROM sub_tags WHERE image_id == ?', (image_id,) )
+		sub_count = db.fetchone()[0]
+		db.execute('SELECT COUNT(*) FROM event_tags WHERE image_id == ?', (image_id,) )
+		event_count = db.fetchone()[0]	
+
+		if (sub_count + event_count) <= 0:			
+			update_image_data({
+								'image_id': image_id,
+								'delete_requested': 1
+							})
+			return (False)
+		else:
+			return (True)
+
+		db_connection.close()
+	except Exception, err:
+		for error in err:
+			db_connection.close()
+			log("Unable to determine if image has at least one tag: " + error)
+			return (True)
+
 def delete_image_tags(*args):
+
 	try:
 		data = args[0]
-		image_id = data['id']
-		main_tag = data['main_tag']
-		sub_tag = data['sub_tag']	
+		image_id = data['image_id']
+		sub_tag_id = data['sub_tag_id']
+		
 		try:			
-			event_tag = data['event_tag']
+			event_tag_id = data['event_tag_id']	
 		except:
-			event_tag = False
-
+			event_tag_id = False
+		
 		db_connection = connect_to_database()
 		db = db_connection.cursor()
 
-		if event_tag:
-			db.execute('DELETE FROM event_tags WHERE image_id = ? AND event_tag = ?', (image_id, event_tag,))
-			db.commit()
-		elif not event_tag:
-			db.execute('DELETE FROM sub_tags WHERE image_id = ? AND parent_tag = ? AND sub_tag = ?', (image_id, main_tag, event_tag,) )
-			db.commit()
-			db.execute('DELETE FROM tags WHERE image_id = ? AND tag = ?', (image_id, main_tag,) )
-			db.commit()
+		if event_tag_id:
+			db.execute('DELETE FROM sub_tags WHERE id = ?', (sub_tag_id,) )			
+			db.execute('DELETE FROM event_tags WHERE id = ?', (event_tag_id,) )						
+		elif not event_tag_id:
+			db.execute('DELETE FROM sub_tags WHERE id = ?', (sub_tag_id,) )	
+
+		db_connection.commit()
 		db_connection.close()
-		return (True)
+		
+		if does_image_have_at_least_one_tag(image_id):
+			return (True)
+		else:
+			return (False)
+
+		
 
 	except Exception, err:
 		db_connection.close()
 		for error in err:
 			log("Unable to delete tag: " + error)
+			return (True)
 		
 	
-def update_image_data(*args):
-	data = args[0]
+def update_image_data(*args, **kwargs):	
+	if args:
+		data = args[0]
+	else:
+		data = kwargs
 	
 	try:
 		image_id = data['image_id']
+
+		#Deletion request, delete image and all metadata
 		if data['delete_requested']:
 			db_connection = connect_to_database()
 			db = db_connection.cursor()
 
 			try:
+				import filesystem
+				#Delete image file and thumbnail
+				db.execute('SELECT image_location, thumb_location FROM images WHERE id = ?', (image_id,) )
+				locations = db.fetchall()[0]
+				#First element is image location, second is thumbnail location
+				filesystem.delete_file( locations[0] )
+				filesystem.delete_file( locations[1] )
+
+				#Clean up all image metadata
 				db.execute('DELETE FROM images WHERE id == ?', (image_id,)  )
 				db.execute('DELETE FROM tags WHERE image_id == ?', (image_id,)  )
 				db.execute('DELETE FROM sub_tags WHERE image_id == ?', (image_id,)  )
@@ -463,14 +510,12 @@ def update_image_data(*args):
 				for error in err:
 					log("Unable to delete image " + image_id + " - " + error)
 
-
-
-
+	#Not a deletion request, update image metadata
 	except:
 		name = data['name']
 		caption = data['caption']
 		date_taken = data['date_taken']
-		print("Updating: " + str(image_id) + "  -  " + str(name) + " | " + str(caption) + " | " + str(date_taken))
+		print("Updating: " + str(image_id) + "  -  " + str(name) + " | " + str(caption) + " | " + str(date_taken))		
 
 #Class used for breaking down data from process submission POST
 class Posted_Data:

@@ -1,31 +1,22 @@
--Refactor tag deletion to use ID for exact deletions instead of fuzzy matching
-
-
--FIX 'Processing' not dissapearing if it's used on a block in the middle of process.
-
 -(MANAGE PAGE) FIX selected picture deselecting once a new tag is clicked.
--(MANAGE PAGE) Make deleting the image and thumbnail part of the delete process in manage
-
--Clear ALL selections made on the process page after back navigation is used. (Basically on load)
-	*Option selections
-	*Captions
-	....etc
-
--Make SURE no ' or " characters are used for tags
-
-
--Have the picture transposer get current year instead of hard-coding the year
+-(PROCESS PAGE) Clear ALL OPTION selections after back navigation is used. (Basically on load)	
+-(PROCESS PAGE) FIX 'Processing' not dissapearing if it's used on a block in the middle of process.
+-(UPLOAD PAGE) FIX file not uploading if only one image is queued.
 
 
 [medium]
+-Have the picture transposer get current year instead of hard-coding the year (optionally update year image)
 -Create AUTH for admin menu
 -Create 404 Pages
+-Make SURE no special characters are used for tags
 ERROR CHECKING FOR EVERYTHING!!
 Write cleanup job for erroneous / old process queue entries
 
 
 [low]
+CLEAN UP Formatting on html files
 Sanitize POST data (so SQL commands can't be run from inputs)
+(MANAGE PAGE) Get rid of 'reload' after delete /update *too many calls after
 
 
 
@@ -35,9 +26,6 @@ Sanitize POST data (so SQL commands can't be run from inputs)
 queuries the DB for files to delete and have it delete them.  Don't use the web server at all for that.
 
 Be paranoid: Never trust your users
-
-So, how do you fight these threats? This is a topic far beyond this guide; however there are a few rules it's good to keep in mind. The most important rule is: never ever trust your users, including yourself; even a trusted user could have been hijacked.
-
 All data that comes to your server must be checked and sanitized. Always. No exception.
 
     Escape potentially dangerous characters. The specific characters you should be cautious with vary depending on the context in which the data is used and the server platform you employ, but all server-side languages have functions for this.
@@ -47,9 +35,6 @@ All data that comes to your server must be checked and sanitized. Always. No exc
 
 
 
-[Code]
-CLEAN UP Formatting on html files
-
 
 
 
@@ -57,3 +42,6 @@ Completed:
 Have the date taken pulled from the image for the process page (if available)
 Don't let pictures be processed without at least a sub-tag
 Make Name and tags mandatory for submission
+-Refactor tag deletion to use ID for exact deletions instead of fuzzy matching
+-(MANAGE PAGE) Check to see if sub/event tags still exist after a tag deletion if count == 0 then kill the main tag and the image
+-(MANAGE PAGE) Make deleting the image and thumbnail part of the delete process in manage

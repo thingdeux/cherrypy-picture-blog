@@ -177,7 +177,7 @@ class web_server(object):
 
   @cherrypy.expose
   def getOnePicture(self, *arguments, **kwargs):   
-    image_id =  kwargs.keys()[0]
+    image_id = kwargs.keys()[0]
     returned_data = database.get_image_by_id ( image_id )
     tag_data = database.get_image_tags_by_image_id( image_id )
     main_tags = tag_data[0]
@@ -198,8 +198,26 @@ class web_server(object):
   
   @cherrypy.expose
   def deleteTags(self, *arguments, **kwargs):
-    print(kwargs)
-    #database.delete_image_tags(kwargs)
+    isImageStillActive = database.delete_image_tags(kwargs)    
+    
+    if isImageStillActive:
+      image_id = kwargs['image_id']      
+      returned_data = database.get_image_by_id ( image_id )
+      tag_data = database.get_image_tags_by_image_id( image_id )
+      main_tags = tag_data[0]
+      sub_tags = tag_data[1]
+      event_tags = tag_data[2]
+
+      mako_template = Template(filename='static/templates/manage_images.tmpl')    
+
+      self.mako_template_render = mako_template.render(image_data = returned_data, main_tags = main_tags, 
+                                  sub_tags = sub_tags, event_tags = event_tags, menu_location = "selected")
+
+      return self.mako_template_render
+      
+    else:      
+      return ("Image Deleted")
+
 
 def startServer():
 

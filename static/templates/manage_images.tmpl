@@ -39,7 +39,6 @@
 
 		//Shorten the image names so they are only 10 characters and ...'s
 		shortenImageNames( $('.image_menu_name') );		
-
 	</script>
 
 %endif
@@ -76,9 +75,9 @@
 					
 
 					<tr><td></td><td>
-						<input id = "update_image_button" type ="button" class = "image_button" value="Update"></input>				
+						<input id = "update_image_button" type ="button" class = "image_button" value="Update"></input>	
 						<input id = "delete_image_button" type = "button" class = "image_button" value="Delete"></input>
-						<input name = "image_id" type="hidden" value="${image_id}"></input>
+						<input id = "image_id" name = "image_id" type="hidden" value="${image_id}"></input>
 					</td></tr>		
 				</table>
 		%endfor
@@ -86,11 +85,13 @@
 
 	<script>
 		function sendPostData(location, data) {				
-			$.ajax({
+			var data = $.ajax({
 					type: "POST",
 					url: location,
-					data: data
+					data: data					
 				});
+
+			return (data)
 		}
 
 		$(':button').button(); //Turn all buttons into JqueryUI buttons
@@ -109,12 +110,12 @@
 			var response = confirm("Are you sure you want to completely delete this image?");
 
 			if (response == true)
-			{
-				var to_delete_data = {
+			{				
+				var data_to_delete = {
 					'delete_requested': 1,
-					'image_id': $(this).parents().children().filter('#id').val()
+					'image_id': $(this).parents().children().filter('#image_id').val()					
 				}				
-				sendPostData("/updateImageData", to_delete_data );
+				sendPostData("/updateImageData", data_to_delete );
 				location.reload();
 			}
 			
@@ -131,18 +132,26 @@
 		});	
 
 		$(".tag_delete_button").click(function() {
-			var images_id = $(this).attr('id');
-			//Get all of the span elements to the left of the delete button
-			var tags_to_post = $(this).closest('tr').children().filter('.tags').children();			
-			
-			//Prepare array to pass server for deletion of ID's.
-			var arrayToPush = {
-							image_id: images_id, 				
-							sub_tag_id: $(tags_to_post).filter('.sub_tag_id').attr('dataSubID'),							
-							event_tag_id: $(tags_to_post).filter('.event_tag_id').attr('dataEventID')
-			}
+			var response = confirm("Remove this tag?");
 
-			sendPostData('/deleteTags/', arrayToPush);
+			if (response == true) {
+				var images_id = $(this).attr('id');
+				//Get all of the span elements to the left of the delete button
+				var tags_to_post = $(this).closest('tr').children().filter('.tags').children();			
+				
+				//Prepare array to pass server for deletion of ID's.
+				var arrayToPush = {
+								image_id: images_id, 				
+								sub_tag_id: $(tags_to_post).filter('.sub_tag_id').attr('dataSubID'),		
+								event_tag_id: $(tags_to_post).filter('.event_tag_id').attr('dataEventID')
+				}
+
+				var returnedData = sendPostData('/deleteTags/', arrayToPush);
+
+				returnedData.done(function ( response, textStatus, jqXHR) {
+				$("#selected_picture").html(response);				
+				});
+			}
 		});
 
 
