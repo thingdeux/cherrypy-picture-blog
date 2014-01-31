@@ -1,9 +1,5 @@
--(MANAGE PAGE) Update image metadata updates data across all tables
--(MANAGE PAGE) FIX selected picture deselecting once a new tag is clicked.
 -(PROCESS PAGE) Clear ALL OPTION selections after back navigation is used. (Basically on load)	
--(PROCESS PAGE) FIX 'Processing' not dissapearing if it's used on a block in the middle of process.
 -(UPLOAD PAGE) FIX file not uploading if only one image is queued.
-
 
 [medium]
 -Have the picture transposer get current year instead of hard-coding the year (optionally update year image)
@@ -15,6 +11,7 @@ Write cleanup job for erroneous / old process queue entries
 
 
 [low]
+-(LOGGER) - Make use of severity - edit log calls to provide info vs ERROR
 -(MANAGE PAGE) Instead of refreshing on delete, rebuild the previous list menu - cleaner look and page elements don't need to be re-fetched for no reason
 
 CLEAN UP Formatting on html files
@@ -42,9 +39,12 @@ All data that comes to your server must be checked and sanitized. Always. No exc
 
 
 Completed: 
+-(PROCESS PAGE) FIX 'Processing' not dissapearing if it's used on a block in the middle of process.
+
+
+-(MANAGE PAGE) FIX selected picture deselecting once a new tag is clicked
 -(MANAGE PAGE) Refresh page *ONLY* in the event of an image deletion (could further optimize this by rebuilding list -- darn it now I'm going to have to do that)
-
-
+-(MANAGE PAGE) Update image metadata updates data across all tables
 Have the date taken pulled from the image for the process page (if available)
 Don't let pictures be processed without at least a sub-tag
 Make Name and tags mandatory for submission
