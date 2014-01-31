@@ -506,16 +506,30 @@ def update_image_data(*args, **kwargs):
 				db.execute('DELETE FROM event_tags WHERE image_id == ?', (image_id,)  )
 				db_connection.commit()		
 				db_connection.close()
+				return(True)  #BOOL Flag for isImageDeleted cherrypyFunction
+
 			except Exception, err:
 				for error in err:
 					log("Unable to delete image " + image_id + " - " + error)
 
 	#Not a deletion request, update image metadata
 	except:
-		name = data['name']
-		caption = data['caption']
-		date_taken = data['date_taken']
-		print("Updating: " + str(image_id) + "  -  " + str(name) + " | " + str(caption) + " | " + str(date_taken))		
+		db_connection = connect_to_database()
+		db = db_connection.cursor()		
+
+		try:
+			name = data['name']
+			caption = data['caption']
+			date_taken = data['date_taken']
+			db.execute('''UPDATE images SET name = ?, caption = ?, date_taken = ? WHERE id == ?''', (name,caption,date_taken,image_id,))
+			db_connection.commit()
+			db_connection.close()
+		except Exception, err:
+			for error in err:
+				db_connection.close()
+				log("Unable to update Image #" + str(image_id) + ": " + error)
+
+		return (False) #BOOL Flag for isImageDeleted cherrypyFunction
 
 #Class used for breaking down data from process submission POST
 class Posted_Data:
