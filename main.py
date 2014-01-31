@@ -101,9 +101,9 @@ class web_server(object):
   @cherrypy.expose
   def uploadPicture(self, **kwargs):
     #Takes a binary file and places it in the 'queue' folder for image processing
-    def write_uploaded_image_file(location):
+    def write_uploaded_image_file(location, cherrypyObj):
       tempFile = open(location, 'wb')
-      tempFile.write(cherrypyObj.file.read()) 
+      tempFile.write(cherrypyObj.file.read())
       tempFile.close()
 
     def get_duplicate_image_file_count(location, filename):
@@ -117,30 +117,38 @@ class web_server(object):
 
       return (filename_found_count)
 
+    def uploadImage(passedImage):
+      #Save each file in the queue_save_location folder as its own filename        
+      #If a duplicate filename is found append a number to the file and write it anyhow      
+      if not os.path.isfile( os.path.join(locations.queue_save_location(), passedImage.filename) ):
+        file_location = os.path.join(locations.queue_save_location(), passedImage.filename)          
+        write_uploaded_image_file( file_location, passedImage ) 
+        #Create Thumbnail for queue process page             
+        pictureConverter.create_queue_thumbnail( file_location,locations.queue_save_location() )          
 
-    try:
+      else:
+        #Find out how many files exist with the same name and append a count of the files to the filename - super hacky!!   
+        #Known "problem" of fuzzy matching between already existing files.  Not serious as copy will be made either way.
+        count = get_duplicate_image_file_count(locations.queue_save_location(), passedImage.filename)
+        filename_with_count = passedImage.filename.replace('.', '-' + str(count) + '.')
+        file_location = os.path.join(locations.queue_save_location(),  filename_with_count)     
+        write_uploaded_image_file( file_location, passedImage )
+        #Create Thumbnail for queue process page          
+        pictureConverter.create_queue_thumbnail( file_location, locations.queue_save_location() )
+
+    try:      
       #Object of each file passed to the server via post
       uploadObj = kwargs.get('file[]')
 
-      for cherrypyObj in uploadObj:        
-        #Save each file in the queue_save_location folder as its own filename
+      try:
+        imageCount = len(uploadObj)
+        
+        print("GOT HERE?")
+        for image in uploadObj:
+          uploadImage(image)
 
-        #If a duplicate filename is found append a number to the file and write it anyhow      
-        if not os.path.isfile( os.path.join(locations.queue_save_location(), cherrypyObj.filename) ):
-          file_location = os.path.join(locations.queue_save_location(), cherrypyObj.filename)          
-          write_uploaded_image_file( file_location ) 
-          #Create Thumbnail for queue process page             
-          pictureConverter.create_queue_thumbnail( file_location,locations.queue_save_location() )          
-
-        else:
-          #Find out how many files exist with the same name and append a count of the files to the filename - super hacky!!   
-          #Known "problem" of fuzzy matching between already existing files.  Not serious as copy will be made either way.
-          count = get_duplicate_image_file_count(locations.queue_save_location(), cherrypyObj.filename)
-          filename_with_count = cherrypyObj.filename.replace('.', '-' + str(count) + '.')
-          file_location = os.path.join(locations.queue_save_location(),  filename_with_count)     
-          write_uploaded_image_file( file_location )
-          #Create Thumbnail for queue process page          
-          pictureConverter.create_queue_thumbnail( file_location, locations.queue_save_location() )          
+      except:        
+        uploadImage(uploadObj)
 
     except Exception, err:
       for error in err:
@@ -223,6 +231,9 @@ class web_server(object):
     else:      
       return ('<span id = "deleted" class = "ui-widget ui-widget-content">Image Deleted</span>')
 
+  @cherrypy.expose
+  def deleteProcessingPicture(self, *arguments, **kwargs):
+    filesystem.delete_queued_image_and_thumbnail(kwargs['FileLocation'])
 
 def startServer():
 

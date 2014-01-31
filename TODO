@@ -1,4 +1,4 @@
--(UPLOAD PAGE) FIX file not uploading if only one image is queued.
+[BLOCKING]
 
 [medium]
 -Have the picture transposer get current year instead of hard-coding the year (optionally update year image)
@@ -38,8 +38,8 @@ All data that comes to your server must be checked and sanitized. Always. No exc
 
 
 Completed: 
+-(UPLOAD PAGE) FIX file not uploading if only one image is queued.
 -(PROCESS PAGE) Clear ALL OPTION selections after refresh is used.
-
 -(PROCESS PAGE) FIX 'Processing' not dissapearing if it's used on a block in the middle of process.
 -(MANAGE PAGE) FIX selected picture deselecting once a new tag is clicked
 -(MANAGE PAGE) Refresh page *ONLY* in the event of an image deletion (could further optimize this by rebuilding list -- darn it now I'm going to have to do that)
