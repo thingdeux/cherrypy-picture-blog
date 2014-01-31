@@ -33,6 +33,7 @@ $(document).ready(function() {
 	$(".ui-menu").on( "menuselect", function(event, ui) {					
 		var parsedTags = parseTagsReceived( $(ui).attr('item') );
 		silentlySendDataWithPost("/getPictures/", parsedTags);
+		$("#selected_picture").html('');
 	});
 	
 

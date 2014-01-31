@@ -53,8 +53,7 @@ $(document).ready(function() {
 		jQueryTableObject.parentsUntil('#process_files').fadeTo(300, .50);				
 		
 		//Pop the word processing in front of the current block of content
-		var processingText = jQueryTableObject.closest('div').after('<span class = "proccesingText">Processing ...</span>');
-		processingText = processingText.next('.proc');	
+		var processingText = jQueryTableObject.closest('div').after('<span class = "proccesingText">Processing ...</span>');				
 	}
 
 	function checkProcessingQueue(image_id, isCleared, jQueryObject) {		
@@ -67,7 +66,7 @@ $(document).ready(function() {
 					setTimeout(function() { checkProcessingQueue(image_id, 1, jQueryObject) }, 2000);
 				}
 				else  {					
-					hideQueueBox(jQueryObject);
+					hideQueueBox(jQueryObject);					
 				}
 			
 			});									
@@ -77,7 +76,8 @@ $(document).ready(function() {
 
 	function hideQueueBox(jQueryTableObject) {		
 		//Hides the whole block
-		jQueryTableObject.parentsUntil('#process_files').hide();
+		jQueryTableObject.parentsUntil('#process_files').hide(300);
+		$('.proccesingText').hide(300);									
 	}
 
 	function verifyRequiredFields(data) {		
