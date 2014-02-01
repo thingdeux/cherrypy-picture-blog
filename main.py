@@ -236,10 +236,22 @@ class web_server(object):
 
   @cherrypy.expose
   def manageTags(self, *arguments, **kwargs):
-    try:
-      tag_type = arguments[0].get('tag_type')
-    except:
-      tag_type = kwargs['tag_type']
+    def checkIfParamExists(name):
+      try:
+        return( arguments[0].get(name) )
+      except:
+        try:                
+          return (kwargs[name])
+        except:
+          return ("")
+                
+    
+    #Check to see if the POST passed just a main tag, or also a sub - if they were passed
+    #Send them to mako for filtering.
+    #When manage tags is called from within main it passes a tuple instead of a dict so check for that as well.
+    tag_type = checkIfParamExists('tag_type')
+    main_tag = checkIfParamExists('main_tag')
+    sub_tag = checkIfParamExists('sub_tag')
 
     mako_template = Template(filename='static/templates/manage_images.tmpl')
     tags = database.get_tags()    
@@ -247,16 +259,17 @@ class web_server(object):
     event_tags = database.get_event_tags()
     
     #Render the mako template
-    self.mako_template_render = mako_template.render(main_tags = tags, sub_tags = sub_tags, event_tags = event_tags, menu_location = "get_tags", tag_type = tag_type)
+    self.mako_template_render = mako_template.render(main_tags = tags, sub_tags = sub_tags, 
+                    event_tags = event_tags, menu_location = "get_tags", tag_type = tag_type,
+                    main_tag_query = main_tag, sub_tag_query = sub_tag)
 
     return self.mako_template_render
     
 
   @cherrypy.expose
   def insertTag(self, *arguments, **kwargs):
-
     database.insert_tag(0, kwargs)
-    return ( self.manageTags(kwargs) )
+    return ( self.manageTags(kwargs) )    
 
 def startServer():
 

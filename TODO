@@ -15,6 +15,7 @@ Write cleanup job for erroneous / old process queue entries
 
 
 [Low]
+-(MANAGE PAGE) - Add check to see if #of main tags is reaching the vertical edge and expand it.
 -(LOGGER) - Make use of severity - edit log calls to provide info vs ERROR
 -(MANAGE PAGE) Instead of refreshing on delete, rebuild the previous list menu - cleaner look and page elements don't need to be re-fetched for no reason
 
