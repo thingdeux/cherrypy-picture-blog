@@ -1,6 +1,11 @@
 [BLOCKING]
+-(PROCESS PAGE) - Clear out caption value on refresh
 
-[medium]
+
+[High]
+Finalize initial tag lists
+
+[Medium]
 -Have the picture transposer get current year instead of hard-coding the year (optionally update year image)
 -Create AUTH for admin menu
 -Create 404 Pages
@@ -9,7 +14,7 @@ ERROR CHECKING FOR EVERYTHING!!
 Write cleanup job for erroneous / old process queue entries
 
 
-[low]
+[Low]
 -(LOGGER) - Make use of severity - edit log calls to provide info vs ERROR
 -(MANAGE PAGE) Instead of refreshing on delete, rebuild the previous list menu - cleaner look and page elements don't need to be re-fetched for no reason
 
@@ -38,6 +43,10 @@ All data that comes to your server must be checked and sanitized. Always. No exc
 
 
 Completed: 
+Cleanup admin css sheet
+Various manage page tweaks
+
+
 -(UPLOAD PAGE) FIX file not uploading if only one image is queued.
 -(PROCESS PAGE) Clear ALL OPTION selections after refresh is used.
 -(PROCESS PAGE) FIX 'Processing' not dissapearing if it's used on a block in the middle of process.

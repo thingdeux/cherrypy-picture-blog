@@ -1,3 +1,4 @@
+/*Universal/All Pages*/
 body {
 	background: black;
 	font-size: 16px;
@@ -7,6 +8,24 @@ body {
 	padding-right: 2%;
 }
 
+.header {
+	font-size: 25px;
+	color: gray;	
+}
+
+#navigation {	
+	font-size: 20px;
+	padding-bottom: 1%;
+	padding-top: 2%;
+	margin-left: 45%;
+}
+
+a.silent_link:link {text-decoration: none; color:white;}
+a.silent_link:visited {text-decoration: none; color:white;}
+a.silent_link:hover {text-decoration: none; color:white;}
+a.silent_link:active {text-decoration: none; color:white;}
+
+/*Upload Page*/
 #dropzone_area {
 	width: 5%;
 	height: 1%;
@@ -28,20 +47,6 @@ body {
   	padding: 2px;	
 }
 
-#process_files {
-	margin-left: 20%;
-	margin-right: 20%;
-	padding: 5%;
-	background-color: #666699;
-	min-width: 925px;
-	max-width: 925px;
-}
-
-.header {
-	font-size: 25px;
-	color: gray;	
-}
-
 .dz-details {		
 	float: left;	
 	padding: 10px;	
@@ -55,11 +60,14 @@ body {
 	bottom: 0;
 }
 
-#navigation {	
-	font-size: 20px;
-	padding-bottom: 1%;
-	padding-top: 2%;
-	margin-left: 45%;
+/*Process Page*/
+#process_files {
+	margin-left: 20%;
+	margin-right: 20%;
+	padding: 5%;
+	background-color: #666699;
+	min-width: 925px;
+	max-width: 925px;
 }
 
 #bottomNav{
@@ -101,13 +109,7 @@ body {
 	position: relative;		
 }
 
-#manage_menu{
-	margin-left: 20%;
-	margin-top: 2%;
-	margin-right: 20%;
-}
-
-.proccesingText{
+.processingText{
 	position: absolute;
 	color: black;
 	font-size: 40px;
@@ -120,14 +122,22 @@ body {
 	font-size: 15px;
 }
 
+/*Manage Page*/
+#manage_menu{
+	margin-left: 20%;
+	margin-top: 2%;
+	margin-right: 20%;
+}
+
 .ui-menu {	
 	float: left;	
 }
 
-.ui-tabs {
+#manage_tabs {
 	min-width: 700px;
-	margin-left: 20%;
-	margin-right: 20%;
+	margin-left: 15%;
+	margin-right: 15%;
+	min-height: 450px;
 	overflow: hidden;
 }
 
@@ -138,8 +148,3 @@ body {
 #image_picture_menu {
 	float: left;
 }
-
-a.silent_link:link {text-decoration: none; color:white;}
-a.silent_link:visited {text-decoration: none; color:white;}
-a.silent_link:hover {text-decoration: none; color:white;}
-a.silent_link:active {text-decoration: none; color:white;}
