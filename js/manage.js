@@ -38,21 +38,21 @@ $(document).ready(function() {
 				$("#image_picture_menu").html(response);		
 			});
 
-			$("#selected_picture").html('');
-
-			$(this).menu("collapseAll", null, true);
+			$("#selected_picture").html('');			
 		}
 		else if (  $(this).is('#tags_menu')  ) {			
 			var data = {
 						tag_type: $(ui).attr('item').attr('dataTagType')
 						}			
-
-			var returnedTemplate = silentlySendDataWithPost("/manageTags/", data);
-			returnedTemplate.done (function (response, textStatus, jqXHR) {
-				$('#tags_selection').html(response);
-			});
-		}		
 		
+			if (data['tag_type']) {
+				var returnedTemplate = silentlySendDataWithPost("/manageTags/", data);
+				returnedTemplate.done (function (response, textStatus, jqXHR) {
+					$('#tags_selection').html(response);
+				});
+			}
+		}
+
 	});
 
 	

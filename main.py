@@ -235,16 +235,28 @@ class web_server(object):
     filesystem.delete_queued_image_and_thumbnail(kwargs['FileLocation'])
 
   @cherrypy.expose
-  def manageTags(self, *arguments, **kwargs):    
+  def manageTags(self, *arguments, **kwargs):
+    try:
+      tag_type = arguments[0].get('tag_type')
+    except:
+      tag_type = kwargs['tag_type']
+
     mako_template = Template(filename='static/templates/manage_images.tmpl')
     tags = database.get_tags()    
     sub_tags = database.get_sub_tags()
     event_tags = database.get_event_tags()
     
     #Render the mako template
-    self.mako_template_render = mako_template.render(main_tags = tags, sub_tags = sub_tags, event_tags = event_tags, menu_location = "get_tags", tag_type = kwargs['tag_type'])
+    self.mako_template_render = mako_template.render(main_tags = tags, sub_tags = sub_tags, event_tags = event_tags, menu_location = "get_tags", tag_type = tag_type)
 
     return self.mako_template_render
+    
+
+  @cherrypy.expose
+  def insertTag(self, *arguments, **kwargs):
+
+    database.insert_tag(0, kwargs)
+    return ( self.manageTags(kwargs) )
 
 def startServer():
 
