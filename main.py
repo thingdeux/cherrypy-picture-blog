@@ -243,8 +243,7 @@ class web_server(object):
         try:                
           return (kwargs[name])
         except:
-          return ("")
-                
+          return ("")         
     
     #Check to see if the POST passed just a main tag, or also a sub - if they were passed
     #Send them to mako for filtering.

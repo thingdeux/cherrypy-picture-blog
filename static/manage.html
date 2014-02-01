@@ -75,7 +75,7 @@
 			</div>
 
 			<div id = "tags">
-				<ul id = "tags_menu" class = "ui_menu">					
+				<ul id = "tags_menu" class = "ui_menu">				
 						<li><a> New Tag </a>
 							<ul>
 								<li dataTagType="main"><a> Main Tag</a></li>
@@ -86,7 +86,22 @@
 										%endfor
 									</ul>
 								</li>
-								<li dataTagType="event"><a> Event Tag</a></li>
+								<li><a> Event Tag</a>
+									<ul>
+										%for main_tag in main_tags:
+											<li class = "long_sub_tag"><a> ${main_tag} </a>
+												<ul>
+												%for parent_main_tag, sub_tag in sub_tags:
+													%if main_tag == parent_main_tag:
+														<li class = "long_event_tag" dataTagType="event" dataSubQuery = "${parent_main_tag}" dataEventQuery = "${sub_tag}">
+															<a> ${sub_tag}</a></li>
+													%endif
+												%endfor
+												</ul>
+											</li>
+										%endfor
+									</ul>
+								</li>								
 							</ul>
 						</li>
 						<li><a> Tag Counts </a></li>

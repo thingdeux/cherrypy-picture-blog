@@ -210,15 +210,27 @@
 		</table>
 
 	%elif tag_type == "event":
-		<table><tr><th>Current Event Tags</th></tr>
-		%for main_tag, sub_tag, event_tag in event_tags:
-			<tr><td>${main_tag} -> ${sub_tag} -> ${event_tag}</td></tr>
-		%endfor
+		<table>
+			<tr><th>New Tag</th><tr>
+
+			<form>
+				<tr><td><input id = "new_event_tag_input" type = "text" name = "new_event_tag" size="35"></input> </td></tr>
+				<tr><td align = "center"><input type = "button" id = "submit_new_event_tag" value="Submit"></input></td></tr>
+			</form>
+
+
+			<tr><th>Current Event Tags</th></tr>
+				%for main_tag, sub_tag, event_tag in event_tags:
+					%if sub_tag_query == sub_tag:
+						<tr><td>${main_tag} -> ${sub_tag} -> ${event_tag}</td></tr>
+					%endif
+				%endfor
 		</table>
 	%endif
 
 
-	<script>		
+	<script>
+		$("#tags_selection").show(200);	
 
 		function silentlyPostData(location, passed_data) {
 			var responseToReturn = $.ajax({
@@ -262,7 +274,6 @@
 					postAndRefreshTagSelection(data)
 				}
 			}			
-
 		});
 
 
@@ -279,7 +290,22 @@
 					postAndRefreshTagSelection(data)
 				}
 			}			
+		});
 
+		//Handler for clicking the submit button on the eventtag creation page
+		$('#submit_new_event_tag').click( function() {			
+			if ( checkTagLength( $('#new_event_tag_input').val())  ) {
+				var confirmed_submit = confirm("Are you sure you wish to create a new event tag?");
+				if (confirmed_submit == true) {
+					var data = {
+							tag_type: "event",
+							main_tag: "${main_tag_query}",							
+							sub_tag: "${sub_tag_query}",
+							event_tag: $('#new_event_tag_input').val()
+					}
+					postAndRefreshTagSelection(data)
+				}
+			}			
 		});
 
 	</script>
