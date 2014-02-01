@@ -42,10 +42,12 @@ $(document).ready(function() {
 		}
 		else if (  $(this).is('#tags_menu')  ) {			
 			var data = {
-						tag_type: $(ui).attr('item').attr('dataTagType')
-						}			
-		
-			if (data['tag_type']) {
+						tag_type: $(ui).attr('item').attr('dataTagType'),
+						main_tag: $(ui).attr('item').attr('dataSubQuery'),
+						sub_tag: $(ui).attr('item').attr('dataEventQuery')
+						}		
+
+			if (data['tag_type']) {				
 				var returnedTemplate = silentlySendDataWithPost("/manageTags/", data);
 				returnedTemplate.done (function (response, textStatus, jqXHR) {
 					$('#tags_selection').html(response);

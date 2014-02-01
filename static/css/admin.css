@@ -66,8 +66,7 @@ a.silent_link:active {text-decoration: none; color:white;}
 	margin-right: 20%;
 	padding: 5%;
 	background-color: #666699;
-	min-width: 925px;
-	max-width: 925px;
+	min-width: 1050px;	
 }
 
 #bottomNav{
@@ -78,8 +77,8 @@ a.silent_link:active {text-decoration: none; color:white;}
 #queue_file_info{	
 	margin-bottom: 4%;
 	background-color: #E0E0EB;	
-	min-width: 900px;
-	max-width: 900px;
+	min-width: 1000px;
+	max-width: 1200px;
 }
 
 .queued_file{	

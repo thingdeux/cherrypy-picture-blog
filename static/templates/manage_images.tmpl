@@ -176,14 +176,14 @@
 %endif
 
 %if menu_location == "get_tags":
-
+	
 	%if tag_type == "main":
 		<table>
 			<tr><th>New Tag</th><tr>
 
 			<form>
 				<tr><td> <input id = "new_main_tag_input" type = "text" name = "new_main_tag"></input> </td></tr>
-				<tr><td align = "center"><input type = "button" id = "submit_new_tag" value="Submit"></input></td></tr>
+				<tr><td align = "center"><input type = "button" id = "submit_new_main_tag" value="Submit"></input></td></tr>
 			</form>
 
 			<tr><th>Current Tags</th></tr>
@@ -193,9 +193,19 @@
 		</table>
 
 	%elif tag_type == "sub":
-		<table><tr><th>Current Sub Tags</th></tr>
+		<table>
+			<tr><th>New Tag</th><tr>
+
+			<form>
+				<tr><td> <input id = "new_sub_tag_input" type = "text" name = "new_sub_tag"></input> </td></tr>
+				<tr><td align = "center"><input type = "button" id = "submit_new_sub_tag" value="Submit"></input></td></tr>
+			</form>
+
+		<tr><th>Current Sub Tags</th></tr>
 		%for main_tag, sub_tag in sub_tags:
-			<tr><td>${main_tag} -> ${sub_tag}</td></tr>
+			%if main_tag_query == main_tag:
+				<tr><td>${main_tag} -> ${sub_tag}</td></tr>
+			%endif
 		%endfor
 		</table>
 
@@ -208,7 +218,8 @@
 	%endif
 
 
-	<script>
+	<script>		
+
 		function silentlyPostData(location, passed_data) {
 			var responseToReturn = $.ajax({
 								type: "POST",
@@ -219,22 +230,54 @@
 			return ( responseToReturn );
 		}
 
+		//This will post data and refresh the tag selection area with html from this template
+		function postAndRefreshTagSelection(data_to_post) {
+			returnedTemplate = silentlyPostData("/insertTag/", data_to_post);
 
-		$('#submit_new_tag').click( function() {
-			var confirmed_submit = confirm("Are you sure you wish to create a new main tag?");
+			returnedTemplate.done(function (response, textStatus, jqXHR) {
+				$('#tags_selection').html(response);
+			});
+		}
 
-			if (confirmed_submit == true) {
-				var data = {
-						main_tag: $('#new_main_tag_input').val(),
-						tag_type: 'main'
-				}			
-						
-				returnedTemplate = silentlyPostData("/insertTag/", data);
-				
-				returnedTemplate.done(function (response, textStatus, jqXHR) {
-					$('#tags_selection').html(response);
-				});
+		function checkTagLength(tag) {
+			if (tag.length > 2) {
+				return (true);
+			}
+			else
+			{				
+				alert("You must enter at least 3 characters for a main tag");
+				return (false)			;
+			}
+		}
 
+		//Handler for clicking the submit button on the main tag creation page
+		$('#submit_new_main_tag').click( function() {			
+			if ( checkTagLength( $('#new_main_tag_input').val())  ) {
+				var confirmed_submit = confirm("Are you sure you wish to create a new main tag?");
+				if (confirmed_submit == true) {
+					var data = {
+							main_tag: $('#new_main_tag_input').val(),
+							tag_type: 'main'
+					}
+					postAndRefreshTagSelection(data)
+				}
+			}			
+
+		});
+
+
+		//Handler for clicking the submit button on the subtag creation page
+		$('#submit_new_sub_tag').click( function() {			
+			if ( checkTagLength( $('#new_sub_tag_input').val())  ) {
+				var confirmed_submit = confirm("Are you sure you wish to create a new sub tag?");
+				if (confirmed_submit == true) {
+					var data = {
+							main_tag: "${main_tag_query}",
+							tag_type: 'sub',
+							sub_tag: $('#new_sub_tag_input').val()
+					}
+					postAndRefreshTagSelection(data)
+				}
 			}			
 
 		});

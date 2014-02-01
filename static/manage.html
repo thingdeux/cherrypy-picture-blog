@@ -79,7 +79,13 @@
 						<li><a> New Tag </a>
 							<ul>
 								<li dataTagType="main"><a> Main Tag</a></li>
-								<li dataTagType="sub"><a> Sub Tag</a></li>
+								<li><a> Sub Tag</a>
+									<ul>
+										%for tag in main_tags:
+											<li dataTagType="sub" dataSubQuery = "${tag}"><a>${tag}</a></li>
+										%endfor
+									</ul>
+								</li>
 								<li dataTagType="event"><a> Event Tag</a></li>
 							</ul>
 						</li>

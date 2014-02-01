@@ -218,7 +218,7 @@ def insert_image_record(*args, **kwargs):
 			log("Database: Unable to insert image record - " + str(error))
 			db_connection.close()
 
-def insert_tag(image_id, tagData):		
+def insert_tag(image_id, tagData):	
 	db_connection = connect_to_database()
 	db = db_connection.cursor()		
 		
