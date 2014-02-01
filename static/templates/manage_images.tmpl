@@ -53,7 +53,7 @@
 					<th></th><th>Added to site ${date_added} &nbsp;&nbsp;&nbsp;&nbsp;</th>
 					<tr><td>&nbsp;</td></tr>
 					<tr><td>Name: </td><td><input id = "picture_name" name = "name" value="${name}"></td></tr>
-					<tr><td>Caption:</td>  <td><textarea name = "caption" rows = 2 cols="30">${caption}</textarea> </td></tr>
+					<tr><td>Caption:</td>  <td><textarea name = "caption" rows = 4 cols="30">${caption}</textarea> </td></tr>
 					<tr><td>Date Taken:</td> <td><input type = "text" id = "date_taken" name = "date_taken" size="8" value="${date_taken}"></input>  
 						(Date Format: MM/DD/YY)</td>
 					<tr><td>&nbsp;</td></tr>
@@ -67,13 +67,12 @@
 
 									%for event_id, parent_main_tag, parent_sub_tag, event_tag in event_tags:
 										%if parent_sub_tag in sub_tag:
-											<span style="color: #665874">-></span> <span class = "event_tag_id" dataEventID = "${event_id}">${event_tag}</span></td>
+											<span style="color: #665874">-></span> <span class = "event_tag_id" dataEventID = "${event_id}">${event_tag}</span>
 										%endif										
-									%endfor
-									<td><input id = "${image_id}" type = "button" align="center" class = "tag_delete_button" value ="X"></input></td>
+									%endfor						
 					%endfor
-					
-
+					<input id = "${image_id}" type = "button" align="center" class = "tag_delete_button" value ="X"></input>
+					</td>
 					<tr><td></td><td>
 						<input id = "update_image_button" type ="button" class = "image_button" value="Update"></input>	
 						<input id = "delete_image_button" type = "button" class = "image_button" value="Delete"></input>
@@ -102,7 +101,8 @@
 						});
 		$('.tag_delete_button').css({
 							"margin-left": "3px",
-							"font-size": "10px"
+							"font-size": "10px",
+							"color": "#A60000",
 		});
 
 		//Delete an image (and all tags associated)
@@ -171,5 +171,32 @@
 			}
 		});
 	</script>
+
+%endif
+
+%if menu_location == "get_tags":
+
+	%if tag_type == "Main Tag":
+		<table><tr><th>Current Tags</th></tr>
+		%for tag in main_tags:
+			<tr><td>${tag}</td></tr>
+		%endfor
+		</table>
+
+	%elif tag_type == "Sub Tag":
+		<table><tr><th>Current Sub Tags</th></tr>
+		%for main_tag, sub_tag in sub_tags:
+			<tr><td>${main_tag} -> ${sub_tag}</td></tr>
+		%endfor
+		</table>
+
+	%elif tag_type == "Event Tag":
+		<table><tr><th>Current Event Tags</th></tr>
+		%for main_tag, sub_tag, event_tag in event_tags:
+			<tr><td>${main_tag} -> ${sub_tag} -> ${event_tag}</td></tr>
+		%endfor
+		</table>
+
+	%endif
 
 %endif

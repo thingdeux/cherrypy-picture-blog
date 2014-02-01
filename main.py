@@ -142,8 +142,7 @@ class web_server(object):
 
       try:
         imageCount = len(uploadObj)
-        
-        print("GOT HERE?")
+                
         for image in uploadObj:
           uploadImage(image)
 
@@ -192,7 +191,7 @@ class web_server(object):
     sub_tags = tag_data[1]
     event_tags = tag_data[2]
 
-    mako_template = Template(filename='static/templates/manage_images.tmpl')    
+    mako_template = Template(filename='static/templates/manage_images.tmpl')
 
     self.mako_template_render = mako_template.render(image_data = returned_data, main_tags = main_tags, 
                                 sub_tags = sub_tags, event_tags = event_tags, menu_location = "selected")
@@ -235,6 +234,18 @@ class web_server(object):
   def deleteProcessingPicture(self, *arguments, **kwargs):
     filesystem.delete_queued_image_and_thumbnail(kwargs['FileLocation'])
 
+  @cherrypy.expose
+  def manageTags(self, *arguments, **kwargs):    
+    mako_template = Template(filename='static/templates/manage_images.tmpl')
+    tags = database.get_tags()    
+    sub_tags = database.get_sub_tags()
+    event_tags = database.get_event_tags()
+    
+    #Render the mako template
+    self.mako_template_render = mako_template.render(main_tags = tags, sub_tags = sub_tags, event_tags = event_tags, menu_location = "get_tags", tag_type = kwargs['tag_type'])
+
+    return self.mako_template_render
+
 def startServer():
 
   if database.verify_database_existence():
@@ -242,7 +253,7 @@ def startServer():
       database.verify_folder_existence()  #If the images /thumbnails / queue folders don't exist create them.
       
       if server_mode is "debug":
-        if database.get_latest_image_id() is 1:
+        if len( database.get_tags() ) <= 1:
           database.create_test_data()
 
       cherrypy.quickstart(web_server(), config=conf)

@@ -3,17 +3,15 @@ $(document).ready(function() {
 	$(".ui_menu").menu();
 
 	function silentlySendDataWithPost(location, data) {				
-		var returnedData = $.ajax({
-								type: "POST",
-								url: location,
-								data: data,								
-								contentType: 'application/x-www-form-urlencoded',
-								responseType: 'XMLHttpRequestResponseType'
-								});
+		var data = $.ajax({
+						type: "POST",
+						url: location,
+						data: data,								
+						contentType: 'application/x-www-form-urlencoded',
+						responseType: 'XMLHttpRequestResponseType'
+						});
 			
-		returnedData.done (function (response, textStatus, jqXHR) {			
-			$("#image_picture_menu").html(response);		
-		});
+		return (data);
 	}
 
 	function parseTagsReceived(uiObj) {
@@ -30,11 +28,33 @@ $(document).ready(function() {
 	$(".long_event_tag").width(200);
 
 	//JQUERY UI Handler for 'images tab'
-	$(".ui-menu").on( "menuselect", function(event, ui) {					
-		var parsedTags = parseTagsReceived( $(ui).attr('item') );
-		silentlySendDataWithPost("/getPictures/", parsedTags);
-		$("#selected_picture").html('');
+	$(".ui-menu").on( "menuselect", function(event, ui) {
+
+		if ( $(this).is('#image_tag_menu') ) {
+			var parsedTags = parseTagsReceived( $(ui).attr('item') );
+			var returnedTemplate = silentlySendDataWithPost("/getPictures/", parsedTags);
+
+			returnedTemplate.done (function (response, textStatus, jqXHR) {			
+				$("#image_picture_menu").html(response);		
+			});
+
+			$("#selected_picture").html('');
+
+			$(this).menu("collapseAll", null, true);
+		}
+		else if (  $(this).is('#tags_menu')  ) {			
+			var data = {
+						tag_type: $(ui).attr('item').attr('dataTagType')
+						}			
+
+			var returnedTemplate = silentlySendDataWithPost("/manageTags/", data);
+			returnedTemplate.done (function (response, textStatus, jqXHR) {
+				$('#tags_selection').html(response);
+			});
+		}		
+		
 	});
+
 	
 
 });

@@ -35,7 +35,7 @@
 
 	<div id = "container">
 		<div id = "manage_tabs">
-			<ul id ="side_menu">
+			<ul id ="top_menu">
 				<li><a href = "#images" id ="image_management">Images</a></li>
 				<li><a href = "#tags" id ="tag_management">Tags</a></li>
 				<li><a href = "#alerts" id ="alert_management">Alerts</a></li>
@@ -75,37 +75,25 @@
 			</div>
 
 			<div id = "tags">
-				<ul id = "tags_tag_menu" class = "ui_menu">
-					%for tag in main_tags:					
-						<li><a> ${tag} </a>
+				<ul id = "tags_menu" class = "ui_menu">					
+						<li><a> New Tag </a>
 							<ul>
-								%for main_tag, sub_tag in sub_tags:									
-									%if main_tag in tag:
-
-										<li><a> ${sub_tag} </a>
-											<ul>
-											%for event_main_tag, event_sub_tag, event_tag in event_tags:
-												%if event_sub_tag in sub_tag:
-													<li class="long_event_tag"><a> ${event_tag} </a></li>
-												%endif
-											%endfor											
-											</ul>
-										</li>
-									%endif
-								%endfor
+								<li dataTagType="Main Tag"><a> Main Tag</a></li>
+								<li dataTagType="Sub Tag"><a> Sub Tag</a></li>
+								<li dataTagType="Event Tag"><a> Event Tag</a></li>
 							</ul>
-						</li>		
-					%endfor
+						</li>
+						<li><a> Tag Counts </a></li>
 				</ul>
-				
+				<div id = "tags_selection" class = "ui_menu"></div>
 			</div>
 
 			<div id = "alerts">				
-				THIS IS A REALLY REALLY LONG THING				
+				Alert | Status | Date_Added | Inactive_date
 			</div>
 
 			<div id = "db">
-				This is a test of the emergency broadcast system (db)
+				Backup | Clean up processing queue | Check for erroneous deletion | 
 			</div>
 
 			<div id = "logs">

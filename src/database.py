@@ -36,6 +36,7 @@ def create_fresh_tables():
 
 	db.execute('''CREATE TABLE alerts (id INTEGER PRIMARY KEY, alert TEXT, status TEXT, date_added INTEGER, inactive_date INTEGER)''')
 	db.execute('''CREATE TABLE processing_queue (id INTEGER PRIMARY KEY, image_name TEXT)''')
+	db.execute('''CREATE TABLE logs (id INTEGER PRIMARY KEY, error TEXT, date_occured TEXT, severity TEXT''')
 
 	#Create index on tags
 	db.execute(''' CREATE INDEX tagIndex ON tags(tag ASC) ''')
@@ -77,36 +78,65 @@ def create_test_data():
 	tagData = [
 		(None, 0, "Kids"),
 		(None, 0, "Josh"),
-		(None, 0, "Linz"),		
-		(None, 0, "Dogs"),
+		(None, 0, "Linz"),				
 		(None, 0, "Family"),
-		(None, 0, "Vacation"),
+		(None, 0, "Vacations")
 	]
 
 	subTagData = [
 		(None, 0, "Kids", "Callie"),
-		(None, 0, "Josh", "Portrait"),
+
+		(None, 0, "Josh", "Portraits"),
 		(None, 0, "Josh", "With Callie"),
 		(None, 0, "Josh", "Photography"),
-		(None, 0, "Linz", "Portrait"),
+		(None, 0, "Josh", "Birthdays"),
+
+		(None, 0, "Linz", "Portraits"),
 		(None, 0, "Linz", "With Callie"),
 		(None, 0, "Linz", "Photography"),
-		(None, 0, "Family", "Johnsons"),
-		(None, 0, "Family", "Zamudios"),
+		(None, 0, "Linz", "Birthdays"),
+
+		(None, 0, "Family", "Johnson"),
+		(None, 0, "Family", "Zamudio"),
+		(None, 0, "Family", "Brownell"),
+		(None, 0, "Family", "Murello"),
+		(None, 0, "Family", "Williams"),
+		(None, 0, "Family", "Puppies"),
+
+		(None, 0, "Vacations", "Seattle"),
+		(None, 0, "Vacations", "Arizona"),
+		(None, 0, "Vacations", "Hawaii"),
+		(None, 0, "Vacations", "Road Trips"),
+		(None, 0, "Vacations", "New York")
 	]
 
 	eventTagData = [
 		(None, 0, "Kids", "Callie", "Callies 1st Birthday"),
-		(None, 0, "Josh", "With Callie", "Callies 1st Birthday"),
-		(None, 0, "Linz", "With Callie", "Callies 1st Birthday"),
-		(None, 0, "Josh", "Portrait", "30th Birthday"),
-		(None, 0, "Linz", "Portrait", "35th Birthday"),
+		(None, 0, "Kids", "Callie", "Growing Girl"),
+		(None, 0, "Kids", "Callie", "Birthdays"),
+		(None, 0, "Kids", "Callie", "Callies 1st Birthday"),
+		(None, 0, "Kids", "Callie", "Holidays"),
+		(None, 0, "Kids", "Callie", "Silly"),
+
+		(None, 0, "Family", "Zamudio", "Brandon and Dakota"),
+		(None, 0, "Family", "Zamudio", "Roger"),
+		(None, 0, "Family", "Zamudio", "Richie and Angie"),
+		(None, 0, "Family", "Johnson", "I I I"),
+		(None, 0, "Family", "Johnson", "Larry and Annette"),
+		(None, 0, "Family", "Johnson", "Misty"),
+		(None, 0, "Family", "Johnson", "Anthony and Latonya"),
+		(None, 0, "Family", "Williams", "Teresa"),
+		(None, 0, "Family", "Brownell", "Christine"),
+
+		(None, 0, "Vacations", "Hawaii", "Cruise Ship"),
+		(None, 0, "Vacations", "Hawaii", "Island")
+		
 		
 	]
 
 	alertData = [
 		(None, "Outage Coming up on the 4th", "active", time.time(), time.time() + 2),
-		(None, "Callies Birthday Coming up!!", "active", time.time(), time.time() + 0.5),
+		(None, "Callies Birthday Coming up!!", "active", time.time(), time.time() + 0.5)
 
 	]
 
