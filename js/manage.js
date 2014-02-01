@@ -1,6 +1,7 @@
 $(document).ready(function() {	
 	$("#manage_tabs").tabs();
 	$(".ui_menu").menu();
+	$("#tags_selection").hide();
 
 	function silentlySendDataWithPost(location, data) {				
 		var data = $.ajax({
@@ -24,8 +25,9 @@ $(document).ready(function() {
 		return (  tags_to_submit  );
 	}
 	
-	//Reset the width on event tags (they're typically longer) - wordwrap looks wrong
-	$(".long_event_tag").width(200);
+	//Reset the width on event and sub tags (they're typically longer) - wordwrap looks wrong
+	$(".long_sub_tag").width(150);
+	$(".long_event_tag").width(200);	
 
 	//JQUERY UI Handler for 'images tab'
 	$(".ui-menu").on( "menuselect", function(event, ui) {
@@ -47,7 +49,7 @@ $(document).ready(function() {
 						sub_tag: $(ui).attr('item').attr('dataEventQuery')
 						}		
 
-			if (data['tag_type']) {				
+			if (data['tag_type']) {		
 				var returnedTemplate = silentlySendDataWithPost("/manageTags/", data);
 				returnedTemplate.done (function (response, textStatus, jqXHR) {
 					$('#tags_selection').html(response);
