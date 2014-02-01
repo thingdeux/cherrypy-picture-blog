@@ -69,10 +69,11 @@
 										%if parent_sub_tag in sub_tag:
 											<span style="color: #665874">-></span> <span class = "event_tag_id" dataEventID = "${event_id}">${event_tag}</span>
 										%endif										
-									%endfor						
+									%endfor
+									<input id = "${image_id}" type = "button" align="center" class = "tag_delete_button" value ="X"></input>
+								</td>
 					%endfor
-					<input id = "${image_id}" type = "button" align="center" class = "tag_delete_button" value ="X"></input>
-					</td>
+					
 					<tr><td></td><td>
 						<input id = "update_image_button" type ="button" class = "image_button" value="Update"></input>	
 						<input id = "delete_image_button" type = "button" class = "image_button" value="Delete"></input>
@@ -176,27 +177,68 @@
 
 %if menu_location == "get_tags":
 
-	%if tag_type == "Main Tag":
-		<table><tr><th>Current Tags</th></tr>
-		%for tag in main_tags:
-			<tr><td>${tag}</td></tr>
-		%endfor
+	%if tag_type == "main":
+		<table>
+			<tr><th>New Tag</th><tr>
+
+			<form>
+				<tr><td> <input id = "new_main_tag_input" type = "text" name = "new_main_tag"></input> </td></tr>
+				<tr><td align = "center"><input type = "button" id = "submit_new_tag" value="Submit"></input></td></tr>
+			</form>
+
+			<tr><th>Current Tags</th></tr>
+			%for tag in main_tags:
+				<tr><td>${tag}</td></tr>
+			%endfor
 		</table>
 
-	%elif tag_type == "Sub Tag":
+	%elif tag_type == "sub":
 		<table><tr><th>Current Sub Tags</th></tr>
 		%for main_tag, sub_tag in sub_tags:
 			<tr><td>${main_tag} -> ${sub_tag}</td></tr>
 		%endfor
 		</table>
 
-	%elif tag_type == "Event Tag":
+	%elif tag_type == "event":
 		<table><tr><th>Current Event Tags</th></tr>
 		%for main_tag, sub_tag, event_tag in event_tags:
 			<tr><td>${main_tag} -> ${sub_tag} -> ${event_tag}</td></tr>
 		%endfor
 		</table>
-
 	%endif
+
+
+	<script>
+		function silentlyPostData(location, passed_data) {
+			var responseToReturn = $.ajax({
+								type: "POST",
+								url: location,
+								data: passed_data
+							});	
+
+			return ( responseToReturn );
+		}
+
+
+		$('#submit_new_tag').click( function() {
+			var confirmed_submit = confirm("Are you sure you wish to create a new main tag?");
+
+			if (confirmed_submit == true) {
+				var data = {
+						main_tag: $('#new_main_tag_input').val(),
+						tag_type: 'main'
+				}			
+						
+				returnedTemplate = silentlyPostData("/insertTag/", data);
+				
+				returnedTemplate.done(function (response, textStatus, jqXHR) {
+					$('#tags_selection').html(response);
+				});
+
+			}			
+
+		});
+
+	</script>
 
 %endif

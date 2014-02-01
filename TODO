@@ -42,11 +42,7 @@ All data that comes to your server must be checked and sanitized. Always. No exc
 
 
 
-Completed: 
-Cleanup admin css sheet
-Various manage page tweaks
-
-
+Completed:
 -(UPLOAD PAGE) FIX file not uploading if only one image is queued.
 -(PROCESS PAGE) Clear ALL OPTION selections after refresh is used.
 -(PROCESS PAGE) FIX 'Processing' not dissapearing if it's used on a block in the middle of process.

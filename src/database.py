@@ -218,15 +218,15 @@ def insert_image_record(*args, **kwargs):
 			log("Database: Unable to insert image record - " + str(error))
 			db_connection.close()
 
-def insert_tag(image_id, tagData):
+def insert_tag(image_id, tagData):		
 	db_connection = connect_to_database()
 	db = db_connection.cursor()		
 		
-	if tagData['tag_type'] is 'main':
+	if tagData['tag_type'] == 'main':		
 		db.execute('INSERT INTO tags VALUES (?, ?, ?)', (None, image_id, tagData['main_tag']) )				
-	elif tagData['tag_type'] is 'sub':
+	elif tagData['tag_type'] == 'sub':
 		db.execute('INSERT INTO sub_tags VALUES (?, ?, ?, ?)', (None, image_id, tagData['main_tag'], tagData['sub_tag']) )
-	elif tagData['tag_type'] is 'event':
+	elif tagData['tag_type'] == 'event':
 		db.execute('INSERT INTO event_tags VALUES (?, ?, ?, ?, ?)', (None, image_id, tagData['main_tag'], tagData['sub_tag'], tagData['event_tag']) )
 
 	try:
@@ -564,7 +564,6 @@ def update_image_data(*args, **kwargs):
 #Class used for breaking down data from process submission POST
 class Posted_Data:
 	def __init__(self, data, dataType):
-				
 
 		self.postedData = data		
 		self.dataType = dataType
