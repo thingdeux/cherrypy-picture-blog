@@ -575,7 +575,20 @@ def get_top_20_logs():
 		for error in err:
 			log("Unable to get logs", "DATABASE", "LOW")
 
+def get_latest_8_images():
+	try:
+		db_connection = connect_to_database()
+		db = db_connection.cursor()
+		db.execute('SELECT * FROM images ORDER BY (date_added)  DESC LIMIT 8')	
+		latest_10 = db.fetchall()
+		db_connection.close()
 
+		return ( latest_10 )
+
+	except Exception, err:
+		db_connection.close()
+		for error in err:
+			log("Unable to get latest images", "DATABASE", "SEVERE")
 
 #Class used for breaking down data from process submission POST
 class Posted_Data:
@@ -645,3 +658,4 @@ class Posted_Data:
 			self.isSuccesful = True
 		else:
 			self.isSuccesful = False
+

@@ -55,15 +55,17 @@ class web_server(object):
   def index(self, **arguments):
   	#Create the below template using index.html (and looking up in the static folder)
     mako_template = Template(filename='static/index.html')
-    
+    latest_8 = database.get_latest_8_images()
+    main_tags = database.get_tags()
+
     #Render the mako template
-    self.mako_template_render = mako_template.render()                    
+    self.mako_template_render = mako_template.render(latest_8 = latest_8, main_tags = main_tags) 
 
     return self.mako_template_render
 
   @cherrypy.expose
   def upload(self, **arguments):
-    #Create the below template using index.html (and looking up in the static folder)
+    #Create the below template using upload.html (and looking up in the static folder)
     mako_template = Template(filename='static/upload.html')
     
     #Render the mako template
@@ -270,6 +272,7 @@ class web_server(object):
   def insertTag(self, *arguments, **kwargs):
     database.insert_tag(0, kwargs)
     return ( self.manageTags(kwargs) )    
+
 
 def startServer():
 

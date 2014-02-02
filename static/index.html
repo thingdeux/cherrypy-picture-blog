@@ -1,4 +1,4 @@
-<!DOCTYPE HTML>
+<!doctype html>
 
 <HTML>
 <title>
@@ -8,37 +8,50 @@
 <head>
 	<link rel="icon" type="image/png" href="/static/favicon.ico">
 	<link rel="stylesheet" href="/static/css/base.css" type="text/css">
-    <link rel="stylesheet" href="/static/css/normalize.css" type="text/css">
+    <link rel="stylesheet" href="/static/css/normalize.css" type="text/css">  
 
     <!-- Add in Prod<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>   
     				<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-    !-->
-    <script type="text/javascript" src="/js/lib/jquery-1.10.2.min.js"></script> 
+    !-->    
 
     <!--Instead of local !-->
+    <script type="text/javascript" src="/js/lib/jquery-1.10.2.min.js"></script> 
+    <script type="text/javascript" src="/js/lib/jquery-ui-1.10.4.min.js"></script>
 
 
     <script type="text/javascript" src="/js/index.js"></script>
 
-
 </head>
 
 <body>
-	<div id = "container">
+	<div id = "header_title">The Johnsons</div>
+
+	<div id = "container">		
 		<div id = "large_j">
 			<span class = "very_large_text">J</span>
 
-
-
-
-
-
-
+			<div id = "main_tags">
+				<ul>
+					%for tag in main_tags:
+						<li><a class = "tag_nav">${tag}</a></li>
+					%endfor
+				</ul>
+			</div>
 
 		</div>
-		<div id = "picture_scroller">
-			Scroll goes here
+
+		<div id = "picture_scroller">			
+						
+			<!-- Break apart thumbpath as it contains more than just thumb location !-->
+			%for image_id, name, image_location, thumb_location, date_added, date_taken, caption in latest_8:
+
+				<% thumbpath = thumb_location.split('/') %>
+				<img class = "thumbnail_scroller ui-widget" src="${'/' + thumbpath[6] + '/' + thumbpath[7]}" width="100px" height = "66px"></img>
+
+			%endfor
+
 		</div>
+
 	</div>
 </body>
 

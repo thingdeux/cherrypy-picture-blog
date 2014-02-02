@@ -1,21 +1,55 @@
-body {
+body {	
 	background: black;
 	font-size: 16px;
-	font-family: Serif;
-	color: white;	
+	font-family: "Times New Roman", Times, serif; 
+	color: white;
 }
 
-#large_j
-{
-	position: relative;
-	left: 40%;
+ul {
+	list-style-type: none;
+}
+
+#header_title {	
+	text-align: center;
+	letter-spacing: 20px;	
+	font-size: 100px;
+}
+
+#large_j {	
+	position: absolute;
+	height: 450px;
+	width: 275px;
+	top: 25%;
+	left: 45%;
 }
 .very_large_text {
+	position: inherit;
+	top: -30%;
 	color: white;
-	font-size: 500px;
+	font-size: 650px;	
 }
 
-#picture_scroller {
+#picture_scroller {	
 	position: absolute;
+	min-width: 1024px;
+	max-width: 1024px;
+	margin: auto;
 	bottom: 0;
+	right: 0;
+	left: 0;
+	
+}
+
+.thumbnail_scroller {
+    background-color: white;
+    padding: 3px;
+    margin-right: 18px;
+}
+
+#main_tags {
+	position: relative;	
+	margin-left: -100px;
+	margin-top: 60px;
+	font-size: 25px;	
+
 }
