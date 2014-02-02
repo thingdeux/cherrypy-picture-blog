@@ -92,9 +92,10 @@ class web_server(object):
     main_tags = database.get_tags()
     sub_tags = database.get_sub_tags()
     event_tags = database.get_event_tags()
+    logs = database.get_top_20_logs()
 
     #Render the mako template
-    self.mako_template_render = mako_template.render(main_tags = main_tags, sub_tags = sub_tags, event_tags = event_tags)
+    self.mako_template_render = mako_template.render(main_tags = main_tags, sub_tags = sub_tags, event_tags = event_tags, logs = logs)
 
     return self.mako_template_render
 
@@ -151,7 +152,7 @@ class web_server(object):
 
     except Exception, err:
       for error in err:
-        log("Unable to receive upload - " + error)
+        log("Unable to receive upload - " + error, "WEB", "MEDIUM")
   
   @cherrypy.expose
   def processPicture(self, **kwargs):
@@ -283,7 +284,7 @@ def startServer():
       cherrypy.quickstart(web_server(), config=conf)
     except Exception, err:
       for error in err:
-        log("Unable to start Webserver" + str(error))
+        log("Unable to start Webserver" + str(error), "WEB", "SEVERE")
 
   else:
     database.create_fresh_tables()       

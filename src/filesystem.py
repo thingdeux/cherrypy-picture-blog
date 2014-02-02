@@ -6,10 +6,10 @@ from pictureConverter import get_date_exif
 def delete_file(filename):
 	try:
 		os.remove(filename)
-		log("Deleting: " + str(filename) )
+		log("Deleting: " + str(filename), "FILESYSTEM", "INFO" )
 	except Exception, err:
 		for error in err:
-			log("Unable to delete file: " + filename + " - " + error)
+			log("Unable to delete file: " + filename + " - " + error, "FILESYSTEM", "LOW")
 
 
 def get_queue_directory_list():

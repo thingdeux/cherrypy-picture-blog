@@ -12,6 +12,7 @@ Finalize initial tag lists
 -Make SURE no special characters are used for tags
 ERROR CHECKING FOR EVERYTHING!!
 Write cleanup job for erroneous / old process queue entries
+Setup DB / App tests to make sure everything is working as designed.
 
 
 [Low]

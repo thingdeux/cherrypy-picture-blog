@@ -39,12 +39,12 @@ class WebsiteImage:
 				except Exception, err:
 					self.isSuccesful = False
 					for error in err:
-						log("Image: Unable to save images" + str(error))
+						log("Image: Unable to save images" + str(error), "CONVERTER", "MEDIUM")
 
 		except Exception, err:
 			self.isSuccesful = False
 			for error in err:
-				log("Image: Unable to process image - " + str(error))
+				log("Image: Unable to process image - " + str(error), "CONVERTER", "MEDIUM")
 
 
 
@@ -55,7 +55,7 @@ class WebsiteImage:
 		except Exception, err:
 			self.isSuccesful = False
 			for error in err:				
-				log ("Unable to open picture - " + str(err))
+				log("Unable to open picture - " + str(err), "CONVERTER", "MEDIUM")
 				return (False)
 
 	def convert_image_to_thumbnail(self):
@@ -71,7 +71,7 @@ class WebsiteImage:
 		except Exception, err:
 			self.isSuccesful = False
 			for error in err:
-				log ("Thumbnail Save Error" + str(error) )
+				log("Thumbnail Save Error" + str(error), "CONVERTER", "MEDIUM" )
 
 	def create_watermark(self):
 		try:
@@ -99,7 +99,7 @@ class WebsiteImage:
 		except Exception, err:
 			self.isSuccesful = False
 			for error in err:
-				log("Image: Unable to create watermark " + error)
+				log("Unable to create watermark " + error, "CONVERTER", "MEDIUM")
 
 	def save_uploaded_images(self):	
 		self.thumb_location = os.path.join(thumbnail_save_location(), str(get_latest_image_id() ) + '.jpg')	
@@ -112,7 +112,7 @@ class WebsiteImage:
 		except Exception, err:
 			self.isSuccesful = False
 			for error in err:
-				log("Image: Unable to save images " + str(error))
+				log("Unable to save images " + str(error), "CONVERTER", "MEDIUM")
 
 			return (False)
 
@@ -132,7 +132,7 @@ def create_queue_thumbnail(file_location,save_location):
 
 	except Exception, err:
 		for error in err:
-			log ("Thumbnail Save Error: " + str(error) )
+			log ("Thumbnail Save Error: " + str(error), "CONVERTER", "MEDIUM" )
 
 def get_date_exif(image_name):
 	try:
@@ -148,5 +148,5 @@ def get_date_exif(image_name):
 		return (  built_date_string )				
 	except Exception, err:
 		for error in err:
-			log("Unable to get EXIF" + error)
+			log("Unable to get EXIF" + error, "CONVERTER", "MEDIUM")
 			return("Unknown")
