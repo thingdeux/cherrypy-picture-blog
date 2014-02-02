@@ -128,10 +128,6 @@ a.silent_link:active {text-decoration: none; color:white;}
 	margin-right: 20%;
 }
 
-.ui-menu {	
-	float: left;	
-}
-
 #manage_tabs {
 	min-width: 700px;
 	margin-left: 15%;
@@ -147,3 +143,25 @@ a.silent_link:active {text-decoration: none; color:white;}
 #image_picture_menu {
 	float: left;
 }
+
+#spread_out_table {
+	border-collapse: separate;
+	border-spacing: 3px;
+}
+
+.log_table_headers {
+	text-align: center;
+	color: black;
+	background-color: #78787B;
+	font-weight: bold;
+}
+
+.log_table_cells {
+	color: black;
+	background-color: #B3B3BC;	
+}
+
+#image_tag_menu, #tags_menu, #tags_selection{
+	float: left;
+}
+

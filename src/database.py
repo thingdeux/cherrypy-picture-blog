@@ -16,7 +16,7 @@ def verify_database_existence():
 			return(True)
 		except Exception, err:			
 			for error in err:
-				logger.log("DataBase: Unable to verify existence" + error)
+				logger.log("DataBase: Unable to verify existence" + error, "DATABASE","SEVERE")
 	else:
 		return(False)
 	
@@ -36,27 +36,27 @@ def create_fresh_tables():
 
 	db.execute('''CREATE TABLE alerts (id INTEGER PRIMARY KEY, alert TEXT, status TEXT, date_added INTEGER, inactive_date INTEGER)''')
 	db.execute('''CREATE TABLE processing_queue (id INTEGER PRIMARY KEY, image_name TEXT)''')
-	db.execute('''CREATE TABLE logs (id INTEGER PRIMARY KEY, error TEXT, date_occured TEXT, severity TEXT''')
+	db.execute('''CREATE TABLE logs (id INTEGER PRIMARY KEY, error_type TEXT, error TEXT, date_time_occured DATETIME NOT NULL, severity TEXT)''')
 
 	#Create index on tags
 	db.execute(''' CREATE INDEX tagIndex ON tags(tag ASC) ''')
 	db.execute(''' CREATE INDEX subtagIndex ON sub_tags(sub_tag ASC) ''')
 	db.execute(''' CREATE INDEX eventtagIndex ON event_tags(event_tag ASC) ''')
+	db.execute(''' CREATE INDEX logTypeIndex ON logs(error_type DESC) ''')
 
 
 	db_connection.commit()
-	log("Database did not exist: Created DB")
+	log("Database did not exist: Created DB", "DATABASE", "SEVERE")
 	db_connection.close()
 
 def connect_to_database():
 	try:
 		#If DB doesn't exist create its tables and keys
-		db_connection = sqlite3.connect(db_path)
-		db = db_connection.cursor()				
+		db_connection = sqlite3.connect(db_path)				
 		return (db_connection)
 	except Exception, err:
 		for error in err:
-			logger.log("DataBase: Unable to connect" + error)
+			logger.log("DATABASE","DataBase: Unable to connect" + error, "SEVERE")
 			return (False)
 
 def create_test_data():
@@ -149,10 +149,10 @@ def create_test_data():
 	try:
 		db_connection.commit()
 		db_connection.close()
-		log("DataBase: Inserted test data into db")
+		log("DataBase: Inserted test data into db", "DATABASE", "INFO")
 	except Exception, err:
 		for error in err:
-			log("DataBase: Unable to insert test data - " + error)
+			log("DataBase: Unable to insert test data - " + error, "DATABASE","INFO")
 			db_connection.close()			
 
 def verify_folder_existence():
@@ -162,22 +162,21 @@ def verify_folder_existence():
 			os.mkdir( locations.image_save_location() )
 		except OSError, err:
 			for error in err:
-				log(error)
+				log(error, "FILESYSTEM", "SEVERE")
 
 	if not os.path.isdir(locations.thumbnail_save_location()):		
 		try:
 			os.mkdir( locations.thumbnail_save_location() )
 		except OSError, err:
 			for error in err:
-				log(error)
+				log(error, "FILESYSTEM", "SEVERE")
 
 	if not os.path.isdir(locations.queue_save_location()):
 		try:
 			os.mkdir( locations.queue_save_location() )
 		except OSError, err:
 			for error in err:
-				log(error)
-
+				log(error, "FILESYSTEM", "SEVERE")
 
 def get_latest_image_id():
 	db_connection = connect_to_database()
@@ -192,7 +191,7 @@ def get_latest_image_id():
 		db_connection.close()
 		
 		for error in err:
-			log("DataBase: Unable to get images table count " + str(error) )
+			log("DataBase: Unable to get images table count " + str(error), "DATABASE","SEVERE" )
 			return (False)
 
 def insert_image_record(*args, **kwargs):
@@ -215,7 +214,7 @@ def insert_image_record(*args, **kwargs):
 		return(last_row)	
 	except Exception, err:
 		for error in err:			
-			log("Database: Unable to insert image record - " + str(error))
+			log("Database: Unable to insert image record - " + str(error), "DATABASE","MEDIUM")
 			db_connection.close()
 
 def insert_tag(image_id, tagData):	
@@ -234,7 +233,7 @@ def insert_tag(image_id, tagData):
 		db_connection.close()
 	except Exception, err:
 		for error in err:
-			log("Unable to add tags: " + error)
+			log("Unable to add tags: " + error, "DATABASE","MEDIUM")
 
 #Get a list of all tags in the DB
 def get_tags():
@@ -257,7 +256,7 @@ def get_tags():
 		db_connection.close()
 		
 		for error in err:
-			log("DataBase: Unable to get tags: " + str(error) )
+			log("DataBase: Unable to get tags: " + str(error), "DATABASE","SEVERE" )
 			return (False)
 #Get a list of all sub tags in the DB
 def get_sub_tags():
@@ -280,7 +279,7 @@ def get_sub_tags():
 		db_connection.close()
 		
 		for error in err:
-			log("DataBase: Unable to get tags: " + str(error) )
+			log("DataBase: Unable to get tags: " + str(error), "DATABASE","SEVERE" )
 			return (False)
 #Get a list of all event tags in the DB
 def get_event_tags():
@@ -303,7 +302,7 @@ def get_event_tags():
 		db_connection.close()
 		
 		for error in err:
-			log("DataBase: Unable to get tags: " + str(error) )
+			log("DataBase: Unable to get tags: " + str(error), "DATABASE","SEVERE" )
 			return (False)
 
 def check_for_processing_image(passed_image_name):
@@ -325,7 +324,7 @@ def check_for_processing_image(passed_image_name):
 		db_connection.close()
 		
 		for error in err:
-			log("DataBase: Unable query processing queue: " + str(error) )
+			log("DataBase: Unable query processing queue: " + str(error), "DATABASE","SEVERE" )
 			return (1)
 
 def insert_currently_processing_job(image_name):
@@ -339,7 +338,7 @@ def insert_currently_processing_job(image_name):
 		db_connection.close()
 	except Exception, err:
 		for error in err:
-			log("Unable to add job to processing_queue tags: " + error)
+			log("Unable to add job to processing_queue tags: " + error, "DATABASE","SEVERE")
 
 def delete_currently_processing_job(image):
 	db_connection = connect_to_database()
@@ -355,7 +354,7 @@ def delete_currently_processing_job(image):
 		db_connection.close()
 		
 		for error in err:
-			log("DataBase: Unable to delete processing job: " + str(error) )
+			log("DataBase: Unable to delete processing job: " + str(error), "DATABASE","SEVERE" )
 			return (False)
 
 def get_images_by_tag(*args, **kwargs):
@@ -388,7 +387,7 @@ def get_images_by_tag(*args, **kwargs):
 	except Exception, err:
 		db_connection.close()
 		for error in err:
-			log("Unable to query images: " + error)
+			log("Unable to query images: " + error, "DATABASE","SEVERE")
 
 		return ("")
 
@@ -406,7 +405,7 @@ def get_image_by_id(image_id):
 	except Exception, err:
 		db.connection.close()
 		for error in err:
-			log("Unable to get image by ID: " + error)		
+			log("Unable to get image by ID: " + error, "DATABASE","HIGH")		
 		return ("")
 
 	query = db.fetchall()
@@ -430,7 +429,7 @@ def get_image_tags_by_image_id(image_id):
 	except Exception, err:
 		db.connection.close()
 		for error in err:
-			log("Unable to get image by ID: " + error)		
+			log("Unable to get image by ID: " + error, "DATABASE","HIGH")		
 		return ("")
 
 	returnedList = [
@@ -465,7 +464,7 @@ def does_image_have_at_least_one_tag(image_id):
 	except Exception, err:
 		for error in err:
 			db_connection.close()
-			log("Unable to determine if image has at least one tag: " + error)
+			log("Unable to determine if image has at least one tag: " + error, "DATABASE","MEDIUM")
 			return (True)
 
 def delete_image_tags(*args):
@@ -502,10 +501,9 @@ def delete_image_tags(*args):
 	except Exception, err:
 		db_connection.close()
 		for error in err:
-			log("Unable to delete tag: " + error)
+			log("Unable to delete tag: " + error, "DATABASE","MEDIUM")
 			return (True)
-		
-	
+			
 def update_image_data(*args, **kwargs):	
 	if args:
 		data = args[0]
@@ -540,7 +538,7 @@ def update_image_data(*args, **kwargs):
 
 			except Exception, err:
 				for error in err:
-					log("Unable to delete image " + image_id + " - " + error)
+					log("Unable to delete image " + image_id + " - " + error, "DATABASE","MEDIUM")
 
 	#Not a deletion request, update image metadata
 	except:
@@ -557,9 +555,27 @@ def update_image_data(*args, **kwargs):
 		except Exception, err:
 			for error in err:
 				db_connection.close()
-				log("Unable to update Image #" + str(image_id) + ": " + error)
+				log("Unable to update Image #" + str(image_id) + ": " + error, "DATABASE","MEDIUM")
 
 		return (False) #BOOL Flag for isImageDeleted cherrypyFunction
+
+def get_top_20_logs():
+	try:
+		db_connection = connect_to_database()
+		db = db_connection.cursor()
+
+		db.execute("SELECT error_type, error, date_time_occured, severity FROM logs LIMIT 20")
+		logs = db.fetchall()		
+		db_connection.close()
+
+		return(logs)
+	except Exception, err:
+		db_connection.close()
+		return ("")
+		for error in err:
+			log("Unable to get logs", "DATABASE", "LOW")
+
+
 
 #Class used for breaking down data from process submission POST
 class Posted_Data:
@@ -575,7 +591,7 @@ class Posted_Data:
 			except Exception, err:
 				self.isSuccesful = False
 				for error in err:
-					log("Unable to completely process image: " + error)
+					log("Unable to completely process image: " + error, "DATABASE","MEDIUM")
 
 	def image_processor(self):
 

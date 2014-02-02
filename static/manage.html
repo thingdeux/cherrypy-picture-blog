@@ -114,11 +114,26 @@
 			</div>
 
 			<div id = "db">
-				Backup | Clean up processing queue | Check for erroneous deletion | 
+
+				Backup | Clean up processing queue | Check for erroneous deletion | 				
 			</div>
 
-			<div id = "logs">
-				This is a test of the emergency broadcast system (logs)
+			<div id = "logs">				
+
+				<table id = "spread_out_table" class = "ui_menu">
+					<tr class = "log_table_headers"><th>Type</th><th>Error</th><th>Date</th><th>Severity</th></tr>
+
+					%for error_type, error, date_time, severity in logs:
+						<tr class = "log_table_cells"><td>${error_type}</td>
+							<td>${error}</td>
+							<td>${date_time}</td>
+							<td>${severity}</td>
+						</tr>
+					%endfor
+					</table>
+
+					<input type = "button" value = "Refresh"></input>
+					<input type = "button" value = "Delete All Logs"></input>
 			</div>
 				
 			
