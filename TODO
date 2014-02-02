@@ -1,14 +1,15 @@
 [BLOCKING]
--(PROCESS PAGE) - Clear out caption value on refresh
+-Create AUTH for admin menu
+-Create 404 Pages
 
 
 [High]
+-(PROCESS PAGE) - Clear out caption value on refresh
 Finalize initial tag lists
+-(INDEX) - Create flexible main tags for index page so that if I double the amount it won't scroll too far - shrink font or perhaps spacing if it's longer than x height
 
 [Medium]
 -Have the picture transposer get current year instead of hard-coding the year (optionally update year image)
--Create AUTH for admin menu
--Create 404 Pages
 -Make SURE no special characters are used for tags
 ERROR CHECKING FOR EVERYTHING!!
 Write cleanup job for erroneous / old process queue entries
@@ -16,9 +17,9 @@ Setup DB / App tests to make sure everything is working as designed.
 
 
 [Low]
+-(MANAGE PAGE) Instead of refreshing on image delete, rebuild the previous list menu - cleaner look and page elements don't need to be re-fetched for no reason
 -(MANAGE PAGE) - Add check to see if #of main tags is reaching the vertical edge and expand it.
--(LOGGER) - Make use of severity - edit log calls to provide info vs ERROR
--(MANAGE PAGE) Instead of refreshing on delete, rebuild the previous list menu - cleaner look and page elements don't need to be re-fetched for no reason
+-(LOG PAGE) - allow for sorting by type and severity
 
 CLEAN UP Formatting on html files
 Sanitize POST data (so SQL commands can't be run from inputs)
@@ -44,7 +45,11 @@ All data that comes to your server must be checked and sanitized. Always. No exc
 
 
 
+
+
 Completed:
+-(LOGGER) - Make use of severity - edit log calls to provide info vs ERROR
+-(LOGGER) - Update all log calls to use new system
 -(UPLOAD PAGE) FIX file not uploading if only one image is queued.
 -(PROCESS PAGE) Clear ALL OPTION selections after refresh is used.
 -(PROCESS PAGE) FIX 'Processing' not dissapearing if it's used on a block in the middle of process.
