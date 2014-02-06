@@ -44,8 +44,8 @@ Dropzone.options.uploadDropzone = {
   createImageThumbnails: true,
   maxFiles: 30,
   parallelUploads: 30,
-  maxThumbnailFilesize: 2,
-  maxFilesize: 4, //In MB
+  maxThumbnailFilesize: 5,
+  maxFilesize: 5, //In MB
   previewsContainer: "#dropzonePreview",
 
 

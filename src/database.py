@@ -4,6 +4,7 @@ import locations
 import time
 from logger import log
 from logger import get_time
+from random import randint
 
 db_path = os.path.join(locations.current_folder(), '.database.db')
 
@@ -80,7 +81,8 @@ def create_test_data():
 		(None, 0, "Josh"),
 		(None, 0, "Linz"),				
 		(None, 0, "Family"),
-		(None, 0, "Vacations")
+		#(None, 0, "Vacations"),
+		(None, 0, "Holidays")
 	]
 
 	subTagData = [
@@ -103,19 +105,27 @@ def create_test_data():
 		(None, 0, "Family", "Williams"),
 		(None, 0, "Family", "Puppies"),
 
-		(None, 0, "Vacations", "Seattle"),
-		(None, 0, "Vacations", "Arizona"),
-		(None, 0, "Vacations", "Hawaii"),
-		(None, 0, "Vacations", "Road Trips"),
-		(None, 0, "Vacations", "New York")
+		#(None, 0, "Vacations", "Seattle"),
+		#(None, 0, "Vacations", "Arizona"),
+		#(None, 0, "Vacations", "Hawaii"),
+		#(None, 0, "Vacations", "Road Trips"),
+		#(None, 0, "Vacations", "New York"),
+
+		(None, 0, "Holidays", "Christmas"),
+		(None, 0, "Holidays", "New Years"),
+		(None, 0, "Holidays", "Easter"),
+		(None, 0, "Holidays", "Valentines Day"),
+		(None, 0, "Holidays", "Dragon Day"),
+		(None, 0, "Holidays", "Thanksgiving"),
+		(None, 0, "Holidays", "4th of July"),
+		(None, 0, "Holidays", "Halloween")
 	]
 
 	eventTagData = [
 		(None, 0, "Kids", "Callie", "Callies 1st Birthday"),
 		(None, 0, "Kids", "Callie", "Growing Girl"),
 		(None, 0, "Kids", "Callie", "Birthdays"),
-		(None, 0, "Kids", "Callie", "Callies 1st Birthday"),
-		(None, 0, "Kids", "Callie", "Holidays"),
+		(None, 0, "Kids", "Callie", "Callies 1st Birthday"),		
 		(None, 0, "Kids", "Callie", "Silly"),
 
 		(None, 0, "Family", "Zamudio", "Brandon and Dakota"),
@@ -128,10 +138,26 @@ def create_test_data():
 		(None, 0, "Family", "Williams", "Teresa"),
 		(None, 0, "Family", "Brownell", "Christine"),
 
-		(None, 0, "Vacations", "Hawaii", "Cruise Ship"),
-		(None, 0, "Vacations", "Hawaii", "Island")
-		
-		
+		#(None, 0, "Vacations", "Hawaii", "Cruise Ship"),
+		#(None, 0, "Vacations", "Hawaii", "Island"),
+				
+		(None, 0, "Holidays", "Halloween", "2013"),
+		(None, 0, "Holidays", "Halloween", "2014"),
+		(None, 0, "Holidays", "Christmas", "2013"),
+		(None, 0, "Holidays", "Christmas", "2014"),
+		(None, 0, "Holidays", "New Years", "2013"),
+		(None, 0, "Holidays", "New Years", "2014"),
+		(None, 0, "Holidays", "Easter", "2013"),
+		(None, 0, "Holidays", "Easter", "2014"),
+		(None, 0, "Holidays", "Valentines Day", "2013"),
+		(None, 0, "Holidays", "Valentines Day", "2014"),
+		(None, 0, "Holidays", "Dragon Day", "2013"),
+		(None, 0, "Holidays", "Dragon Day", "2014"),
+		(None, 0, "Holidays", "Thanksgiving", "2013"),
+		(None, 0, "Holidays", "Thanksgiving", "2014"),
+		(None, 0, "Holidays", "4th of July", "2013"),
+		(None, 0, "Holidays", "4th of July", "2014")
+
 	]
 
 	alertData = [
@@ -240,7 +266,7 @@ def get_tags():
 	db_connection = connect_to_database()
 	db = db_connection.cursor()
 	try:		
-		db.execute('''SELECT DISTINCT tag from tags''')
+		db.execute('''SELECT DISTINCT tag from tags ORDER BY(id) ASC''')
 		the_tags = db.fetchall()
 		db_connection.close()
 
@@ -264,7 +290,7 @@ def get_sub_tags():
 	db = db_connection.cursor()
 
 	try:		
-		db.execute('''SELECT DISTINCT parent_tag, sub_tag FROM sub_tags''')
+		db.execute('''SELECT DISTINCT parent_tag, sub_tag FROM sub_tags ORDER BY(sub_tag) ASC''')
 		the_tags = db.fetchall()
 		db_connection.close()
 
@@ -287,7 +313,7 @@ def get_event_tags():
 	db = db_connection.cursor()
 
 	try:		
-		db.execute('''SELECT DISTINCT parent_tag, parent_sub_tag, event_tag FROM event_tags''')
+		db.execute('''SELECT DISTINCT parent_tag, parent_sub_tag, event_tag FROM event_tags ORDER BY(event_tag) ASC''')
 		the_tags = db.fetchall()
 		db_connection.close()
 
@@ -589,6 +615,50 @@ def get_latest_8_images():
 		db_connection.close()
 		for error in err:
 			log("Unable to get latest images", "DATABASE", "SEVERE")
+
+def get_random_image_id_by_main_tag(main_tag, db_cursor = False):
+	def return_random_number(db):		
+		db.execute('SELECT image_id FROM tags WHERE tag = ?', (main_tag,) )
+		image_id_list = db.fetchall()		
+		random_image = randint(1, (len(image_id_list) - 1)     )				
+		return (  get_image_by_id(image_id_list[random_image][0])  )		
+		
+	if db_cursor == False:
+		try:
+			db_connection = connect_to_database()
+			db_cursor = db_connection.cursor()
+			return ( return_random_number(db_cursor) )
+			db_connection.close()
+
+		except Exception, err:
+			db_connection.close()
+			for error in err:
+				log("Unable to get random Image_id  " + error, "DATABASE", "SEVERE")
+			return(False)
+				
+	else:
+		return ( return_random_number(db_cursor) )
+
+def get_image_for_every_main_tag():
+	try:
+		db_connection = connect_to_database()
+		db = db_connection.cursor()
+		
+		db.execute('SELECT tag FROM tags WHERE image_id = 0 ORDER BY(id) ASC')
+		main_tags = db.fetchall()		
+		returned_list_of_dicts = {}
+
+		for tag in main_tags:
+			returned_list_of_dicts[ tag[0] ] =  get_random_image_id_by_main_tag(tag[0], db)
+
+		db_connection.close()
+
+		return ( returned_list_of_dicts )
+
+	except Exception, err:
+		db_connection.close()
+		for error in err:
+			log("Unable to get latest images " + error, "DATABASE", "SEVERE")
 
 #Class used for breaking down data from process submission POST
 class Posted_Data:

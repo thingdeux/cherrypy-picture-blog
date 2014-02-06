@@ -1,4 +1,8 @@
 [BLOCKING]
+-(DATABASE) - SORT ORDER Row on each table, order by sort order ASC
+-(DATABASE) - Make sure all DB connections are closed after use
+
+
 -Create AUTH for admin menu
 -Create 404 Pages
 

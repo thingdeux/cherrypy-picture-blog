@@ -5,7 +5,7 @@
 	JoshandLinz
 </title>
 
-<head>
+
 	<link rel="icon" type="image/png" href="/static/favicon.ico">
 	<link rel="stylesheet" href="/static/css/base.css" type="text/css">
     <link rel="stylesheet" href="/static/css/normalize.css" type="text/css">  
@@ -23,41 +23,38 @@
 
 </head>
 
-<body>
-	<div id = "header_title">The Johnsons</div>
+<body>	
+		
 
-	<div id = "container">		
-		<div id = "large_j">
-			<span class = "very_large_text">J</span>
+	<div id = "container">
 
-			<div id = "main_tags">
-				<ul>
-					%for tag in main_tags:
-						<li><a class = "tag_nav">${tag}</a></li>
-					%endfor
-				</ul>
-			</div>
 
-		</div>
-
-		<div id = "picture_scroller">			
-						
-			<!-- Break apart thumbpath as it contains more than just thumb location !-->
-			%for image_id, name, image_location, thumb_location, date_added, date_taken, caption in latest_8:
-
-				<% thumbpath = thumb_location.split('/') %>
-				<img class = "thumbnail_scroller ui-widget" src="${'/' + thumbpath[6] + '/' + thumbpath[7]}" width="100px" height = "66px"></img>
-
+		<div id = "tag_preview">
+			%for tag in main_tags:
+				%for id, name, image_location, thumb_location, date_added, date_taken, caption in images[ tag ]:
+					<% strippedLoc = image_location.split('/') %>
+					<% imageLocation = "/images/" + strippedLoc[ len(strippedLoc) - 1 ] %>
+									
+					<img id = "${tag}" class = "tag_preview_image" src = ${imageLocation} style="max-height: 100%; max-width: 100%; border: 5px solid black;">
+				%endfor
 			%endfor
-
 		</div>
+
+		<div id = "tag_nav">
+			<table>
+				%for tag in main_tags:				
+					<tr class = "tag" name="${tag}"><td>${tag}<td></tr>											
+				%endfor 
+			</table>
+		</div>
+
+
 
 	</div>
+
+
+
+
 </body>
-
-
-
-
-
 
 </HTML>
