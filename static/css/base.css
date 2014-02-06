@@ -9,6 +9,11 @@ ul {
 	list-style-type: none;
 }
 
+a:link {text-decoration: none; color:black;}
+a:visited {text-decoration: none; color:black;}
+a:hover {text-decoration: none; color:white;}
+a:active {text-decoration: none; color:black;}
+
 #container {
 	margin-left: 20%;
 }
