@@ -55,11 +55,11 @@ class web_server(object):
   def index(self, **arguments):
   	#Create the below template using index.html (and looking up in the static folder)
     mako_template = Template(filename='static/index.html')
-    latest_8 = database.get_latest_8_images()
+    random_images = database.get_image_for_every_main_tag()
     main_tags = database.get_tags()
 
     #Render the mako template
-    self.mako_template_render = mako_template.render(latest_8 = latest_8, main_tags = main_tags) 
+    self.mako_template_render = mako_template.render(images = random_images, main_tags = main_tags) 
 
     return self.mako_template_render
 
