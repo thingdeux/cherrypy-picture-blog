@@ -27,7 +27,7 @@
 				%for id, name, image_location, thumb_location, date_added, date_taken, caption, width, height in images[ tag ]:
 					<% strippedLoc = image_location.split('/') %>
 					<% imageLocation = "/images/" + strippedLoc[ len(strippedLoc) - 1 ] %>
-					<img id = "${tag}" class = "tag_preview_image" dataWidth="${width}" src = ${imageLocation} style="max-height: 100%; max-width: 100%; border: 5px solid black;">
+					<img id = "${tag}" class = "tag_preview_image" src = ${imageLocation} style="max-height: 100%; max-width: 100%; border: 5px solid black;">
 				%endfor
 			%endfor
 		</div>

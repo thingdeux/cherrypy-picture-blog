@@ -1,16 +1,15 @@
 [BLOCKING]
--(DATABASE) - SORT ORDER Row on each table, order by sort order ASC
--(DATABASE) - Make sure all DB connections are closed after use
 -(INDEX) - Make sure if no images are returned on initial load it won't crash the site :)
 
+-(DATABASE) - SORT ORDER Row on each table, order by sort order ASC
+-(DATABASE) - Check all DB Calls and Make sure all connections are closed after query
+-(ADMIN PAGES) - Create AUTH for admin menu
 
--Create AUTH for admin menu
 -Create 404 Pages
 
 
 [High]
 -(PROCESS PAGE) - Clear out caption value on refresh
-Finalize initial tag lists
 -(INDEX) - Create flexible main tags for index page so that if I double the amount it won't scroll too far - shrink font or perhaps spacing if it's longer than x height
 
 [Medium]
@@ -56,13 +55,12 @@ Completed:
 -(INDEX PAGE) - Fixed preview image load alignment problem
 -(DATABASE) - Created width/height DB fields / Modified MAKO templates to account for new cols
 -(DATABASE) - modified query for random images, now identifies widescreen dimensions
-
-
 -(LOGGER) - Make use of severity - edit log calls to provide info vs ERROR
 -(LOGGER) - Update all log calls to use new system
 -(UPLOAD PAGE) FIX file not uploading if only one image is queued.
 -(PROCESS PAGE) Clear ALL OPTION selections after refresh is used.
 -(PROCESS PAGE) FIX 'Processing' not dissapearing if it's used on a block in the middle of process.
+-(GENERAL) - Finalize initial tag lists
 -(MANAGE PAGE) FIX selected picture deselecting once a new tag is clicked
 -(MANAGE PAGE) Refresh page *ONLY* in the event of an image deletion (could further optimize this by rebuilding list -- darn it now I'm going to have to do that)
 -(MANAGE PAGE) Update image metadata updates data across all tables

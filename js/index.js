@@ -1,52 +1,57 @@
 $(document).ready(function() {	
 
-	function shiftPortraitImage(image) {
-		var image_width = image.attr("dataWidth");		
-
-		console.log(image)
-
-		if (image_width < 720) {	
-			var moveDistance = 720 - image_width;			
-			var transformStatement = "translate(" + moveDistance + "px,0px)";			
-			//$(image).css('transform', transformStatement);
-		}		
-	}
+	//  --Global Variables-- //
+	//Keep all elements from query in variable so DOM does not need to be crawled again.
+	var main_tags = $('.tag_preview_image');	
+	//Global var for determining when the preview image is animating.
+	var isTransitioning = false;
 
 	function hideOrShowPreviewImageByName(name) {		
-		main_tags.each(function () {
-			if ($(this).attr('id') == name) {									
-				$(this).show();
-				shiftPortraitImage( $(this) );				
-			}
-			else {				
-				$(this).hide();
-			}
-		});
+		
+		if (isTransitioning == false) {
+			main_tags.each(function () {			
+				if ( $(this).is(":visible") ) {					
+					$(this).fadeOut(200);			
+				}										
+				if ($(this).attr('id') == name) {
+					$(this).delay(200).show(150);
+				}		
+			});
+			//Prevent multiple images from hiding/fading out at the same time.
+			setTransitioning()
+			window.setTimeout(function() { setTransitioning() }, 500);
+		}
+
+		
+	}
+	
+	function setTransitioning() {
+		isTransitioning = !isTransitioning;		
 	}
 
 	function hideAllPreviewImages() {
-		main_tags.each( function(index) {						
+		main_tags.each( function(index) {					
 			$(this).hide();
 		});
 	}
-	
-	//Keep all elements from query in variable so DOM does not need to be crawled again.
-	var main_tags = $('.tag_preview_image');
-	//Pick a random number between 0 and length of all main_tags - display it first
-	var tag_length = main_tags.length;
-	var selected_random_tag = Math.floor(( Math.random()*tag_length));	
-	//var nav_x = $("#tag_nav").position().left	
 
+	function getRandomPreviewImage(){
+		//Pick a random number between 0 and length of all main_tags - display it first
+		var tag_length = main_tags.length;
+		var selected_random_tag = Math.floor(( Math.random()*tag_length));
+		return (selected_random_tag)
+	}
+	
+	
 	hideAllPreviewImages();
 
-	//Make sure all of the images have loaded before adjusting them and showing them
+	//Make sure all of the images have loaded before showing them
 	$(window).load(function() {
-
+		randomSelection = getRandomPreviewImage()
 		main_tags.each( function(index) {												
 			//Hide all other images except the randomly selected image
-			if ( index == selected_random_tag ) {
-				$(this).show();
-				shiftPortraitImage( $(this) );
+			if ( index == randomSelection ) {
+				$(this).show();			
 			}					
 		});
 
@@ -55,6 +60,9 @@ $(document).ready(function() {
 	
 	$('.tag').hover(function () {			
 		hideOrShowPreviewImageByName( $(this).attr('name')  )
+	},
+	function() {
+		//Do nothing on unhover				
 	});
 
 	$('a').click(function(event) {
