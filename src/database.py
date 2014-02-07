@@ -621,7 +621,7 @@ def get_latest_8_images():
 def get_random_image_id_by_main_tag(main_tag, db_cursor = False):
 	def return_random_number(db):		
 		#db.execute('SELECT image_id FROM tags WHERE tag = ?', (main_tag,) )
-		db.execute('SELECT images.id FROM images INNER JOIN tags ON images.id = tags.image_id WHERE tags.tag = ? AND images.width > 720 AND (images.width - images.height) > 280 ', (main_tag,))
+		db.execute('SELECT images.id FROM images INNER JOIN tags ON images.id = tags.image_id WHERE tags.tag = ? AND images.width > 720 AND (images.width - images.height) > 280', (main_tag,))
 		image_id_list = db.fetchall()		
 
 		#Select a random record from 1 to length of results and return the id
