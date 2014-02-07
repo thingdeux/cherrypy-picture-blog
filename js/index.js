@@ -5,6 +5,9 @@ $(document).ready(function() {
 	var main_tags = $('.tag_preview_image');	
 	//Global var for determining when the preview image is animating.
 	var isTransitioning = false;
+	//Slideshow Transition speed
+	var slideshowShuffleSpeed = 3500;	
+	var shuffleTimeOutObject = 0;
 
 	function hideOrShowPreviewImageByName(name) {		
 		
@@ -20,18 +23,32 @@ $(document).ready(function() {
 			//Prevent multiple images from hiding/fading out at the same time.
 			setTransitioning()
 			window.setTimeout(function() { setTransitioning() }, 500);
-		}
+		}		
+	}
 
+	function shufflePreviewImage() {		
+			randomSelection = getRandomPreviewImage();
+			hideAllPreviewImages(300);			
+
+			main_tags.each(function (index) {
+				if (index == randomSelection) {
+					$(this).show(300);
+				}
+			});
+
+			shuffleTimeOutObject = window.setTimeout(function() { shufflePreviewImage() }, slideshowShuffleSpeed);
 		
 	}
 	
 	function setTransitioning() {
 		isTransitioning = !isTransitioning;		
 	}
-
-	function hideAllPreviewImages() {
+	
+	function hideAllPreviewImages(speed) {
+		if (speed == null) { speed = 0; }
+		
 		main_tags.each( function(index) {					
-			$(this).hide();
+			$(this).hide(speed);
 		});
 	}
 
@@ -47,11 +64,14 @@ $(document).ready(function() {
 
 	//Make sure all of the images have loaded before showing them
 	$(window).load(function() {
-		randomSelection = getRandomPreviewImage()
+		randomSelection = getRandomPreviewImage();
+
 		main_tags.each( function(index) {												
 			//Hide all other images except the randomly selected image
 			if ( index == randomSelection ) {
-				$(this).show();			
+				$(this).show();
+				//Start slideshow
+				shuffleTimeOutObject = window.setTimeout(function() { shufflePreviewImage() }, slideshowShuffleSpeed);
 			}					
 		});
 
@@ -60,9 +80,12 @@ $(document).ready(function() {
 	
 	$('.tag').hover(function () {			
 		hideOrShowPreviewImageByName( $(this).attr('name')  )
+		//Stop slideshow on hover
+		clearTimeout(shuffleTimeOutObject);
 	},
 	function() {
-		//Do nothing on unhover				
+		//Start slideshow
+		shuffleTimeOutObject = window.setTimeout(function() { shufflePreviewImage() }, slideshowShuffleSpeed);
 	});
 
 	$('a').click(function(event) {
