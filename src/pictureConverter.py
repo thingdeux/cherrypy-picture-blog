@@ -23,16 +23,17 @@ class WebsiteImage:
 
 			if self.picObject:
 				self.watermarked_image = self.create_watermark()
-				self.thumbnail = self.convert_image_to_thumbnail()				
+				self.thumbnail = self.convert_image_to_thumbnail()
+				self.size = self.get_image_height_and_width()					
 
 				try:
 					isUploaded = self.save_uploaded_images()
 					
-
 					if isUploaded:
 						self.picture_row_id = insert_image_record(name = self.postData.picture_name, 
 							image_location=self.image_location, thumb_location=self.thumb_location,
-							date_taken=self.postData.date_taken, caption=self.postData.picture_caption)
+							date_taken=self.postData.date_taken, caption=self.postData.picture_caption, 
+							width = self.size[0], height = self.size[1])
 						
 						self.isSuccesful = True
 
@@ -116,6 +117,13 @@ class WebsiteImage:
 
 			return (False)
 
+	def get_image_height_and_width(self):
+		try:
+			return (self.watermarked_image.size)
+		except:
+			return ( (0,0) )
+
+
 
 
 def create_queue_thumbnail(file_location,save_location):	
@@ -150,3 +158,5 @@ def get_date_exif(image_name):
 		for error in err:
 			log("Unable to get EXIF" + error, "CONVERTER", "MEDIUM")
 			return("Unknown")
+	
+

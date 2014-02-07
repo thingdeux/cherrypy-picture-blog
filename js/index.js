@@ -1,36 +1,22 @@
-$(document).ready(function() {
-	
-	//Keep all elements from query in variable so DOM does not need to be crawled again.
-	var main_tags = $('.tag_preview_image');
-	//Pick a random number between 0 and length of all main_tags - display it first
-	var tag_length = main_tags.length;	
-	var selected_random_tag = Math.floor(( Math.random()*tag_length));
+$(document).ready(function() {	
 
-	main_tags.each( function(index) {
-		function shiftPortraitImage(image) {
-			var image_width = parseInt($(image).prop('width') );			
+	function shiftPortraitImage(image) {
+		var image_width = image.attr("dataWidth");		
 
-			if (image_width < 720) {			
-				var moveDistance = 720 - image_width;	
-				var transformStatement = "translate(" + moveDistance + "px,0px)";				
-				$(image).css('transform', transformStatement);
-			}
-		}
+		console.log(image)
 
-		//Make sure images that are in portrait orientation align properly with the tag nav
-		shiftPortraitImage( $(this) );
-		
-		//Hide all other images except the randomly selected image
-		if ( index != selected_random_tag ) {
-			$(this).hide();
-		}
-		
-	});
+		if (image_width < 720) {	
+			var moveDistance = 720 - image_width;			
+			var transformStatement = "translate(" + moveDistance + "px,0px)";			
+			//$(image).css('transform', transformStatement);
+		}		
+	}
 
 	function hideOrShowPreviewImageByName(name) {		
 		main_tags.each(function () {
-			if ($(this).attr('id') == name) {				
+			if ($(this).attr('id') == name) {									
 				$(this).show();
+				shiftPortraitImage( $(this) );				
 			}
 			else {				
 				$(this).hide();
@@ -38,6 +24,35 @@ $(document).ready(function() {
 		});
 	}
 
+	function hideAllPreviewImages() {
+		main_tags.each( function(index) {						
+			$(this).hide();
+		});
+	}
+	
+	//Keep all elements from query in variable so DOM does not need to be crawled again.
+	var main_tags = $('.tag_preview_image');
+	//Pick a random number between 0 and length of all main_tags - display it first
+	var tag_length = main_tags.length;
+	var selected_random_tag = Math.floor(( Math.random()*tag_length));	
+	//var nav_x = $("#tag_nav").position().left	
+
+	hideAllPreviewImages();
+
+	//Make sure all of the images have loaded before adjusting them and showing them
+	$(window).load(function() {
+
+		main_tags.each( function(index) {												
+			//Hide all other images except the randomly selected image
+			if ( index == selected_random_tag ) {
+				$(this).show();
+				shiftPortraitImage( $(this) );
+			}					
+		});
+
+	});
+	
+	
 	$('.tag').hover(function () {			
 		hideOrShowPreviewImageByName( $(this).attr('name')  )
 	});

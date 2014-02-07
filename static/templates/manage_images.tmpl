@@ -1,7 +1,7 @@
 %if menu_location == "list":
 
 	<table class="ui-widget ui-widget-content">
-		%for id, name, image_location, thumb_location, date_added, date_taken, caption in image_data:			
+		%for id, name, image_location, thumb_location, date_added, date_taken, caption, width, height in image_data:			
 						
 			<% thumbpath = thumb_location.split('/') %>
 			<tr><td imageID = "${id}" class = "image_menu_link image_menu_name">${name}</td></tr>
@@ -47,7 +47,7 @@
 
 %if menu_location == "selected":	
 	<form id = 'update_data' name = 'updated_image_data'>
-		%for image_id, name, image_location, thumb_location, date_added, date_taken, caption in image_data:			
+		%for image_id, name, image_location, thumb_location, date_added, date_taken, caption, width, height in image_data:			
 				<table class="ui-widget ui-widget-content">			
 					<% thumbpath = thumb_location.split('/') %>
 					<th></th><th>Added to site ${date_added} &nbsp;&nbsp;&nbsp;&nbsp;</th>

@@ -28,7 +28,7 @@ def create_fresh_tables():
 		
 	db.execute('''CREATE TABLE images 
 			(id INTEGER PRIMARY KEY, name TEXT, image_location TEXT, thumb_location TEXT, date_added INTEGER,
-				date_taken INTEGER, caption TEXT)''')
+				date_taken INTEGER, caption TEXT, width INTEGER, height INTEGER)''')
 
 	#Create 3 Tag tables - primary / sub / and event
 	db.execute('''CREATE TABLE tags (id INTEGER PRIMARY KEY, image_id INTEGER NOT NULL, tag TEXT NOT NULL)''')	
@@ -231,9 +231,11 @@ def insert_image_record(*args, **kwargs):
 	date_added = get_time()
 	date_taken =  kwargs.get('date_taken')
 	caption = kwargs.get('caption')
+	width = kwargs.get('width')
+	height = kwargs.get('height')
 
 	try:		
-		db.execute('INSERT INTO images VALUES (?,?,?,?,?,?,?)', (None, name, image_location, thumb_location, date_added, date_taken, caption) )
+		db.execute('INSERT INTO images VALUES (?,?,?,?,?,?,?,?,?)', (None, name, image_location, thumb_location, date_added, date_taken, caption, width, height) )
 		last_row = db.lastrowid
 		db_connection.commit()	
 		db_connection.close()
@@ -421,7 +423,7 @@ def get_images_by_tag(*args, **kwargs):
 	db_connection.close()
 
 	return ( query )
-		
+
 def get_image_by_id(image_id):
 	db_connection = connect_to_database()
 	db = db_connection.cursor()
@@ -618,17 +620,25 @@ def get_latest_8_images():
 
 def get_random_image_id_by_main_tag(main_tag, db_cursor = False):
 	def return_random_number(db):		
-		db.execute('SELECT image_id FROM tags WHERE tag = ?', (main_tag,) )
+		#db.execute('SELECT image_id FROM tags WHERE tag = ?', (main_tag,) )
+		db.execute('SELECT images.id FROM images INNER JOIN tags ON images.id = tags.image_id WHERE tags.tag = ? AND images.width > 720 AND (images.width - images.height) > 280 ', (main_tag,))
 		image_id_list = db.fetchall()		
-		random_image = randint(1, (len(image_id_list) - 1)     )				
+
+		#Select a random record from 1 to length of results and return the id
+		try: 
+			random_image = randint(1, (len(image_id_list) - 1) )
+		except:
+			random_image = 0
+
 		return (  get_image_by_id(image_id_list[random_image][0])  )		
 		
 	if db_cursor == False:
 		try:
 			db_connection = connect_to_database()
 			db_cursor = db_connection.cursor()
-			return ( return_random_number(db_cursor) )
+			random_id =  return_random_number(db_cursor)
 			db_connection.close()
+			return (random_id)
 
 		except Exception, err:
 			db_connection.close()
@@ -695,8 +705,7 @@ class Posted_Data:
 					return (tagDict)
 
 			tagList = []
-			for field, data in self.postedData.iteritems():
-				#print (str(field) + ": " + str(data) )
+			for field, data in self.postedData.iteritems():				
 				if "event_tag_selection" in field or "tag_selection" in field or "sub_tag_selection" in field:
 					#Handler for multiple tags being selected
 					if isinstance(data, list):
@@ -721,8 +730,7 @@ class Posted_Data:
 		convertedPicture = pictureConverter.WebsiteImage(self.file_location, self)
 
 		#If PIL has processed the image
-		if convertedPicture.isSuccesful == True:			
-
+		if convertedPicture.isSuccesful == True:
 			for tag in self.tagList:			
 				insert_tag( convertedPicture.picture_row_id, tag )				
 			self.isSuccesful = True

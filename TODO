@@ -1,6 +1,7 @@
 [BLOCKING]
 -(DATABASE) - SORT ORDER Row on each table, order by sort order ASC
 -(DATABASE) - Make sure all DB connections are closed after use
+-(INDEX) - Make sure if no images are returned on initial load it won't crash the site :)
 
 
 -Create AUTH for admin menu
@@ -52,6 +53,11 @@ All data that comes to your server must be checked and sanitized. Always. No exc
 
 
 Completed:
+-(INDEX PAGE) - Fixed preview image load alignment problem
+-(DATABASE) - Created width/height DB fields / Modified MAKO templates to account for new cols
+-(DATABASE) - modified query for random images, now identifies widescreen dimensions
+
+
 -(LOGGER) - Make use of severity - edit log calls to provide info vs ERROR
 -(LOGGER) - Update all log calls to use new system
 -(UPLOAD PAGE) FIX file not uploading if only one image is queued.
