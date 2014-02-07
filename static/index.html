@@ -5,7 +5,6 @@
 	JoshandLinz
 </title>
 
-
 	<link rel="icon" type="image/png" href="/static/favicon.ico">
 	<link rel="stylesheet" href="/static/css/base.css" type="text/css">
     <link rel="stylesheet" href="/static/css/normalize.css" type="text/css">  
@@ -17,25 +16,18 @@
     <!--Instead of local !-->
     <script type="text/javascript" src="/js/lib/jquery-1.10.2.min.js"></script> 
     <script type="text/javascript" src="/js/lib/jquery-ui-1.10.4.min.js"></script>
-
-
     <script type="text/javascript" src="/js/index.js"></script>
 
 </head>
 
-<body>	
-		
-
+<body>			
 	<div id = "container">
-
-
 		<div id = "tag_preview">
 			%for tag in main_tags:
-				%for id, name, image_location, thumb_location, date_added, date_taken, caption in images[ tag ]:
+				%for id, name, image_location, thumb_location, date_added, date_taken, caption, width, height in images[ tag ]:
 					<% strippedLoc = image_location.split('/') %>
 					<% imageLocation = "/images/" + strippedLoc[ len(strippedLoc) - 1 ] %>
-									
-					<img id = "${tag}" class = "tag_preview_image" src = ${imageLocation} style="max-height: 100%; max-width: 100%; border: 5px solid black;">
+					<img id = "${tag}" class = "tag_preview_image" dataWidth="${width}" src = ${imageLocation} style="max-height: 100%; max-width: 100%; border: 5px solid black;">
 				%endfor
 			%endfor
 		</div>
@@ -48,13 +40,7 @@
 			</table>
 		</div>
 
-
-
 	</div>
 
-
-
-
 </body>
-
 </HTML>
