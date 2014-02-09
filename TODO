@@ -1,5 +1,7 @@
 [BLOCKING]
 -(INDEX) - Make sure if no images are returned on initial load it won't crash the site :)
+-(INDEX) - PRevent the same image from showing up when randomly flipping on slideshow
+-(INDEX) - Create Static index page with no Javascript (for no script users)
 
 -(DATABASE) - SORT ORDER Row on each table, order by sort order ASC
 -(DATABASE) - Check all DB Calls and Make sure all connections are closed after query

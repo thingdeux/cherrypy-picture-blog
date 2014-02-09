@@ -1,7 +1,17 @@
-body {	
-	background: #CACAD3;
+html {
+	min-height: 100%;
+}
+
+body {
+
+	background: -webkit-linear-gradient(150deg, #CCCCCC, #171717); /* For Safari */
+	background: -o-linear-gradient(150deg,#CCCCCC, #171717); /* For Opera 11.1 to 12.0 */
+	background: -moz-linear-gradient(150deg,#CCCCCC,#171717); /* For Firefox 3.6 to 15 */
+	background: linear-gradient(150deg,#CCCCCC, #171717); /* Standard syntax */
+
+	height: 100%;
 	font-size: 16px;
-	font-family: "Times New Roman", Times, serif; 
+	font-family: "Times New Roman", Times, serif;
 	color: black;
 }
 
@@ -14,18 +24,21 @@ a:visited {text-decoration: none; color:black;}
 a:hover {text-decoration: none; color:white;}
 a:active {text-decoration: none; color:black;}
 
-#container {
-	margin-left: 20%;
-	margin-right: 20%;
-	margin-top: 10%;
+#site_title {
+	position: relative;
+	font-size: 80px;
+	padding-left: 160px;	
 }
 
+#container {
+	margin-left: 25%;
+	margin-right: 20%;	
+}
 
 #tag_preview{		
 	width: 720px;
 	height: 550px;
-	margin-top: 10%;	
-	background-color: #CACAD3;
+	margin-top: 5%;	
 }
 
 #tag_nav {

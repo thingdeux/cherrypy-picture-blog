@@ -16,12 +16,14 @@
     <!--Instead of local !-->
     <script type="text/javascript" src="/js/lib/jquery-1.10.2.min.js"></script> 
     <script type="text/javascript" src="/js/lib/jquery-ui-1.10.4.min.js"></script>
-    <script type="text/javascript" src="/js/index.js"></script>
-
+    <script type="text/javascript" src="/js/index.js"></script>    
 </head>
 
-<body>			
+<body>		
+
 	<div id = "container">
+		<div id = "site_title">The Johnsons</div>
+
 		<div id = "tag_preview">
 			%for tag in main_tags:
 				%for id, name, image_location, thumb_location, date_added, date_taken, caption, width, height in images[ tag ]:
@@ -43,4 +45,5 @@
 	</div>
 
 </body>
+
 </HTML>
