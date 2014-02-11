@@ -286,14 +286,20 @@ def get_tags():
 		for error in err:
 			log("DataBase: Unable to get tags: " + str(error), "DATABASE","SEVERE" )
 			return (False)
+
 #Get a list of all sub tags in the DB
-def get_sub_tags():
+def get_sub_tags(parent_tag = False):
 	db_connection = connect_to_database()
 	db = db_connection.cursor()
 
-	try:		
-		db.execute('''SELECT DISTINCT parent_tag, sub_tag FROM sub_tags ORDER BY(sub_tag) ASC''')
-		the_tags = db.fetchall()
+	try:
+		if parent_tag == False:
+			db.execute('''SELECT DISTINCT parent_tag, sub_tag FROM sub_tags ORDER BY(sub_tag) ASC''')
+			the_tags = db.fetchall()
+		else:			
+			db.execute('''SELECT DISTINCT parent_tag, sub_tag FROM sub_tags WHERE parent_tag = ? ORDER BY(sub_tag) ASC''', (parent_tag,) )
+			the_tags = db.fetchall()			
+
 		db_connection.close()
 
 		returned_list = []
@@ -309,6 +315,7 @@ def get_sub_tags():
 		for error in err:
 			log("DataBase: Unable to get tags: " + str(error), "DATABASE","SEVERE" )
 			return (False)
+
 #Get a list of all event tags in the DB
 def get_event_tags():
 	db_connection = connect_to_database()
@@ -618,19 +625,40 @@ def get_latest_8_images():
 		for error in err:
 			log("Unable to get latest images", "DATABASE", "SEVERE")
 
-def get_random_image_id_by_main_tag(main_tag, db_cursor = False):
-	def return_random_number(db):		
-		#db.execute('SELECT image_id FROM tags WHERE tag = ?', (main_tag,) )
-		db.execute('SELECT images.id FROM images INNER JOIN tags ON images.id = tags.image_id WHERE tags.tag = ? AND images.width > 720 AND (images.width - images.height) > 280', (main_tag,))
-		image_id_list = db.fetchall()		
-
-		#Select a random record from 1 to length of results and return the id
-		try: 
-			random_image = randint(1, (len(image_id_list) - 1) )
+def get_random_image_id_by_tag(db_cursor = False, **kwargs):	
+	def query_db_for_acceptable_images(dbcur, tag):
+		try:			
+			main_tag = tag['main_tag']			
+			dbcur.execute('SELECT images.id FROM images INNER JOIN tags ON images.id = tags.image_id WHERE tags.tag = ? AND images.width > 720 AND (images.width - images.height) > 280', (main_tag,))
+			return( dbcur.fetchall() )
 		except:
-			random_image = 0
+			try:
+				sub_tag = tag['sub_tag']				
+				dbcur.execute( 'SELECT images.id FROM images INNER JOIN sub_tags ON images.id = sub_tags.image_id WHERE sub_tags.sub_tag = ? AND images.width > 720 AND (images.width - images.height) > 280', (sub_tag,) )				
+				return( dbcur.fetchall() )
+			except:
+				try:					
+					event_tag = tag['event_tag']					
+					dbcur.execute('SELECT images.id FROM images INNER JOIN event_tags ON images.id = event_tags.image_id WHERE event_tags.event_tag = ? AND images.width > 720 AND (images.width - images.height) > 280', (event_tag,))
+					return( dbcur.fetchall() )
+				except Exception, err:
+					for error in err:
+						log("Unable to query db for acceptable images: " + error)
+					return ("")
 
-		return (  get_image_by_id(image_id_list[random_image][0])  )		
+	def return_random_number(db):
+		try:			
+			image_id_list = query_db_for_acceptable_images(db, kwargs)			
+
+			#Select a random record from 1 to length of results and return the id
+			try: 
+				random_image = randint(1, (len(image_id_list) - 1) )
+			except:
+				random_image = 0
+
+			return (  get_image_by_id(image_id_list[random_image][0])  )
+		except:					
+			return(False)
 		
 	if db_cursor == False:
 		try:
@@ -638,14 +666,18 @@ def get_random_image_id_by_main_tag(main_tag, db_cursor = False):
 			db_cursor = db_connection.cursor()
 			random_id =  return_random_number(db_cursor)
 			db_connection.close()
-			return (random_id)
+
+			#No random image could be found
+			if random_id == False:
+				return(False)
+			else:
+				return (random_id)
 
 		except Exception, err:
 			db_connection.close()
 			for error in err:
 				log("Unable to get random Image_id  " + error, "DATABASE", "SEVERE")
-			return(False)
-				
+			return(False)			
 	else:
 		return ( return_random_number(db_cursor) )
 
@@ -659,7 +691,36 @@ def get_image_for_every_main_tag():
 		returned_list_of_dicts = {}
 
 		for tag in main_tags:
-			returned_list_of_dicts[ tag[0] ] =  get_random_image_id_by_main_tag(tag[0], db)
+			random_image = get_random_image_id_by_tag(db, main_tag = tag[0])
+
+			#If a random image has been returned add it to the dictionary else skip over it
+			if random_image == False:
+				pass
+			else:
+				returned_list_of_dicts[ tag[0] ] = random_image
+
+		db_connection.close()
+
+		return ( returned_list_of_dicts )
+
+	except Exception, err:
+		db_connection.close()
+		for error in err:
+			log("Unable to get latest images " + error, "DATABASE", "SEVERE")
+
+def get_image_for_every_sub_tag(main_tag):
+	try:		
+		sub_tags = get_sub_tags(main_tag)		
+		db_connection = connect_to_database()
+		db = db_connection.cursor()					
+		returned_list_of_dicts = {}
+
+		for parent_tag, sub_tag in sub_tags:
+			random_image = get_random_image_id_by_tag(db, sub_tag = sub_tag)
+			if random_image == False:
+				pass
+			else:
+				returned_list_of_dicts[ sub_tag ] = random_image
 
 		db_connection.close()
 

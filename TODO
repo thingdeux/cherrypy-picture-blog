@@ -1,9 +1,8 @@
 [BLOCKING]
--(INDEX) - Make sure if no images are returned on initial load it won't crash the site :)
--(INDEX) - PRevent the same image from showing up when randomly flipping on slideshow
+-(INDEX) - Prevent the same image from showing up when randomly flipping on slideshow
 -(INDEX) - Create Static index page with no Javascript (for no script users)
+-(INDEX -Sub page) - Create error page for no results returned on /p query
 
--(DATABASE) - SORT ORDER Row on each table, order by sort order ASC
 -(DATABASE) - Check all DB Calls and Make sure all connections are closed after query
 -(ADMIN PAGES) - Create AUTH for admin menu
 
@@ -15,6 +14,7 @@
 -(INDEX) - Create flexible main tags for index page so that if I double the amount it won't scroll too far - shrink font or perhaps spacing if it's longer than x height
 
 [Medium]
+-(DATABASE) - SORT ORDER Row on each table, order by sort order ASC
 -Have the picture transposer get current year instead of hard-coding the year (optionally update year image)
 -Make SURE no special characters are used for tags
 ERROR CHECKING FOR EVERYTHING!!
@@ -54,6 +54,7 @@ All data that comes to your server must be checked and sanitized. Always. No exc
 
 
 Completed:
+-(INDEX) - Make sure if no images are returned on initial load it won't crash the site :)
 -(INDEX PAGE) - Fixed preview image load alignment problem
 -(DATABASE) - Created width/height DB fields / Modified MAKO templates to account for new cols
 -(DATABASE) - modified query for random images, now identifies widescreen dimensions

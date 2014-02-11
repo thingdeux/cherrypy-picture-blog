@@ -1,0 +1,72 @@
+<!doctype html>
+<HTML>
+<title>
+	JoshandLinz
+</title>
+
+	<link rel="icon" type="image/png" href="/static/favicon.ico">
+	<link rel="stylesheet" href="/static/css/base.css" type="text/css">
+    <link rel="stylesheet" href="/static/css/normalize.css" type="text/css">  
+
+    <!-- Add in Prod
+    	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>   
+		<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+    !-->
+    <!--Instead of local !-->
+    <script type="text/javascript" src="/js/lib/jquery-1.10.2.min.js"></script> 
+    <script type="text/javascript" src="/js/lib/jquery-ui-1.10.4.min.js"></script>
+    <script type="text/javascript" src="/js/index.js"></script>    
+</head>
+
+<body>		
+
+	<div id = "container">
+		<div id = "site_title">The Johnsons</div>
+
+
+
+%if display_type == "Sub": 
+
+		<div id = "tag_preview">
+			%for parent_tag, sub_tag in sub_tags:
+				
+				%try:
+					%for id, name, image_location, thumb_location, date_added, date_taken, caption, width, height in images[ sub_tag ]:
+						<% strippedLoc = image_location.split('/') %>
+						<% imageLocation = "/images/" + strippedLoc[ len(strippedLoc) - 1 ] %>
+						<img id = "${sub_tag}" class = "tag_preview_image" src = ${imageLocation} style="max-height: 100%; max-width: 100%; border: 5px solid black;">
+					%endfor
+				%except:
+				%endtry
+
+			%endfor
+		</div>
+
+		<div id = "tag_nav">
+			<table>
+				%for parent_tag, sub_tag in sub_tags:
+					
+					%try:				
+						<% failure_point = images[sub_tag] %>
+						<tr><td><a class = "tag" name="${sub_tag}" href="">${sub_tag}</a></td></tr>
+					%except:
+					%endtry
+
+				%endfor 
+			</table>
+		</div>
+
+
+
+
+
+
+%endif
+
+
+
+	</div>
+
+</body>
+
+</HTML>

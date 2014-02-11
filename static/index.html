@@ -9,10 +9,10 @@
 	<link rel="stylesheet" href="/static/css/base.css" type="text/css">
     <link rel="stylesheet" href="/static/css/normalize.css" type="text/css">  
 
-    <!-- Add in Prod<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>   
-    				<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-    !-->    
-
+    <!-- Add in Prod
+    	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>   
+		<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+    !-->
     <!--Instead of local !-->
     <script type="text/javascript" src="/js/lib/jquery-1.10.2.min.js"></script> 
     <script type="text/javascript" src="/js/lib/jquery-ui-1.10.4.min.js"></script>
@@ -26,18 +26,26 @@
 
 		<div id = "tag_preview">
 			%for tag in main_tags:
-				%for id, name, image_location, thumb_location, date_added, date_taken, caption, width, height in images[ tag ]:
-					<% strippedLoc = image_location.split('/') %>
-					<% imageLocation = "/images/" + strippedLoc[ len(strippedLoc) - 1 ] %>
-					<img id = "${tag}" class = "tag_preview_image" src = ${imageLocation} style="max-height: 100%; max-width: 100%; border: 5px solid black;">
-				%endfor
+				%try:
+					%for id, name, image_location, thumb_location, date_added, date_taken, caption, width, height in images[ tag ]:
+						<% strippedLoc = image_location.split('/') %>
+						<% imageLocation = "/images/" + strippedLoc[ len(strippedLoc) - 1 ] %>
+						<img id = "${tag}" class = "tag_preview_image" src = ${imageLocation} style="max-height: 100%; max-width: 100%; border: 5px solid black;">
+					%endfor
+				%except:
+				%endtry
+
 			%endfor
 		</div>
 
 		<div id = "tag_nav">
 			<table>
-				%for tag in main_tags:				
-					<tr><td><a class = "tag" name="${tag}" href="">${tag}</a></td></tr>
+				%for tag in main_tags:
+					%try:   #Will catch any tags without images in them
+						<% failure_point = images[tag] %>	
+						<tr><td><a class = "tag" name="${tag}" href="/p/${tag}">${tag}</a></td></tr>
+					%except:
+					%endtry
 				%endfor 
 			</table>
 		</div>
