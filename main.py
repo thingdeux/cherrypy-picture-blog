@@ -1,6 +1,7 @@
 import cherrypy
 from mako.template import Template
 from mako.lookup import TemplateLookup
+from mako import exceptions
 import os
 import src.logger as logger
 from src.logger import log
@@ -44,15 +45,14 @@ conf = {
         'favicon.ico': {
                         'tools.staticfile.on': True,
                         'tools.staticfile.filename': os.path.join(locations.current_folder(), "static/favicon.ico")
-                    },
-
+                    }
         }
 
 
 class web_server(object):
 
   @cherrypy.expose	
-  def index(self, **arguments):
+  def index(self, *args, **kwargs):    
   	#Create the below template using index.html (and looking up in the static folder)
     mako_template = Template(filename='static/index.html')
     random_images = database.get_image_for_every_main_tag()
@@ -64,6 +64,36 @@ class web_server(object):
     return self.mako_template_render
 
   @cherrypy.expose
+  def p(self, *args, **kwargs):    
+    try:      
+      main_tag = args[0]      
+      mako_template = Template(filename='static/templates/index_data.tmpl')
+      sub_tags = database.get_sub_tags(main_tag)
+      images = database.get_image_for_every_sub_tag(main_tag)
+      
+      self.mako_template_render = mako_template.render(sub_tags = sub_tags, images = images, display_type = "Sub")
+      return self.mako_template_render            
+
+    except Exception, err:
+      for error in err:
+        log("Unable to build Template: " + str(error) )
+
+  @cherrypy.expose
+  def admin(self, *args, **kwargs):
+    try:
+      nav_location = args[0].lower()
+
+      if nav_location == "manage":
+        return ( self.manage() )
+      elif nav_location == "upload":
+        return ( self.upload() )
+      elif nav_location == "process":
+        return (self.process() )
+
+    except:
+      return ("No page here")
+
+  
   def upload(self, **arguments):
     #Create the below template using upload.html (and looking up in the static folder)
     mako_template = Template(filename='static/upload.html')
@@ -72,8 +102,7 @@ class web_server(object):
     self.mako_template_render = mako_template.render()                 
 
     return self.mako_template_render
-
-  @cherrypy.expose
+  
   def process(self, **arguments):
     #Create the below template using index.html (and looking up in the static folder)
     mako_template = Template(filename='static/process.html')
@@ -86,8 +115,7 @@ class web_server(object):
     self.mako_template_render = mako_template.render(queued_files = queued_files, tags = tags, sub_tags = sub_tags, event_tags = event_tags)
 
     return self.mako_template_render
-
-  @cherrypy.expose
+  
   def manage(self, **arguments):
     #Create the below template using index.html (and looking up in the static folder)
     mako_template = Template(filename='static/manage.html')
