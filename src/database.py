@@ -792,7 +792,7 @@ def get_image_for_misc_sub_tag(main_tag, sub_tag):
 		if random_image == False:
 			pass
 		else:
-			returned_list_of_dicts[ sub_tag ] = random_image
+			returned_list_of_dicts[ "Misc" ] = random_image
 
 		db_connection.close()
 
