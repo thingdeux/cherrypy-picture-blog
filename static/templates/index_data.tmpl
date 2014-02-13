@@ -101,7 +101,7 @@
 
 				%try:
 					<% failure_point = misc_images["Misc"] %>
-					<tr><td><a class = "tag" name="Misc" href="/p/${parent_main_tag}/${parent_sub_tag}">Misc</a></td></tr>
+					<tr><td><a class = "tag" name="Misc" href="/p/${parent_main_tag}/${parent_sub_tag}/Misc">Misc</a></td></tr>
 				%except:
 				%endtry
 				<tr><td><a href="/p/${parent_main_tag}">Back</a></td></tr>
@@ -111,7 +111,7 @@
 
 %elif display_type == "Event":
 	<div id = "container">
-		<div id = "site_title">${parent_sub_tag}</div>		
+		<div id = "site_title">${event_tag}</div>
 	
 	<div id = "nav_folders">						
 			<!-- Display a jQuery UI Tooltip only if the text is cutoff !-->

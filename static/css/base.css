@@ -51,17 +51,17 @@ a:active {text-decoration: none; color:black;}
 	font-size: 40px;	
 }
 
-#nav_folders {	
-	width: 620px;
+#nav_folders {
+	width: 850px;
 	margin-top: 5%;	
 	overflow: hidden;
-	display: inline-block;
+	display: inline-block;	
 }
 
 .nav_image {	
 	position: relative;
 	display: inline-block;
-	padding: 15px;	
+	padding: 15px;
 }
 
 .ui-tooltip {

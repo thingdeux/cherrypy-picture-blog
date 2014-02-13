@@ -69,28 +69,36 @@ class web_server(object):
     main_tag = args[0]
     
     try:
-      sub_tag = args[1]
-      event_tags = database.get_event_tags(sub_tag)      
-      images = database.get_image_for_each_event_tag(sub_tag)      
-      misc_images = database.get_image_for_misc_sub_tag(main_tag, sub_tag)      
+      event_tag = args[2]      
+      sub_tag = args[1]      
+      images = database.get_latest_10_images_by_tag(main_tag, sub_tag)
       
-      #images = database.get_latest_10_images_by_tag(main_tag, sub_tag)
-
-      self.mako_template_render = mako_template.render(parent_main_tag = main_tag, parent_sub_tag = sub_tag, 
-                                  event_tags = event_tags, images = images, misc_images = misc_images, display_type = "Sub")
-      
-      return self.mako_template_render      
-
-    except:      
-      try:        
-        sub_tags = database.get_sub_tags(main_tag)
-        images = database.get_image_for_each_sub_tag(main_tag)
+      self.mako_template_render = mako_template.render(event_main_tag = main_tag, event_sub_tag = sub_tag, 
+                                                       event_tag = event_tag, images = images, display_type = "Event")
         
-        self.mako_template_render = mako_template.render(main_tag = main_tag, sub_tags = sub_tags, images = images, display_type = "Main")
-        return self.mako_template_render
-      except Exception, err:
-        for error in err:
-          log("Unable to build Template: " + str(error) )
+      return self.mako_template_render            
+    except:
+      try:
+        sub_tag = args[1]      
+        event_tags = database.get_event_tags(sub_tag)
+        images = database.get_image_for_each_event_tag(sub_tag)      
+        misc_images = database.get_image_for_misc_sub_tag(main_tag, sub_tag)        
+
+        self.mako_template_render = mako_template.render(parent_main_tag = main_tag, parent_sub_tag = sub_tag, 
+                                    event_tags = event_tags, images = images, misc_images = misc_images, display_type = "Sub")
+        
+        return self.mako_template_render      
+
+      except:      
+        try:   
+          sub_tags = database.get_sub_tags(main_tag)
+          images = database.get_image_for_each_sub_tag(main_tag)          
+          
+          self.mako_template_render = mako_template.render(main_tag = main_tag, sub_tags = sub_tags, images = images, display_type = "Main")
+          return self.mako_template_render
+        except Exception, err:
+          for error in err:
+            log("Unable to build Template: " + str(error) )
     
   @cherrypy.expose
   def admin(self, *args, **kwargs):
