@@ -3,7 +3,6 @@ html {
 }
 
 body {
-
 	background: -webkit-linear-gradient(150deg, #CCCCCC, #171717); /* For Safari */
 	background: -o-linear-gradient(150deg,#CCCCCC, #171717); /* For Opera 11.1 to 12.0 */
 	background: -moz-linear-gradient(150deg,#CCCCCC,#171717); /* For Firefox 3.6 to 15 */
@@ -30,15 +29,16 @@ a:active {text-decoration: none; color:black;}
 	padding-left: 160px;	
 }
 
-#container {
+#container {	
 	margin-left: 25%;
-	margin-right: 20%;	
+	margin-right: 20%;
+	min-height: 100%;
 }
 
-#tag_preview{		
+#tag_preview{	
 	width: 720px;
 	height: 550px;
-	margin-top: 5%;	
+	margin-top: 5%;
 }
 
 #tag_nav {
@@ -47,5 +47,22 @@ a:active {text-decoration: none; color:black;}
 	margin-top: -520px;
 	width: 250px;
 	height: 400px;	
-	font-size: 50px;	
+	font-size: 40px;	
+}
+
+#nav_folders {	
+	width: 620px;
+	margin-top: 5%;	
+	overflow: hidden;
+	display: inline-block;
+}
+
+.nav_image {	
+	position: relative;
+	display: inline-block;
+	padding: 15px;	
+}
+
+.ui-tooltip {
+	background: black;
 }
