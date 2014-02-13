@@ -3,6 +3,7 @@
 -(INDEX) - Create Static index page with no Javascript (for no script users)
 -(INDEX -Sub page) - Create error page for no results returned on /p query
 
+
 -(DATABASE) - Check all DB Calls and Make sure all connections are closed after query
 -(ADMIN PAGES) - Create AUTH for admin menu
 
@@ -10,6 +11,8 @@
 
 
 [High]
+PEP8 Compliant
+-(ADMIN PAGE) - Close all admin functions from access via the browser.
 -(PROCESS PAGE) - Clear out caption value on refresh
 -(INDEX) - Create flexible main tags for index page so that if I double the amount it won't scroll too far - shrink font or perhaps spacing if it's longer than x height
 
@@ -54,6 +57,7 @@ All data that comes to your server must be checked and sanitized. Always. No exc
 
 
 Completed:
+-(INDEX - Sub Page) - May have to create folder view here or be more inclusive for event page. Perhaps create a generic folder for the pictures without an event
 -(INDEX) - Make sure if no images are returned on initial load it won't crash the site :)
 -(INDEX PAGE) - Fixed preview image load alignment problem
 -(DATABASE) - Created width/height DB fields / Modified MAKO templates to account for new cols

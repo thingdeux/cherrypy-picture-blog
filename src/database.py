@@ -317,13 +317,18 @@ def get_sub_tags(parent_tag = False):
 			return (False)
 
 #Get a list of all event tags in the DB
-def get_event_tags():
+def get_event_tags(sub_tag = False):
 	db_connection = connect_to_database()
 	db = db_connection.cursor()
 
-	try:		
-		db.execute('''SELECT DISTINCT parent_tag, parent_sub_tag, event_tag FROM event_tags ORDER BY(event_tag) ASC''')
-		the_tags = db.fetchall()
+	try:
+		if sub_tag == False:	
+			db.execute('''SELECT DISTINCT parent_tag, parent_sub_tag, event_tag FROM event_tags ORDER BY(event_tag) ASC''')
+			the_tags = db.fetchall()
+		else:
+			db.execute('''SELECT DISTINCT parent_tag, parent_sub_tag, event_tag FROM event_tags WHERE parent_sub_tag = ? ORDER BY(event_tag) ASC''', (sub_tag,))
+			the_tags = db.fetchall()
+
 		db_connection.close()
 
 		returned_list = []
@@ -610,11 +615,12 @@ def get_top_20_logs():
 		for error in err:
 			log("Unable to get logs", "DATABASE", "LOW")
 
-def get_latest_8_images():
+def get_latest_10_images_by_tag(main_tag, sub_tag, event_tag = False):	
 	try:
 		db_connection = connect_to_database()
 		db = db_connection.cursor()
-		db.execute('SELECT * FROM images ORDER BY (date_added)  DESC LIMIT 8')	
+		db.execute('''SELECT images.id, images.name, images.thumb_location  FROM images INNER JOIN sub_tags ON images.id = sub_tags.image_id WHERE sub_tags.parent_tag = ? 
+						AND sub_tags.sub_tag = ? ORDER BY (images.id) DESC LIMIT 10''', (main_tag, sub_tag,))	
 		latest_10 = db.fetchall()
 		db_connection.close()
 
@@ -623,39 +629,59 @@ def get_latest_8_images():
 	except Exception, err:
 		db_connection.close()
 		for error in err:
-			log("Unable to get latest images", "DATABASE", "SEVERE")
+			log("Unable to get latest 4 images: " + error, "DATABASE", "SEVERE")
 
 def get_random_image_id_by_tag(db_cursor = False, **kwargs):	
 	def query_db_for_acceptable_images(dbcur, tag):
+		#If the key main_tag is passed it's a main tag query
+		#If the key parent_tag and sub_tag are passed (and not main_tag) it's a sub tag query
+		#If the key event_tag is passed (and neither of the previous two) it's an event query
+		#If the key 'misc_parent_tag' is passed it's a query for sub_tags that don't have event tags
 		try:			
 			main_tag = tag['main_tag']			
 			dbcur.execute('SELECT images.id FROM images INNER JOIN tags ON images.id = tags.image_id WHERE tags.tag = ? AND images.width > 720 AND (images.width - images.height) > 280', (main_tag,))
 			return( dbcur.fetchall() )
 		except:
 			try:
-				sub_tag = tag['sub_tag']				
-				dbcur.execute( 'SELECT images.id FROM images INNER JOIN sub_tags ON images.id = sub_tags.image_id WHERE sub_tags.sub_tag = ? AND images.width > 720 AND (images.width - images.height) > 280', (sub_tag,) )				
+				sub_tag = tag['sub_tag']
+				parent_tag = tag['parent_tag']						
+				dbcur.execute( 'SELECT images.id FROM images INNER JOIN sub_tags ON images.id = sub_tags.image_id WHERE sub_tags.sub_tag = ? AND sub_tags.parent_tag = ? AND images.width > 720 AND (images.width - images.height) > 280', (sub_tag,parent_tag,) )				
 				return( dbcur.fetchall() )
 			except:
 				try:					
-					event_tag = tag['event_tag']					
-					dbcur.execute('SELECT images.id FROM images INNER JOIN event_tags ON images.id = event_tags.image_id WHERE event_tags.event_tag = ? AND images.width > 720 AND (images.width - images.height) > 280', (event_tag,))
-					return( dbcur.fetchall() )
-				except Exception, err:
-					for error in err:
-						log("Unable to query db for acceptable images: " + error)
-					return ("")
+					event_tag = tag['event_tag']
+					parent_sub = tag['parent_sub_tag']
+					parent_tag = tag['parent_tag']					
+					dbcur.execute('''SELECT images.id FROM images INNER JOIN event_tags ON images.id = event_tags.image_id WHERE 
+									event_tags.event_tag = ? AND event_tags.parent_sub_tag = ? AND event_tags.parent_tag = ? AND images.width > 720 AND (images.width - images.height) > 280''', 
+									(event_tag,parent_sub, parent_tag))
+					return ( dbcur.fetchall() )
+				except:
+					try:
+						misc_parent_tag = tag['misc_parent_tag']
+						misc_sub_tag = tag['misc_sub_tag']
+						dbcur.execute('''SELECT images.id FROM images INNER JOIN sub_tags ON images.id = sub_tags.image_id WHERE 
+										sub_tags.parent_tag = (?) AND sub_tags.sub_tag = (?) AND (images.width > 720) and (images.width - images.height) > 280 AND 
+										image_id NOT IN (SELECT image_id FROM event_tags WHERE parent_tag = (?) AND parent_sub_tag = (?) )''',(misc_parent_tag, misc_sub_tag, misc_parent_tag, misc_sub_tag,) )
+						return ( dbcur.fetchall() )
+
+					except Exception, err:
+						for error in err:
+							log("Unable to query db for acceptable images: " + error, "DATABASE", "MEDIUM")
+						return ("")
 
 	def return_random_number(db):
 		try:			
-			image_id_list = query_db_for_acceptable_images(db, kwargs)			
-
+			image_id_list = query_db_for_acceptable_images(db, kwargs)						
 			#Select a random record from 1 to length of results and return the id
 			try: 
-				random_image = randint(1, (len(image_id_list) - 1) )
+				random_image = randint(1, (len(image_id_list) - 1) )				
 			except:
-				random_image = 0
-
+				if len(random_image) >= 1:
+					random_image = 0
+				else:
+					return(False)			
+			
 			return (  get_image_by_id(image_id_list[random_image][0])  )
 		except:					
 			return(False)
@@ -708,19 +734,65 @@ def get_image_for_every_main_tag():
 		for error in err:
 			log("Unable to get latest images " + error, "DATABASE", "SEVERE")
 
-def get_image_for_every_sub_tag(main_tag):
+def get_image_for_each_sub_tag(main_tag):
 	try:		
 		sub_tags = get_sub_tags(main_tag)		
 		db_connection = connect_to_database()
 		db = db_connection.cursor()					
 		returned_list_of_dicts = {}
 
-		for parent_tag, sub_tag in sub_tags:
-			random_image = get_random_image_id_by_tag(db, sub_tag = sub_tag)
+		for parent_tag, sub_tag in sub_tags:			
+			random_image = get_random_image_id_by_tag(db, parent_tag = main_tag, sub_tag = sub_tag)
 			if random_image == False:
 				pass
 			else:
 				returned_list_of_dicts[ sub_tag ] = random_image
+
+		db_connection.close()
+
+		return ( returned_list_of_dicts )
+
+	except Exception, err:
+		db_connection.close()
+		for error in err:
+			log("Unable to get latest images " + error, "DATABASE", "SEVERE")
+
+def get_image_for_each_event_tag(sub_tag):
+	try:		
+		event_tags = get_event_tags(sub_tag)
+		db_connection = connect_to_database()
+		db = db_connection.cursor()					
+		returned_list_of_dicts = {}
+
+		for parent_tag, sub_tag, event_tag in event_tags:						
+			random_image = get_random_image_id_by_tag(db, parent_tag = parent_tag, parent_sub_tag = sub_tag, event_tag = event_tag)
+
+			if random_image == False:				
+				pass
+			else:							
+				returned_list_of_dicts[ event_tag ] = random_image
+
+		db_connection.close()
+
+		return ( returned_list_of_dicts )
+
+	except Exception, err:
+		db_connection.close()
+		for error in err:
+			log("Unable to get latest images " + error, "DATABASE", "SEVERE")	
+
+def get_image_for_misc_sub_tag(main_tag, sub_tag):
+	try:				
+		db_connection = connect_to_database()
+		db = db_connection.cursor()					
+		returned_list_of_dicts = {}
+		
+		random_image = get_random_image_id_by_tag(db, misc_parent_tag = main_tag, misc_sub_tag = sub_tag)
+		
+		if random_image == False:
+			pass
+		else:
+			returned_list_of_dicts[ sub_tag ] = random_image
 
 		db_connection.close()
 

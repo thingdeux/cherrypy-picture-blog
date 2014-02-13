@@ -62,11 +62,21 @@ class WebsiteImage:
 	def convert_image_to_thumbnail(self):
 			
 		try:
-			picObject = self.picObject
-			thumbnail_size = (100,100)			
-			picObject.thumbnail( thumbnail_size )
+			picThumb = self.picObject
+			thumbnail_size = (150,125)			
 			
-			#Get latest DB id and append to the filename 		
+			#Create blank canvas
+			picObject = Image.new( self.picObject.mode, thumbnail_size)
+			#Turn the copy of the passed Image Object into a thumbnail
+			picThumb.thumbnail(thumbnail_size, Image.ANTIALIAS)
+
+			#Find the difference between the two to create black background behind cropped image (if not widescreen format)
+			x_offset= (picObject.size[0] - picThumb.size[0]) // 2
+			y_offset= (picObject.size[1] - picThumb.size[1]) // 2
+
+			#Create new image with black background pasted behind the resize
+			picObject.paste(picThumb, (x_offset, y_offset))
+						
 			return(picObject)
 
 		except Exception, err:
@@ -74,11 +84,12 @@ class WebsiteImage:
 			for error in err:
 				log("Thumbnail Save Error" + str(error), "CONVERTER", "MEDIUM" )
 
+
 	def create_watermark(self):
 		try:
 			picObject = self.picObject
 			shrink_size = (1280,1024)
-			picObject.thumbnail( shrink_size )		
+			picObject.thumbnail( shrink_size, Image.ANTIALIAS )		
 		
 			watermark_image = Image.open(os.path.join(current_folder(), 'static/watermark.png')  )	
 			watermark_image = watermark_image.convert('RGBA')
