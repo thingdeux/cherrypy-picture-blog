@@ -127,7 +127,7 @@
 				%try:
 					<% strippedLoc = thumb_location.split('/') %>
 					<% thumbLocation = "/thumbnails/" + strippedLoc[ len(strippedLoc) - 1 ] %>	
-
+					
 					%if len(name) > 20:
 					<table class = "nav_image" title = "${name}">
 					%else:
@@ -135,14 +135,15 @@
 					%endif
 
 						<tr><td>
-							<img id = "${image_id}" src = ${thumbLocation} style="width: 150px; height: 125px; border: 5px solid black;">
-						</tr></td>
-
+							<a class = "thumbs">
+							<img id = "${image_id}" src = ${thumbLocation} style="width: 150px; height: 125px; border: 5px solid"></a>	
+						</tr>
+						
 						<th align="center">${name[0:20]}
 						%if len(name) > 20:
 							...
 						%endif
-						</th>					
+						</th>
 
 					</table>					
 				%except:

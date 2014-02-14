@@ -23,6 +23,9 @@ a:visited {text-decoration: none; color:black;}
 a:hover {text-decoration: none; color:white;}
 a:active {text-decoration: none; color:black;}
 
+.thumbs:hover { border-color: white; }
+.thumbs:link { border-color: black; }
+
 #site_title {
 	position: relative;
 	font-size: 80px;
