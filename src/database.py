@@ -445,7 +445,7 @@ def get_image_by_id(image_id):
 	except Exception, err:
 		db.connection.close()
 		for error in err:
-			log("Unable to get image by ID: " + error, "DATABASE","HIGH")		
+			log("Unable to get image by ID: " + error, "DATABASE","HIGH")	
 		return ("")
 
 	query = db.fetchall()
@@ -619,8 +619,13 @@ def get_latest_10_images_by_tag(main_tag, sub_tag, event_tag = False):
 	try:
 		db_connection = connect_to_database()
 		db = db_connection.cursor()
-		db.execute('''SELECT images.id, images.name, images.thumb_location  FROM images INNER JOIN sub_tags ON images.id = sub_tags.image_id WHERE sub_tags.parent_tag = ? 
-						AND sub_tags.sub_tag = ? ORDER BY (images.id) DESC LIMIT 10''', (main_tag, sub_tag,))	
+		if event_tag == False:
+			db.execute('''SELECT images.id, images.name, images.thumb_location  FROM images INNER JOIN sub_tags ON images.id = sub_tags.image_id WHERE sub_tags.parent_tag = ? 
+							AND sub_tags.sub_tag = ? ORDER BY (images.id) DESC LIMIT 10''', (main_tag, sub_tag,))	
+		else:
+			db.execute('''SELECT images.id, images.name, images.thumb_location  FROM images INNER JOIN event_tags ON images.id = event_tags.image_id WHERE event_tags.parent_tag = ? 
+							AND event_tags.parent_sub_tag = ? AND event_tags.event_tag = ? ORDER BY (images.id) DESC LIMIT 10''', (main_tag, sub_tag,event_tag, ))	
+
 		latest_10 = db.fetchall()
 		db_connection.close()
 

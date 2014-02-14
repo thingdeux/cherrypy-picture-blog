@@ -70,8 +70,11 @@ class web_server(object):
     
     try:
       event_tag = args[2]      
-      sub_tag = args[1]      
-      images = database.get_latest_10_images_by_tag(main_tag, sub_tag)
+      sub_tag = args[1]
+      if event_tag == "Misc":    
+        images = database.get_latest_10_images_by_tag(main_tag, sub_tag)
+      else:
+        images = database.get_latest_10_images_by_tag(main_tag, sub_tag, event_tag)
       
       self.mako_template_render = mako_template.render(event_main_tag = main_tag, event_sub_tag = sub_tag, 
                                                        event_tag = event_tag, images = images, display_type = "Event")
@@ -316,7 +319,15 @@ class web_server(object):
                     main_tag_query = main_tag, sub_tag_query = sub_tag)
 
     return self.mako_template_render
-    
+  
+  @cherrypy.expose
+  def getModalPicture(self, *args, **kwargs):
+    image = database.get_image_by_id( kwargs.get('image_id') )
+    mako_template = Template(filename='static/templates/image_modal.tmpl')  
+
+    self.mako_template_render = mako_template.render(image = image)
+
+    return self.mako_template_render
 
   @cherrypy.expose
   def insertTag(self, *arguments, **kwargs):

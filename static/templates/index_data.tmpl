@@ -4,16 +4,18 @@
 	JoshandLinz
 </title>
 
-	<link rel="icon" type="image/png" href="/static/favicon.ico">
-	<link rel="stylesheet" href="/static/css/eggplant/jquery-ui-1.10.4.custom.css">
+	<link rel="icon" type="image/png" href="/static/favicon.ico">	
 	<link rel="stylesheet" href="/static/css/base.css" type="text/css">
-    <link rel="stylesheet" href="/static/css/normalize.css" type="text/css">  
+    <link rel="stylesheet" href="/static/css/normalize.css" type="text/css">
+
 
     <!-- Add in Prod
+    	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/ui-darkness/jquery-ui.min.css">
     	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>   
 		<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
     !-->
     <!--Instead of local !-->
+    <link rel="stylesheet" href="/static/css/ui-darkness/jquery-ui-1.10.4.custom.css">
     <script type="text/javascript" src="/js/lib/jquery-1.10.2.min.js"></script> 
     <script type="text/javascript" src="/js/lib/jquery-ui-1.10.4.min.js"></script>
     <script type="text/javascript" src="/js/index.js"></script>
@@ -93,7 +95,7 @@
 					
 					%try:				
 						<% failure_point = images[misc_event_tag] %>
-						<tr><td><a class = "tag" name="${misc_event_tag}" href="/p/${parent_main_tag}/${parent_sub_tag}">${misc_event_tag}</a></td></tr>
+						<tr><td><a class = "tag" name="${misc_event_tag}" href="/p/${parent_main_tag}/${parent_sub_tag}/${misc_event_tag}">${misc_event_tag}</a></td></tr>
 					%except:						
 					%endtry
 
@@ -110,12 +112,17 @@
 
 
 %elif display_type == "Event":
+	<div id = "modal"></div>
 	<div id = "container">
-		<div id = "site_title">${event_tag}</div>
+		<!-- Make the I I I have smaller spacing for Joe !-->
+		%if event_tag == "I I I":
+			<div id = "site_title" style="letter-spacing: -6px">${event_tag}</div>
+		%else:
+			<div id = "site_title">${event_tag}</div>
+		%endif
 	
-	<div id = "nav_folders">						
+		<div id = "image_previews">						
 			<!-- Display a jQuery UI Tooltip only if the text is cutoff !-->
-
 			%for image_id, name, thumb_location in images:
 				%try:
 					<% strippedLoc = thumb_location.split('/') %>
@@ -135,24 +142,23 @@
 						%if len(name) > 20:
 							...
 						%endif
-						</th>						
+						</th>					
 
 					</table>					
 				%except:
 				%endtry
-				
-			%endfor
+			%endfor	
 
+			<div id = "image_nav">
+				<a> Prev Images </a>				
+				<a style="margin-left: 15%" href="/p/${event_main_tag}/${event_sub_tag}"> - Back -  </a>
+				<a style ="margin-left: 15%">Next Images</a>
+			</div>	
 
-			<a> Load More </a>
-
-			
+		</div>				
 		
-	</div>
 	
 %endif
-
-
 
 	</div>
 
