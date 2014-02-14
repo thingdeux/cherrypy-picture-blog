@@ -26,8 +26,8 @@ a:active {text-decoration: none; color:black;}
 #site_title {
 	position: relative;
 	font-size: 80px;
+	text-align: center;
 	
-	text-align: center;	
 }
 
 #container {	
@@ -47,15 +47,22 @@ a:active {text-decoration: none; color:black;}
 	margin-left: 750px;
 	margin-top: -520px;
 	width: 250px;
-	height: 400px;	
+	height: 400px;
 	font-size: 40px;	
 }
 
-#nav_folders {
-	width: 850px;
-	margin-top: 5%;	
+#image_previews {	
+	width: 800px;
+	margin-top: 5%;
+	margin-left: 10%;
 	overflow: hidden;
-	display: inline-block;	
+	float: left;	
+}
+
+#image_nav {
+	font-size: 40px;
+	margin-top: 10px;		
+	width: auto;				
 }
 
 .nav_image {	
@@ -65,5 +72,7 @@ a:active {text-decoration: none; color:black;}
 }
 
 .ui-tooltip {
-	background: black;
+	background: black;	
 }
+
+

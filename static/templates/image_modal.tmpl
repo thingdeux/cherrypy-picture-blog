@@ -1,0 +1,35 @@
+<div id = "image_container">
+
+	%for id, name, image_location, thumb_location, date_added,date_taken, caption, width, height in image:
+
+		%try:
+			<% strippedLoc = image_location.split('/') %>
+			<% imageLocation = "/images/" + strippedLoc[ len(strippedLoc) - 1 ] %>
+			<img name = "${name}" class = "modal_image" dataWidth="${width}" dataHeight = "${height}" style= "max-height: 100%; max-width: 100%; border: 5px solid black;" src = ${imageLocation}>
+
+			%if len(caption) > 1:
+				<em style="color: white;">${caption}</em>		
+			%endif
+		%except:
+		%endtry
+
+		%endfor
+
+		
+
+		<script>
+			$( "#modal").dialog({
+				modal: true,
+				hide: {effect: "clip", duration: 250},
+				minWidth: $('.modal_image').attr('dataWidth') * 0.75,				
+				minHeight: $('.modal_image').attr('dataHeight') * 0.75,
+				title: $('.modal_image').prop('name'),
+			});
+
+			$('button').removeClass('ui-state-hover ui-state-focus');
+
+		</script>
+
+
+
+</div>

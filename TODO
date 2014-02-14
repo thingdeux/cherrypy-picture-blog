@@ -1,9 +1,9 @@
 [BLOCKING]
+-(FRONT END) - Make page responsize to resolution - for mobile or smaller shrink previews and/or do away with them entirely and two column folder layout.
+
 -(INDEX) - Prevent the same image from showing up when randomly flipping on slideshow
 -(INDEX) - Create Static index page with no Javascript (for no script users)
 -(INDEX -Sub page) - Create error page for no results returned on /p query
-
-
 -(DATABASE) - Check all DB Calls and Make sure all connections are closed after query
 -(ADMIN PAGES) - Create AUTH for admin menu
 
