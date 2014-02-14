@@ -8,6 +8,13 @@ from random import randint
 
 db_path = os.path.join(locations.current_folder(), '.database.db')
 
+def tryToCloseDB(db_connection):
+	try:
+		db_connection.close()
+	except:
+		pass
+
+
 def verify_database_existence():
 	#Check to see if DB exists
 	if (os.path.isfile(db_path) ):
@@ -15,40 +22,47 @@ def verify_database_existence():
 			db_connection = sqlite3.connect(db_path)
 			db_connection.close()
 			return(True)
-		except Exception, err:			
+		except Exception, err:
+			db_connection.close()
 			for error in err:
 				logger.log("DataBase: Unable to verify existence" + error, "DATABASE","SEVERE")
 	else:
 		return(False)
 	
 def create_fresh_tables():
-	#If DB doesn't exist create its tables and keys
-	db_connection = sqlite3.connect(db_path)
-	db = db_connection.cursor()
-		
-	db.execute('''CREATE TABLE images 
-			(id INTEGER PRIMARY KEY, name TEXT, image_location TEXT, thumb_location TEXT, date_added INTEGER,
-				date_taken INTEGER, caption TEXT, width INTEGER, height INTEGER)''')
+	try:
+		#If DB doesn't exist create its tables and keys
+		db_connection = sqlite3.connect(db_path)
+		db = db_connection.cursor()
+			
+		db.execute('''CREATE TABLE images 
+				(id INTEGER PRIMARY KEY, name TEXT, image_location TEXT, thumb_location TEXT, date_added INTEGER,
+					date_taken INTEGER, caption TEXT, width INTEGER, height INTEGER)''')
 
-	#Create 3 Tag tables - primary / sub / and event
-	db.execute('''CREATE TABLE tags (id INTEGER PRIMARY KEY, image_id INTEGER NOT NULL, tag TEXT NOT NULL)''')	
-	db.execute('''CREATE TABLE sub_tags (id INTEGER PRIMARY KEY, image_id INTEGER NOT NULL, parent_tag TEXT NOT NULL, sub_tag TEXT NOT NULL)''')
-	db.execute('''CREATE TABLE event_tags (id INTEGER PRIMARY KEY, image_id INTEGER NOT NULL, parent_tag TEXT NOT NULL, parent_sub_tag NOT NULL, event_tag NOT NULL)''')
+		#Create 3 Tag tables - primary / sub / and event
+		db.execute('''CREATE TABLE tags (id INTEGER PRIMARY KEY, image_id INTEGER NOT NULL, tag TEXT NOT NULL)''')	
+		db.execute('''CREATE TABLE sub_tags (id INTEGER PRIMARY KEY, image_id INTEGER NOT NULL, parent_tag TEXT NOT NULL, sub_tag TEXT NOT NULL)''')
+		db.execute('''CREATE TABLE event_tags (id INTEGER PRIMARY KEY, image_id INTEGER NOT NULL, parent_tag TEXT NOT NULL, parent_sub_tag NOT NULL, event_tag NOT NULL)''')
 
-	db.execute('''CREATE TABLE alerts (id INTEGER PRIMARY KEY, alert TEXT, status TEXT, date_added INTEGER, inactive_date INTEGER)''')
-	db.execute('''CREATE TABLE processing_queue (id INTEGER PRIMARY KEY, image_name TEXT)''')
-	db.execute('''CREATE TABLE logs (id INTEGER PRIMARY KEY, error_type TEXT, error TEXT, date_time_occured DATETIME NOT NULL, severity TEXT)''')
+		db.execute('''CREATE TABLE alerts (id INTEGER PRIMARY KEY, alert TEXT, status TEXT, date_added INTEGER, inactive_date INTEGER)''')
+		db.execute('''CREATE TABLE processing_queue (id INTEGER PRIMARY KEY, image_name TEXT)''')
+		db.execute('''CREATE TABLE logs (id INTEGER PRIMARY KEY, error_type TEXT, error TEXT, date_time_occured DATETIME NOT NULL, severity TEXT)''')
 
-	#Create index on tags
-	db.execute(''' CREATE INDEX tagIndex ON tags(tag ASC) ''')
-	db.execute(''' CREATE INDEX subtagIndex ON sub_tags(sub_tag ASC) ''')
-	db.execute(''' CREATE INDEX eventtagIndex ON event_tags(event_tag ASC) ''')
-	db.execute(''' CREATE INDEX logTypeIndex ON logs(error_type DESC) ''')
+		#Create index on tags
+		db.execute(''' CREATE INDEX tagIndex ON tags(tag ASC) ''')
+		db.execute(''' CREATE INDEX subtagIndex ON sub_tags(sub_tag ASC) ''')
+		db.execute(''' CREATE INDEX eventtagIndex ON event_tags(event_tag ASC) ''')
+		db.execute(''' CREATE INDEX logTypeIndex ON logs(error_type DESC) ''')
 
 
-	db_connection.commit()
-	log("Database did not exist: Created DB", "DATABASE", "SEVERE")
-	db_connection.close()
+		db_connection.commit()
+		log("Database did not exist: Created DB", "DATABASE", "SEVERE")
+		db_connection.close()
+	except Exception, err:
+		tryToCloseDB(db_connection)
+		for error in err:
+			log("Unable to create DB Tables: " + error, "DAtABASE", "SEVERE")
+
 
 def connect_to_database():
 	try:
@@ -56,6 +70,7 @@ def connect_to_database():
 		db_connection = sqlite3.connect(db_path)				
 		return (db_connection)
 	except Exception, err:
+		tryToCloseDB(db_connection)
 		for error in err:
 			logger.log("DATABASE","DataBase: Unable to connect" + error, "SEVERE")
 			return (False)
@@ -177,9 +192,9 @@ def create_test_data():
 		db_connection.close()
 		log("DataBase: Inserted test data into db", "DATABASE", "INFO")
 	except Exception, err:
+		tryToCloseDB(db_connection)
 		for error in err:
-			log("DataBase: Unable to insert test data - " + error, "DATABASE","INFO")
-			db_connection.close()			
+			log("DataBase: Unable to insert test data - " + error, "DATABASE","INFO")					
 
 def verify_folder_existence():
 
@@ -214,7 +229,7 @@ def get_latest_image_id():
 
 		return (the_count[0] + 1)
 	except Exception, err:
-		db_connection.close()
+		tryToCloseDB(db_connection)
 		
 		for error in err:
 			log("DataBase: Unable to get images table count " + str(error), "DATABASE","SEVERE" )
@@ -241,9 +256,10 @@ def insert_image_record(*args, **kwargs):
 		db_connection.close()
 		return(last_row)	
 	except Exception, err:
+		tryToCloseDB(db_connection)
+
 		for error in err:			
-			log("Database: Unable to insert image record - " + str(error), "DATABASE","MEDIUM")
-			db_connection.close()
+			log("Database: Unable to insert image record - " + str(error), "DATABASE","MEDIUM")			
 
 def insert_tag(image_id, tagData):	
 	db_connection = connect_to_database()
@@ -260,6 +276,7 @@ def insert_tag(image_id, tagData):
 		db_connection.commit()
 		db_connection.close()
 	except Exception, err:
+		tryToCloseDB(db_connection)		
 		for error in err:
 			log("Unable to add tags: " + error, "DATABASE","MEDIUM")
 
@@ -281,7 +298,7 @@ def get_tags():
 		return(returned_list)
 
 	except Exception, err:
-		db_connection.close()
+		tryToCloseDB(db_connection)
 		
 		for error in err:
 			log("DataBase: Unable to get tags: " + str(error), "DATABASE","SEVERE" )
@@ -310,7 +327,7 @@ def get_sub_tags(parent_tag = False):
 		return(returned_list)
 
 	except Exception, err:
-		db_connection.close()
+		tryToCloseDB(db_connection)
 		
 		for error in err:
 			log("DataBase: Unable to get tags: " + str(error), "DATABASE","SEVERE" )
@@ -339,7 +356,7 @@ def get_event_tags(sub_tag = False):
 		return(returned_list)
 
 	except Exception, err:
-		db_connection.close()
+		tryToCloseDB(db_connection)
 		
 		for error in err:
 			log("DataBase: Unable to get tags: " + str(error), "DATABASE","SEVERE" )
@@ -361,7 +378,7 @@ def check_for_processing_image(passed_image_name):
 		
 		
 	except Exception, err:
-		db_connection.close()
+		tryToCloseDB(db_connection)
 		
 		for error in err:
 			log("DataBase: Unable query processing queue: " + str(error), "DATABASE","SEVERE" )
@@ -391,7 +408,7 @@ def delete_currently_processing_job(image):
 		return (True)
 
 	except Exception, err:
-		db_connection.close()
+		tryToCloseDB(db_connection)
 		
 		for error in err:
 			log("DataBase: Unable to delete processing job: " + str(error), "DATABASE","SEVERE" )
@@ -425,7 +442,7 @@ def get_images_by_tag(*args, **kwargs):
 		elif main_tag:
 			db.execute('SELECT * from images WHERE id IN (SELECT image_id FROM tags WHERE tag == (?) )', (main_tag,) )	
 	except Exception, err:
-		db_connection.close()
+		tryToCloseDB(db_connection)
 		for error in err:
 			log("Unable to query images: " + error, "DATABASE","SEVERE")
 
@@ -467,7 +484,8 @@ def get_image_tags_by_image_id(image_id):
 		db.connection.close()
 
 	except Exception, err:
-		db.connection.close()
+		tryToCloseDB(db_connection)
+
 		for error in err:
 			log("Unable to get image by ID: " + error, "DATABASE","HIGH")		
 		return ("")
@@ -479,7 +497,6 @@ def get_image_tags_by_image_id(image_id):
 					]
 
 	return(returnedList)
-	db.connection.close()
 
 def does_image_have_at_least_one_tag(image_id):
 	db_connection = connect_to_database()
@@ -502,8 +519,8 @@ def does_image_have_at_least_one_tag(image_id):
 
 		db_connection.close()
 	except Exception, err:
-		for error in err:
-			db_connection.close()
+		tryToCloseDB(db_connection)
+		for error in err:			
 			log("Unable to determine if image has at least one tag: " + error, "DATABASE","MEDIUM")
 			return (True)
 
@@ -539,7 +556,7 @@ def delete_image_tags(*args):
 		
 
 	except Exception, err:
-		db_connection.close()
+		tryToCloseDB(db_connection)
 		for error in err:
 			log("Unable to delete tag: " + error, "DATABASE","MEDIUM")
 			return (True)
@@ -577,6 +594,7 @@ def update_image_data(*args, **kwargs):
 				return(True)  #BOOL Flag for isImageDeleted cherrypyFunction
 
 			except Exception, err:
+				tryToCloseDB(db_connection)
 				for error in err:
 					log("Unable to delete image " + image_id + " - " + error, "DATABASE","MEDIUM")
 
@@ -593,8 +611,8 @@ def update_image_data(*args, **kwargs):
 			db_connection.commit()
 			db_connection.close()
 		except Exception, err:
-			for error in err:
-				db_connection.close()
+			tryToCloseDB(db_connection)
+			for error in err:				
 				log("Unable to update Image #" + str(image_id) + ": " + error, "DATABASE","MEDIUM")
 
 		return (False) #BOOL Flag for isImageDeleted cherrypyFunction
@@ -610,7 +628,7 @@ def get_top_20_logs():
 
 		return(logs)
 	except Exception, err:
-		db_connection.close()
+		tryToCloseDB(db_connection)
 		return ("")
 		for error in err:
 			log("Unable to get logs", "DATABASE", "LOW")
@@ -632,7 +650,7 @@ def get_latest_10_images_by_tag(main_tag, sub_tag, event_tag = False):
 		return ( latest_10 )
 
 	except Exception, err:
-		db_connection.close()
+		tryToCloseDB(db_connection)
 		for error in err:
 			log("Unable to get latest 4 images: " + error, "DATABASE", "SEVERE")
 
@@ -705,7 +723,7 @@ def get_random_image_id_by_tag(db_cursor = False, **kwargs):
 				return (random_id)
 
 		except Exception, err:
-			db_connection.close()
+			tryToCloseDB(db_connection)
 			for error in err:
 				log("Unable to get random Image_id  " + error, "DATABASE", "SEVERE")
 			return(False)			
@@ -735,7 +753,7 @@ def get_image_for_every_main_tag():
 		return ( returned_list_of_dicts )
 
 	except Exception, err:
-		db_connection.close()
+		tryToCloseDB(db_connection)
 		for error in err:
 			log("Unable to get latest images " + error, "DATABASE", "SEVERE")
 
@@ -758,7 +776,7 @@ def get_image_for_each_sub_tag(main_tag):
 		return ( returned_list_of_dicts )
 
 	except Exception, err:
-		db_connection.close()
+		tryToCloseDB(db_connection)
 		for error in err:
 			log("Unable to get latest images " + error, "DATABASE", "SEVERE")
 
@@ -782,7 +800,7 @@ def get_image_for_each_event_tag(sub_tag):
 		return ( returned_list_of_dicts )
 
 	except Exception, err:
-		db_connection.close()
+		tryToCloseDB(db_connection)
 		for error in err:
 			log("Unable to get latest images " + error, "DATABASE", "SEVERE")	
 
@@ -804,7 +822,7 @@ def get_image_for_misc_sub_tag(main_tag, sub_tag):
 		return ( returned_list_of_dicts )
 
 	except Exception, err:
-		db_connection.close()
+		tryToCloseDB(db_connection)
 		for error in err:
 			log("Unable to get latest images " + error, "DATABASE", "SEVERE")
 
