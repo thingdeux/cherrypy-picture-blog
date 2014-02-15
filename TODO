@@ -1,11 +1,13 @@
 [BLOCKING]
--(FRONT END) - Make page responsize to resolution - for mobile or smaller shrink previews and/or do away with them entirely and two column folder layout.
-
 -(INDEX) - Prevent the same image from showing up when randomly flipping on slideshow
 -(INDEX - Sub page) - Create error page for no results returned on /p query
 
 -(ADMIN PAGES) - Create AUTH for admin menu
 -(FRONT END) - Create 404 Pages
+
+
+-(CSS) - Make button to close modal larger for Mobile.
+-(CSS) - Creat responsive design rules for Mobile.
 
 
 [High]
