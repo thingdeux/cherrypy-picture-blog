@@ -1,37 +1,65 @@
-<div id = "image_container">
+<a id = "leftArrow" href="#"><span class = "arrow" style="color: gray"> &lt; </span></a>
+<a id = "rightArrow" href="#"><span class = "arrow" style="color: gray"> &gt; </span></a>
 
+<div id = "image_container">	
 	%for id, name, image_location, thumb_location, date_added,date_taken, caption, width, height in image:
 
 		%try:
 			<% strippedLoc = image_location.split('/') %>
-			<% imageLocation = "/images/" + strippedLoc[ len(strippedLoc) - 1 ] %>
+			<% imageLocation = "/images/" + strippedLoc[ len(strippedLoc) - 1 ] %>						
+
 			<img name = "${name}" class = "modal_image" dataWidth="${width}" dataHeight = "${height}" style= "max-height: 100%; max-width: 100%; border: 5px solid black;" src = ${imageLocation}>
 
 			%if len(caption) > 1:
-				<em style="color: white;">${caption}</em>		
+				<em style="color: white;">${caption}</em>	
 			%endif
+			
 		%except:
-		%endtry
+		%endtry			
 
-		%endfor
+	%endfor
 
 		
 
-		<script>
+		<script>			
+			var imageWidth = $('.modal_image').attr('dataWidth') * 0.75
+			var imageHeight = $('.modal_image').attr('dataHeight') * 0.75
+
 			$( "#modal").dialog({
 				modal: true,
 				draggable: false,
 				resizable: false,
 				hide: {effect: "clip", duration: 250},
-				minWidth: $('.modal_image').attr('dataWidth') * 0.75,				
-				minHeight: $('.modal_image').attr('dataHeight') * 0.75,
+				minWidth: imageWidth,				
+				minHeight: imageHeight,
 				title: $('.modal_image').prop('name'),
 			});
 
+			$(".arrow").click(function ( event ) {
+				event.preventDefault();
+			});
+
 			$('button').removeClass('ui-state-hover ui-state-focus');
+			$('#rightArrow').css('margin-left', (imageWidth - 110) + "px");
 
 		</script>
 
+		<style>
+			.ui-dialog-title {				
+				text-align: center;				
+			}
 
+			.arrow:hover { color: #0078a3; }
 
+			.arrow {				
+				position: absolute;
+				margin-top: 250px;				
+				font-size: 100px;			
+			}			
+
+			#leftArrow{
+				margin-left: 10px;
+			}
+			
+		</style>		
 </div>

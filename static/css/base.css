@@ -51,7 +51,7 @@ a:active {text-decoration: none; color:black;}
 	margin-top: -520px;
 	width: 250px;
 	height: 400px;
-	font-size: 40px;	
+	font-size: 35px;
 }
 
 #image_previews {	
@@ -77,5 +77,4 @@ a:active {text-decoration: none; color:black;}
 .ui-tooltip {
 	background: black;	
 }
-
 
