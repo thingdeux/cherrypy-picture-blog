@@ -1,5 +1,5 @@
-<a id = "leftArrow" href="#"><span class = "arrow" style="color: gray"> &lt; </span></a>
-<a id = "rightArrow" href="#"><span class = "arrow" style="color: gray"> &gt; </span></a>
+<a id = "left" class = "arrow" href="#"> &lt; </a>
+<a id = "right" class = "arrow" href="#"> &gt; </a>
 
 <div id = "image_container">	
 	%for id, name, image_location, thumb_location, date_added,date_taken, caption, width, height in image:
@@ -8,10 +8,10 @@
 			<% strippedLoc = image_location.split('/') %>
 			<% imageLocation = "/images/" + strippedLoc[ len(strippedLoc) - 1 ] %>						
 
-			<img name = "${name}" class = "modal_image" dataWidth="${width}" dataHeight = "${height}" style= "max-height: 100%; max-width: 100%; border: 5px solid black;" src = ${imageLocation}>
+			<img id = "${id}" name = "${name}" class = "modal_image" dataWidth="${width}" dataHeight = "${height}" style= "max-height: 100%; max-width: 100%; border: 5px solid black;" src = ${imageLocation}>
 
 			%if len(caption) > 1:
-				<em style="color: white;">${caption}</em>	
+				<em style="color: white;">${caption}</em>
 			%endif
 			
 		%except:
@@ -21,9 +21,10 @@
 
 		
 
-		<script>			
+		<script>					
 			var imageWidth = $('.modal_image').attr('dataWidth') * 0.75
 			var imageHeight = $('.modal_image').attr('dataHeight') * 0.75
+			var imageArray = $('#image_previews').attr('data-imageArray');
 
 			$( "#modal").dialog({
 				modal: true,
@@ -37,10 +38,64 @@
 
 			$(".arrow").click(function ( event ) {
 				event.preventDefault();
-			});
+				var arrowDirection = $(this).attr('id')
+
+
+				function getNewImageID() {
+					//Do away with the brackets from the imageArray[]			
+					var bracketsRemoved = imageArray.slice( 1,(imageArray.length - 1) );
+					var arrayOfImageIDs = bracketsRemoved.split(',');							
+					var imageID = parseInt( $('.modal_image').attr('id') )					
+
+					for (i=0; i < arrayOfImageIDs.length; i++) {				
+
+						if (imageID == parseInt(arrayOfImageIDs[i]) ) {																	
+							if (arrowDirection == "right") {								
+								//If you get to the final image return the first picture
+								if (i < arrayOfImageIDs.length - 1) {
+									return ( arrayOfImageIDs[i + 1] )
+								}
+								else {
+									return ( arrayOfImageIDs[0] )
+								}								
+							}
+							else {
+								console.log("Left")
+								if (i == 0) {
+									return (  arrayOfImageIDs[arrayOfImageIDs.length - 1] )
+								}
+								else {
+									return ( arrayOfImageIDs[i - 1] )
+								}
+								
+
+							}
+
+							break;
+						}
+						
+					}
+				}
+
+				function setModal(data) {
+					var returnedData = $.ajax({
+						type: "GET",
+						url: '/getModalPicture',
+						data: { image_id: data }			
+					});
+
+					returnedData.done(function ( response, textStatus, jqXHR) {						
+						$("#modal").html( response );
+					});		
+				}
+
+				var switch_to_image_id = getNewImageID();
+				setModal(switch_to_image_id);
+
+			});	
 
 			$('button').removeClass('ui-state-hover ui-state-focus');
-			$('#rightArrow').css('margin-left', (imageWidth - 110) + "px");
+			$('#right').css('margin-left', (imageWidth - 110) + "px");
 
 		</script>
 
@@ -48,16 +103,20 @@
 			.ui-dialog-title {				
 				text-align: center;				
 			}
-
-			.arrow:hover { color: #0078a3; }
+			
 
 			.arrow {				
 				position: absolute;
 				margin-top: 250px;				
-				font-size: 100px;			
+				font-size: 100px;
+				opacity: 0.4;			
 			}			
+			.arrow:link { text-decoration: none; color: gray; }
+			.arrow:visited { text-decoration: none; color: gray; }
+			.arrow:hover { text-decoration: none; color: #0078a3; opacity: 1; }
+			.arrow:active { text-decoration: none; color: gray; }
 
-			#leftArrow{
+			#left{
 				margin-left: 10px;
 			}
 			
