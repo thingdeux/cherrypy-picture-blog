@@ -121,7 +121,7 @@
 			<div id = "site_title">${event_tag}</div>
 		%endif
 	
-		<div id = "image_previews">						
+		<div id = "image_previews" data-imageArray="${imageIDList}">			
 			<!-- Display a jQuery UI Tooltip only if the text is cutoff !-->
 			%for image_id, name, thumb_location in images:
 				%try:
