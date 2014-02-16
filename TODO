@@ -1,29 +1,25 @@
 [BLOCKING]
--(INDEX) - Prevent the same image from showing up when randomly flipping on slideshow
--(INDEX - Sub page) - Create error page for no results returned on /p query
 -(ADMIN PAGES) - Create AUTH for admin menu
 -(FRONT END) - Create 404 Pages
-
-
--(Event Page) - Fix modal right arrow not positioning itself properly on portrait orientation pictures
--(Event Page) - Fix caption text not wrapping properly on ^^ pictures
-
-
 -(CSS) - Make button to close modal larger for Mobile.
--(CSS) - Creat responsive design rules for Mobile.
+-(CSS) - Create responsive design rules for Mobile.
+
+-(Image Pages) - Create error page for no results returned on /p query and index
+-(DATABASE) - Sanitize POST data (so SQL commands can't be run from inputs)
+
+-(INDEX) - Prevent the same image from showing up when randomly flipping on slideshow
 
 
 [High]
-PEP8 Compliant
+-(CODE) PEP8 Compliant
 -(DATABASE) - Move Verify_folder_existence to FS
--(ADMIN PAGE) - Close all admin functions from access via the browser.
--(PROCESS PAGE) - Clear out caption value on refresh
--(INDEX) - Create flexible main tags for index page so that if I double the amount it won't scroll too far - shrink font or perhaps spacing if it's longer than x height
+-(ADMIN PAGE) - Close off all admin functions from access via the browser.
+-(PROCESS PAGE) - Clear out caption value from previous image on page refresh
 -(EVENT PAGE) - Figure out new way to prevent images from resizing because the JQUERY UI object does not close out. (Currently I destroy it then recreate but there's a *slight* delay on switch)
+
 
 [Medium]
 -(INDEX) - Create Static index page with no Javascript (for no script users)
--(DATABASE) - SORT ORDER Row on each table, order by sort order ASC
 -Have the picture transposer get current year instead of hard-coding the year (optionally update year image)
 -Make SURE no special characters are used for tags
 ERROR CHECKING FOR EVERYTHING!!
@@ -35,10 +31,10 @@ Setup DB / App tests to make sure everything is working as designed.
 -(MANAGE PAGE) Instead of refreshing on image delete, rebuild the previous list menu - cleaner look and page elements don't need to be re-fetched for no reason
 -(MANAGE PAGE) - Add check to see if #of main tags is reaching the vertical edge and expand it.
 -(LOG PAGE) - allow for sorting by type and severity
-
-CLEAN UP Formatting on html files
-Sanitize POST data (so SQL commands can't be run from inputs)
+-(DATABASE) - SORT ORDER Row on each table, order by sort order ASC -- deferred
+- (FRONT END) - CLEAN UP Formatting on html files
 (MANAGE PAGE) Get rid of 'reload' after delete /update *too many calls after
+-(INDEX) - Create flexible main tags for index page so that if I double the amount it won't scroll too far - shrink font or perhaps spacing if it's longer than x height
 
 
 
@@ -63,6 +59,8 @@ All data that comes to your server must be checked and sanitized. Always. No exc
 
 
 Completed:
+-(Event Page) - Fix modal right arrow not positioning itself properly on portrait orientation pictures
+-(Event Page) - Fix caption text not wrapping properly on ^^ pictures
 -(DATABASE) - Check all DB Calls and Make sure all connections are closed after query
 -(INDEX - Sub Page) - May have to create folder view here or be more inclusive for event page. Perhaps create a generic folder for the pictures without an event
 -(INDEX) - Make sure if no images are returned on initial load it won't crash the site :)
