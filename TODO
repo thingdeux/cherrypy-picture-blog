@@ -1,9 +1,12 @@
 [BLOCKING]
 -(INDEX) - Prevent the same image from showing up when randomly flipping on slideshow
 -(INDEX - Sub page) - Create error page for no results returned on /p query
-
 -(ADMIN PAGES) - Create AUTH for admin menu
 -(FRONT END) - Create 404 Pages
+
+
+-(Event Page) - Fix modal right arrow not positioning itself properly on portrait orientation pictures
+-(Event Page) - Fix caption text not wrapping properly on ^^ pictures
 
 
 -(CSS) - Make button to close modal larger for Mobile.
@@ -16,6 +19,7 @@ PEP8 Compliant
 -(ADMIN PAGE) - Close all admin functions from access via the browser.
 -(PROCESS PAGE) - Clear out caption value on refresh
 -(INDEX) - Create flexible main tags for index page so that if I double the amount it won't scroll too far - shrink font or perhaps spacing if it's longer than x height
+-(EVENT PAGE) - Figure out new way to prevent images from resizing because the JQUERY UI object does not close out. (Currently I destroy it then recreate but there's a *slight* delay on switch)
 
 [Medium]
 -(INDEX) - Create Static index page with no Javascript (for no script users)
