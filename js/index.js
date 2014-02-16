@@ -36,8 +36,7 @@ $(document).ready(function() {
 			fadeAllPreviewImagesOut(300);
 
 			main_tags.each(function (index) {
-				if (index == randomSelection) {										
-					var nameToHighlight = $(this).attr('id');					
+				if (index == randomSelection) {					
 					$(this).delay(290).show(300, 'swing');				
 				}
 			});			
@@ -77,10 +76,10 @@ $(document).ready(function() {
 		});
 	}	
 
-	function getRandomPreviewImage(){
+	function getRandomPreviewImage() {				
 		//Pick a random number between 0 and length of all main_tags - display it first
 		var tag_length = main_tags.length;
-		var selected_random_tag = Math.floor(( Math.random()*tag_length));
+		var selected_random_tag = Math.floor(( Math.random()*tag_length));						
 		return (selected_random_tag)
 	}
 
@@ -94,7 +93,7 @@ $(document).ready(function() {
 						});
 			
 		return (data);
-	}		
+	}
 
 	hideAllPreviewImages();
 
