@@ -23,23 +23,22 @@
 
 		<script>					
 			var imageWidth = $('.modal_image').attr('dataWidth') * 0.75
-			var imageHeight = $('.modal_image').attr('dataHeight') * 0.75
-			var imageArray = $('#image_previews').attr('data-imageArray');
+			var imageHeight = $('.modal_image').attr('dataHeight') * 0.75			
+			var imageArray = $('#image_previews').attr('data-imageArray');			
 
 			$( "#modal").dialog({
 				modal: true,
 				draggable: false,
 				resizable: false,
 				hide: {effect: "clip", duration: 250},
-				minWidth: imageWidth,				
-				minHeight: imageHeight,
+				minWidth: imageWidth,							
+				minHeight: imageHeight,				
 				title: $('.modal_image').prop('name'),
 			});
 
 			$(".arrow").click(function ( event ) {
 				event.preventDefault();
 				var arrowDirection = $(this).attr('id')
-
 
 				function getNewImageID() {
 					//Do away with the brackets from the imageArray[]			
@@ -89,7 +88,13 @@
 					});		
 				}
 
-				var switch_to_image_id = getNewImageID();
+				var switch_to_image_id = getNewImageID();				
+				/*Need to destroy the jQueryUI dialog instance else there
+				Are issues on re-instantiation. Slow... need to find another way*/
+				$("#modal").html("");
+				$("#modal").dialog("destroy");
+				/* Switch to new image by re-initializing this template with the
+				New ID */
 				setModal(switch_to_image_id);
 
 			});	
@@ -118,7 +123,7 @@
 
 			#left{
 				margin-left: 10px;
-			}
+			}			
 			
 		</style>		
 </div>
