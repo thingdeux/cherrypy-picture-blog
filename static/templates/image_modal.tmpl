@@ -17,14 +17,12 @@
 		%except:
 		%endtry			
 
-	%endfor
-
-		
+	%endfor	
 
 		<script>					
 			var imageWidth = $('.modal_image').attr('dataWidth') * 0.75
 			var imageHeight = $('.modal_image').attr('dataHeight') * 0.75			
-			var imageArray = $('#image_previews').attr('data-imageArray');			
+			var imageArray = $('#image_previews').attr('data-imageArray');		
 
 			$( "#modal").dialog({
 				modal: true,
@@ -58,8 +56,7 @@
 									return ( arrayOfImageIDs[0] )
 								}								
 							}
-							else {
-								console.log("Left")
+							else {								
 								if (i == 0) {
 									return (  arrayOfImageIDs[arrayOfImageIDs.length - 1] )
 								}
@@ -91,16 +88,25 @@
 				var switch_to_image_id = getNewImageID();				
 				/*Need to destroy the jQueryUI dialog instance else there
 				Are issues on re-instantiation. Slow... need to find another way*/
-				$("#modal").html("");
+				$("#modal").html("");				
 				$("#modal").dialog("destroy");
 				/* Switch to new image by re-initializing this template with the
 				New ID */
 				setModal(switch_to_image_id);
 
 			});	
-
+			
+			/*The default behaviour for the jqueryui dialog window is to have the 
+				close button highlighted.  Remove that highlight */
 			$('button').removeClass('ui-state-hover ui-state-focus');
-			$('#right').css('margin-left', (imageWidth - 110) + "px");
+			$('#right').css('margin-left', (imageWidth - 110) + "px");			
+
+			$('body').click(function(event) {				
+				if ( $(event.target).is(".ui-front") ) {
+					$("#modal").html("");
+					$('#modal').dialog("destroy")	
+				}				
+			});
 
 		</script>
 
