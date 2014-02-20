@@ -63,7 +63,6 @@ def create_fresh_tables():
 		for error in err:
 			log("Unable to create DB Tables: " + error, "DAtABASE", "SEVERE")
 
-
 def connect_to_database():
 	try:
 		#If DB doesn't exist create its tables and keys
@@ -633,16 +632,18 @@ def get_top_20_logs():
 		for error in err:
 			log("Unable to get logs", "DATABASE", "LOW")
 
-def get_latest_10_images_by_tag(main_tag, sub_tag, event_tag = False):	
+def get_latest_12_images_by_tag(main_tag, sub_tag, event_tag = False, offset = 0):	
 	try:
 		db_connection = connect_to_database()
 		db = db_connection.cursor()
 		if event_tag == False:
-			db.execute('''SELECT images.id, images.name, images.thumb_location  FROM images INNER JOIN sub_tags ON images.id = sub_tags.image_id WHERE sub_tags.parent_tag = ? 
-							AND sub_tags.sub_tag = ? ORDER BY (images.id) DESC LIMIT 10''', (main_tag, sub_tag,))	
+			db.execute('''SELECT images.id, images.name, images.thumb_location  FROM images 
+							INNER JOIN sub_tags ON images.id = sub_tags.image_id WHERE sub_tags.parent_tag = ? 
+							AND sub_tags.sub_tag = ? ORDER BY (images.id) DESC LIMIT 12 OFFSET ?''', (main_tag, sub_tag,offset,))
 		else:
-			db.execute('''SELECT images.id, images.name, images.thumb_location  FROM images INNER JOIN event_tags ON images.id = event_tags.image_id WHERE event_tags.parent_tag = ? 
-							AND event_tags.parent_sub_tag = ? AND event_tags.event_tag = ? ORDER BY (images.id) DESC LIMIT 10''', (main_tag, sub_tag,event_tag, ))	
+			db.execute('''SELECT images.id, images.name, images.thumb_location  FROM images 
+							INNER JOIN event_tags ON images.id = event_tags.image_id WHERE event_tags.parent_tag = ? 
+							AND event_tags.parent_sub_tag = ? AND event_tags.event_tag = ? ORDER BY (images.id) DESC LIMIT 12 OFFSET ?''', (main_tag, sub_tag,event_tag, offset,))	
 
 		latest_10 = db.fetchall()
 		db_connection.close()
@@ -653,6 +654,7 @@ def get_latest_10_images_by_tag(main_tag, sub_tag, event_tag = False):
 		tryToCloseDB(db_connection)
 		for error in err:
 			log("Unable to get latest 4 images: " + error, "DATABASE", "SEVERE")
+
 
 def get_random_image_id_by_tag(db_cursor = False, **kwargs):	
 	def query_db_for_acceptable_images(dbcur, tag):

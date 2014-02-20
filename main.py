@@ -71,22 +71,28 @@ class web_server(object):
     try:
       event_tag = args[2]      
       sub_tag = args[1]
-      imageIDList = []
+      imageIDList = []      
 
-      if event_tag == "Misc":    
-        images = database.get_latest_10_images_by_tag(main_tag, sub_tag)
+      #SQL Offset number for DB Query
+      try:
+        offset = int(args[3])
+      except:
+        offset = 0      
+
+      if event_tag == "Misc":
+        images = database.get_latest_12_images_by_tag(main_tag, sub_tag, False, offset)        
       else:
-        images = database.get_latest_10_images_by_tag(main_tag, sub_tag, event_tag)
+        images = database.get_latest_12_images_by_tag(main_tag, sub_tag, event_tag, offset)      
 
-      for image in images:
-        imageIDList.append(image[0])      
-      
+      for image in images:        
+        imageIDList.append(image[0])     
+
       self.mako_template_render = mako_template.render(event_main_tag = main_tag, event_sub_tag = sub_tag,
                                                       imageIDList = imageIDList, event_tag = event_tag, 
-                                                      images = images, display_type = "Event")
+                                                      images = images, display_type = "Event", offset = offset)
         
       return self.mako_template_render            
-    except:
+    except:      
       try:
         sub_tag = args[1]      
         event_tags = database.get_event_tags(sub_tag)

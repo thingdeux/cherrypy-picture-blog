@@ -1,13 +1,16 @@
 [BLOCKING]
+
+-(DATABASE) - Move to mySQL before prod push
 -(ADMIN PAGES) - Create AUTH for admin menu
 -(FRONT END) - Create 404 Pages
--(CSS) - Make button to close modal larger for Mobile.
--(CSS) - Create responsive design rules for Mobile.
-
 -(Image Pages) - Create error page for no results returned on /p query and index
 -(DATABASE) - Sanitize POST data (so SQL commands can't be run from inputs)
-
 -(INDEX) - Prevent the same image from showing up when randomly flipping on slideshow
+
+
+-(CSS) - Make button to close modal larger for Mobile. 
+-(CSS) - Create responsive design rules for Mobile.
+-(CSS) - use em instead of px (to account for zoom size)
 
 
 [High]
@@ -15,7 +18,7 @@
 -(DATABASE) - Move Verify_folder_existence to FS
 -(ADMIN PAGE) - Close off all admin functions from access via the browser.
 -(PROCESS PAGE) - Clear out caption value from previous image on page refresh
--(EVENT PAGE) - Figure out new way to prevent images from resizing because the JQUERY UI object does not close out. (Currently I destroy it then recreate but there's a *slight* delay on switch)
+
 
 
 [Medium]
@@ -59,6 +62,12 @@ All data that comes to your server must be checked and sanitized. Always. No exc
 
 
 Completed:
+-(EVENT PAGE) - Figure out new way to prevent images from resizing because the JQUERY UI object does not close out. (Currently I destroy it then recreate but there's a *slight* delay on switch) -- This is actually fine.
+-(DATABASE) - Setup DB offset for 'next' and 'prev' picture preview
+-(DATABASE) - Implement offset querying
+
+
+-(Event page) - allow for clicking outside of the modal to close it.
 -(Event Page) - Fix modal right arrow not positioning itself properly on portrait orientation pictures
 -(Event Page) - Fix caption text not wrapping properly on ^^ pictures
 -(DATABASE) - Check all DB Calls and Make sure all connections are closed after query
