@@ -827,6 +827,14 @@ def get_image_for_misc_sub_tag(main_tag, sub_tag):
 		for error in err:
 			log("Unable to get latest images " + error, "DATABASE", "SEVERE")
 
+def sanitizeInputString(string):
+	try:
+		passedString = str(string)
+		strippedString = passedString.replace("'","").replace(";","").replace("\"", "").replace("=","").replace("*","")
+		return ( strippedString )
+	except:
+		return ("")
+
 #Class used for breaking down data from process submission POST
 class Posted_Data:
 	def __init__(self, data, dataType):

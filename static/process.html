@@ -3,7 +3,6 @@
 	JoshandLinz
 </title>
 
-<head>
 	<link rel="icon" type="image/png" href="/static/favicon.ico">
 	<link rel="stylesheet" href="/static/css/admin.css" type="text/css">
     <link rel="stylesheet" href="/static/css/normalize.css" type="text/css">
@@ -23,28 +22,23 @@
 		<span style="color:purple">Process</span> | 		
 		<a href="/admin/manage" class="silent_link">Manage</a> | 					
 	</div>
-
 	<div id = "container">
-		<div id = "process_files">
-			
+		<div id = "process_files">		
 			%for i, filename in enumerate(queued_files):
 			<div id = "queue_file_info">
 				<span class = "queue_thumbnail"><img src="${filename[2]}" height="200"></img></span>					
 					<table>							
 						<form id = "queued_file_form" name = ${i} class = "submission_data">
-
 							<tr><td><span style="color:black"><span class="required_mark">*</span>Name:</td>  <td><input type = "text" class = "image_name" name = "picture_name" value="${filename[0]}" size="31"> </td></tr>
 							<tr><td><span style="color:purple">Caption:</span></td>  <td><textarea rows = 4 cols="30" id = "caption" name = "picture_caption"></textarea> </td></tr>
 							<tr><td><span style="color:black">Date Taken:</span></td> <td><input type = "text" id = "date_taken" name = "picture_date" size="8" value="${filename[3]}"> 
 								<span style="color:black">(Date Format: MM/DD/YY)</span></td></tr>
 							<tr><td><span style="color:purple"><span class="required_mark">*</span>Main Tags: </span></td> 
-
 									<td><select name="tag_selection" multiple>												
 											%for tag in tags:
 												<option value=${tag}>${tag}</option>
 											%endfor
 										</select>
-
 										<span class = "sub_tag_info" id = "sub_tag_text"><span class="required_mark">*</span>Sub-Tags: </span>							
 										<span class = "sub_tag_info" style="position: relative; left: 5px">
 											<select class = "sub_tag_info" name="sub_tag_selection" multiple>
@@ -56,42 +50,24 @@
 										</span>										
 									</td>
 							</tr>
-
 							<tr><td><span class = "event_tag_info" id = "event_tag_text">Event Tags:</td>
-
-									<td><select class = "event_tag_info" name="event_tag_selection" multiple>
-										%for parent_tag, parent_sub_tag, event_tag in event_tags:
-											<% eventPassValue = parent_tag + ";" + parent_sub_tag + ";" + event_tag %>
-											<option class = "event_tag_values" value="${eventPassValue}"> ${parent_tag}->${parent_sub_tag}->${event_tag}</option>
-										%endfor												
-									</select></span></td>
-							</tr>	
-														
-							<tr align = "center"><td></td>													
-												
+								<td><select class = "event_tag_info" name="event_tag_selection" multiple>
+									%for parent_tag, parent_sub_tag, event_tag in event_tags:
+										<% eventPassValue = parent_tag + ";" + parent_sub_tag + ";" + event_tag %>
+										<option class = "event_tag_values" value="${eventPassValue}"> ${parent_tag}->${parent_sub_tag}->${event_tag}</option>
+									%endfor												
+								</select></span></td>
+							</tr>															
+							<tr align = "center"><td></td>																								
 								<td><input type ="button" id = "process_picture_button" value="Process"></input>
 								&nbsp;&nbsp;
 								<input type ="button" id="delete_picture_button" value ="Delete"></input> </td></tr>
-
 						<input type = "hidden" name="FileLocation" value = "${filename[1]}"></input>												
 					</table>															
 					</form>
-
 			</div>
-
 			%endfor				
-
 		</div>
-
-	</div>
-	
-	
-	
+	</div>	
 </body>
-
-
-
-
-
-
 </HTML>

@@ -4,12 +4,10 @@
 <title>
 	JoshandLinz
 </title>
-
 <head>
 	<link rel="icon" type="image/png" href="/static/favicon.ico">
 	<link rel="stylesheet" href="/static/css/admin.css" type="text/css">
     <link rel="stylesheet" href="/static/css/normalize.css" type="text/css">
-
 
     <!-- Add in Prod<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>   !-->
     <script type="text/javascript" src="/js/lib/jquery-1.10.2.min.js"></script> 
@@ -20,45 +18,25 @@
 
     <span class ="header">Admin Menu</span>
 </head>
-
 <body>
-	<div id = "navigation">		
-		
+	<div id = "navigation">				
 		<span style="color:purple">Upload</span> | 
 		<a href="/admin/process" class="silent_link">Process</a> | 
-		<a href="/admin/manage" class="silent_link">Manage</a> | 
-		
+		<a href="/admin/manage" class="silent_link">Manage</a> | 		
 	</div>
-
 	<div id = "container">
-
 		<div class="dropzone-previews" id="dropzonePreview"> </div>
-
 	</div>
-
-	<div id = "bottomNav">
-		
+	<div id = "bottomNav">		
 		<div id = "dropzone_area">				
 			<form action="/uploadPicture" class="dropzone" id="uploadDropzone">
 				Browse
 			</form>																
 		</div>								
-
-			
-
 		<button id="picture_upload_button">Upload</button>
-
 		<div id = "statistics">	
 			<div id = "dropzone_upload_progress"> Upload Progress: N/A </div>		
 		</div>
 	</div>
-	
-	
 </body>
-
-
-
-
-
-
 </HTML>

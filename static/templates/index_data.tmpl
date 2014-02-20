@@ -3,12 +3,9 @@
 <title>
 	JoshandLinz
 </title>
-
 	<link rel="icon" type="image/png" href="/static/favicon.ico">	
 	<link rel="stylesheet" href="/static/css/base.css" type="text/css">
     <link rel="stylesheet" href="/static/css/normalize.css" type="text/css">
-
-
     <!-- Add in Prod
     	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/ui-darkness/jquery-ui.min.css">
     	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>   
@@ -23,14 +20,12 @@
 </head>
 
 <body>		
-
 %if display_type == "Main": 
 	<div id = "container">
 		<div id = "site_title">${main_tag}</div>
 
 		<div id = "tag_preview">
-			%for parent_tag, sub_tag in sub_tags:
-				
+			%for parent_tag, sub_tag in sub_tags:				
 				%try:
 					%for id, name, image_location, thumb_location, date_added, date_taken, caption, width, height in images[ sub_tag ]:
 						<% strippedLoc = image_location.split('/') %>
@@ -40,11 +35,8 @@
 
 				%except:
 				%endtry
-
 			%endfor
-
 		</div>
-
 		<div id = "tag_nav">
 			<table>
 				%for parent_tag, sub_tag in sub_tags:
@@ -56,7 +48,6 @@
 					%endtry
 
 				%endfor
-
 				<tr><td><a href="/">Back</a></td></tr>
 			</table>
 		</div>
@@ -120,31 +111,26 @@
 		%else:
 			<div id = "site_title">${event_tag}</div>
 		%endif
-	
 		<div id = "image_previews" data-imageArray="${imageIDList}">			
 			<!-- Display a jQuery UI Tooltip only if the text is cutoff !-->
 			%for image_id, name, thumb_location in images:
 				%try:
 					<% strippedLoc = thumb_location.split('/') %>
-					<% thumbLocation = "/thumbnails/" + strippedLoc[ len(strippedLoc) - 1 ] %>	
-					
+					<% thumbLocation = "/thumbnails/" + strippedLoc[ len(strippedLoc) - 1 ] %>
 					%if len(name) > 20:
 					<table class = "nav_image" title = "${name}">
 					%else:
 					<table class = "nav_image">
 					%endif
-
 						<tr><td>
 							<a class = "thumbs">
 							<img id = "${image_id}" src = ${thumbLocation} style="width: 150px; height: 125px; border: 5px solid"></a>	
-						</tr>
-						
+						</tr>						
 						<th align="center">${name[0:20]}
 						%if len(name) > 20:
 							...
 						%endif
 						</th>
-
 					</table>					
 				%except:
 				%endtry
@@ -156,24 +142,15 @@
 				%else:
 					<a href="/p/${event_main_tag}/${event_sub_tag}/${event_tag}/${(offset-12)}"> Prev Images </a>
 				%endif
-
 				<a style="margin-left: 15%" href="/p/${event_main_tag}/${event_sub_tag}"> - Back -  </a>
-
 				%if len(images) == 12: #Make sure there are actually more pictures to see
 					<a style ="margin-left: 15%" href="/p/${event_main_tag}/${event_sub_tag}/${event_tag}/${(offset+12)}">Next Images</a>
 				%else:
 					<a style ="margin-left: 15%"><span style="visibility: hidden">Next Images<span></a>
 				%endif
 			</div>	
-
-		</div>				
-		
-	
+		</div>					
 %endif
-
 	</div>
-
-
 </body>
-
 </HTML>

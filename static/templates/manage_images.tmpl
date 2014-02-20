@@ -1,17 +1,14 @@
 %if menu_location == "list":
 
 	<table class="ui-widget ui-widget-content">
-		%for id, name, image_location, thumb_location, date_added, date_taken, caption, width, height in image_data:			
-						
+		%for id, name, image_location, thumb_location, date_added, date_taken, caption, width, height in image_data:					
 			<% thumbpath = thumb_location.split('/') %>
 			<tr><td imageID = "${id}" class = "image_menu_link image_menu_name">${name}</td></tr>
-			<tr><td imageID = "${id}" class = "image_menu_link"><img src="${'/' + thumbpath[6] + '/' + thumbpath[7]}"></img></td></tr>	
-		
+			<tr><td imageID = "${id}" class = "image_menu_link"><img src="${'/' + thumbpath[6] + '/' + thumbpath[7]}"></img></td></tr>			
 		%endfor	
 	</table>
 
 	<script>
-
 		function shortenImageNames(jQueryObject) {			
 			//Take the first 10 characters from the name and strip the rest.
 			for (i=0; i < jQueryObject.length; i++) {
@@ -40,10 +37,7 @@
 		//Shorten the image names so they are only 10 characters and ...'s
 		shortenImageNames( $('.image_menu_name') );		
 	</script>
-
 %endif
-
-
 
 %if menu_location == "selected":	
 	<form id = 'update_data' name = 'updated_image_data'>
@@ -57,9 +51,7 @@
 					<tr><td>Date Taken:</td> <td><input type = "text" id = "date_taken" name = "date_taken" size="8" value="${date_taken}"></input>  
 						(Date Format: MM/DD/YY)</td>
 					<tr><td>&nbsp;</td></tr>
-					<tr><td></td><td align='center'> Associated Tags </td></tr><tr><td>&nbsp;</td></tr>
-
-					
+					<tr><td></td><td align='center'> Associated Tags </td></tr><tr><td>&nbsp;</td></tr>					
 					%for sub_id, main_tag, sub_tag in sub_tags:
 						<tr><td>Tag:</td>
 								<td class = "tags">${main_tag}														
@@ -72,8 +64,7 @@
 									%endfor
 									<input id = "${image_id}" type = "button" align="center" class = "tag_delete_button" value ="X"></input>
 								</td>
-					%endfor
-					
+					%endfor				
 					<tr><td></td><td>
 						<input id = "update_image_button" type ="button" class = "image_button" value="Update"></input>	
 						<input id = "delete_image_button" type = "button" class = "image_button" value="Delete"></input>
@@ -93,7 +84,7 @@
 
 			return (data)
 		}
-
+		
 		$(':button').button(); //Turn all buttons into JqueryUI buttons
 		$('.image_button').css({
 							"margin-top": "30px",
@@ -171,21 +162,19 @@
 				});
 			}
 		});
+
 	</script>
 
 %endif
 
-%if menu_location == "get_tags":
-	
+%if menu_location == "get_tags":	
 	%if tag_type == "main":
 		<table>
 			<tr><th>New Tag</th><tr>
-
 			<form>
 				<tr><td> <input id = "new_main_tag_input" type = "text" name = "new_main_tag"></input> </td></tr>
 				<tr><td align = "center"><input type = "button" id = "submit_new_main_tag" value="Submit"></input></td></tr>
 			</form>
-
 			<tr><th>Current Tags</th></tr>
 			%for tag in main_tags:
 				<tr><td>${tag}</td></tr>
@@ -195,12 +184,10 @@
 	%elif tag_type == "sub":
 		<table>
 			<tr><th>New Tag</th><tr>
-
 			<form>
 				<tr><td> <input id = "new_sub_tag_input" type = "text" name = "new_sub_tag"></input> </td></tr>
 				<tr><td align = "center"><input type = "button" id = "submit_new_sub_tag" value="Submit"></input></td></tr>
 			</form>
-
 		<tr><th>Current Sub Tags</th></tr>
 		%for main_tag, sub_tag in sub_tags:
 			%if main_tag_query == main_tag:
@@ -208,17 +195,13 @@
 			%endif
 		%endfor
 		</table>
-
 	%elif tag_type == "event":
 		<table>
 			<tr><th>New Tag</th><tr>
-
 			<form>
 				<tr><td><input id = "new_event_tag_input" type = "text" name = "new_event_tag" size="35"></input> </td></tr>
 				<tr><td align = "center"><input type = "button" id = "submit_new_event_tag" value="Submit"></input></td></tr>
 			</form>
-
-
 			<tr><th>Current Event Tags</th></tr>
 				%for main_tag, sub_tag, event_tag in event_tags:
 					%if sub_tag_query == sub_tag:
@@ -307,7 +290,6 @@
 				}
 			}			
 		});
-
 	</script>
 
 %endif

@@ -3,7 +3,6 @@
 
 <div id = "image_container">
 	%for id, name, image_location, thumb_location, date_added,date_taken, caption, width, height in image:
-
 		%try:
 			<% strippedLoc = image_location.split('/') %>
 			<% imageLocation = "/images/" + strippedLoc[ len(strippedLoc) - 1 ] %>						
@@ -12,12 +11,11 @@
 
 			%if len(caption) > 1:
 				<em style="color: white;">${caption}</em>
-			%endif
-			
+			%endif			
 		%except:
 		%endtry			
-
-	%endfor	
+	%endfor
+	<br><span id="instructions" style='font-size: 12px;'>Use the Arrow keys to navigate, ESC to close</span>
 
 		<script>
 			//Get the width/height of the current image thumbnail			
@@ -107,7 +105,9 @@
 				close button highlighted.  Remove that highlight */
 			$('button').removeClass('ui-state-hover ui-state-focus');			
 			$('#right').css('margin-left', (imageWidth - 110) + "px");
-			$('.arrow').css('margin-top', (imageHeight*.35) + "px")		
+			$('.arrow').css('margin-top', (imageHeight*.35) + "px");
+			//Center the instructions text half the width of the image minus half the length of the text
+			$('#instructions').css('margin-left', (imageWidth/2 - 125) + "px");
 
 			//Handler for closing the modal if a click event happens outside of the window
 			$('body').click(function(event) {				
