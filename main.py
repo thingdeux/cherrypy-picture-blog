@@ -139,7 +139,7 @@ class web_server(object):
         return (self.process() )
 
     except:
-      return ("No page here")
+      return (self.default())
 
   
   def upload(self, **arguments):
