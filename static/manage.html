@@ -41,8 +41,7 @@
 				<li><a href = "#alerts" id ="alert_management">Alerts</a></li>
 				<li><a href = "#db" id ="db_management">DB Maintenance</a></li>
 				<li><a href = "#logs" id ="log_management">Logs</a></li>
-			</ul>
-				
+			</ul>			
 			<div id = "images">
 				<ul id = "image_tag_menu" class = "ui_menu">
 					%for tag in main_tags:					
@@ -68,12 +67,9 @@
 						</li>		
 					%endfor
 				</ul>
-
 				<div id = "image_picture_menu"></div>		
 				<div id = "selected_picture"></div>
-
 			</div>
-
 			<div id = "tags">
 				<ul id = "tags_menu" class = "ui_menu">				
 						<li><a> New Tag </a>
@@ -108,17 +104,13 @@
 				</ul>
 				<div id = "tags_selection" class = "ui_menu"></div>
 			</div>
-
 			<div id = "alerts">				
 				Alert | Status | Date_Added | Inactive_date
 			</div>
-
 			<div id = "db">
 				Manual Backup | Clean up processing queue | Find Images with no tags | Delete all logs
 			</div>
-
 			<div id = "logs">				
-
 				<table id = "spread_out_table" class = "ui_menu">
 					<tr class = "log_table_headers"><th>Type</th><th>Error</th><th>Date</th><th>Severity</th></tr>
 
@@ -130,13 +122,8 @@
 						</tr>
 					%endfor
 					</table>					
-			</div>
-				
-			
+			</div>			
 		</div>
-
 	</div>
-
 </body>
-
 </HTML>

@@ -1,31 +1,29 @@
 [BLOCKING]
 -(ADMIN PAGES) - Create AUTH for admin menu
--(DATABASE) - Sanitize POST data (so SQL commands can't be run from inputs)
 -(DATABASE) - Move to mySQL before prod push
 
 -(CSS) - Make button to close modal larger for Mobile.
 -(CSS) - Create responsive design rules for Mobile.
 -(CSS) - use em instead of px (to account for zoom size)
 
-
 [High]
 -(INDEX) - Prevent the same image from showing up when randomly flipping on slideshow
 -(DATABASE) - Move Verify_folder_existence to FS
 -(ADMIN PAGE) - Close off all admin functions from access via the browser.
 -(PROCESS PAGE) - Clear out caption value from previous image on page refresh
--(CODE) - Write Unit tests for every function call / component
-
 
 
 [Medium]
 -(INDEX) - Create Static index page with no Javascript (for no script users)
 -Have the picture transposer get current year instead of hard-coding the year (optionally update year image)
 -Make SURE no special characters are used for tags
+-(CODE) - ERROR CHECKING FOR EVERYTHING!!
+-(CODE) - PEP8 Compliant
+-(CODE) - Write Unit tests for every function call / component
+		  Setup DB / App tests to make sure everything is working as designed.
 
--(CODE) PEP8 Compliant
-ERROR CHECKING FOR EVERYTHING!!
 Write cleanup job for erroneous / old process queue entries
-Setup DB / App tests to make sure everything is working as designed.
+
 
 
 [Low]
@@ -33,7 +31,6 @@ Setup DB / App tests to make sure everything is working as designed.
 -(MANAGE PAGE) - Add check to see if #of main tags is reaching the vertical edge and expand it.
 -(LOG PAGE) - allow for sorting by type and severity
 -(DATABASE) - SORT ORDER Row on each table, order by sort order ASC -- deferred
-- (FRONT END) - CLEAN UP Formatting on html files
 (MANAGE PAGE) Get rid of 'reload' after delete /update *too many calls after
 -(INDEX) - Create flexible main tags for index page so that if I double the amount it won't scroll too far - shrink font or perhaps spacing if it's longer than x height
 
@@ -76,9 +73,11 @@ All data that comes to your server must be checked and sanitized. Always. No exc
 
 
 Completed:
+-(DATABASE) - Sanitize POST data (so SQL commands can't be run from inputs)
+-(FRONT END) - CLEAN UP Formatting on html files
+
 -(FRONT END) - Create 404 Pages
 -(Image Pages) - Create error page for no results returned on /p query and index
-
 -(EVENT PAGE) - Figure out new way to prevent images from resizing because the JQUERY UI object does not close out. (Currently I destroy it then recreate but there's a *slight* delay on switch) -- This is actually fine.
 -(DATABASE) - Setup DB offset for 'next' and 'prev' picture preview
 -(DATABASE) - Implement offset querying
