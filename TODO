@@ -1,14 +1,7 @@
 [BLOCKING]
-
--(DATABASE) - Move to mySQL before prod push
 -(ADMIN PAGES) - Create AUTH for admin menu
-
-
--(FRONT END) - Create 404 Pages
--(Image Pages) - Create error page for no results returned on /p query and index
 -(DATABASE) - Sanitize POST data (so SQL commands can't be run from inputs)
--(INDEX) - Prevent the same image from showing up when randomly flipping on slideshow
-
+-(DATABASE) - Move to mySQL before prod push
 
 -(CSS) - Make button to close modal larger for Mobile.
 -(CSS) - Create responsive design rules for Mobile.
@@ -16,6 +9,7 @@
 
 
 [High]
+-(INDEX) - Prevent the same image from showing up when randomly flipping on slideshow
 -(DATABASE) - Move Verify_folder_existence to FS
 -(ADMIN PAGE) - Close off all admin functions from access via the browser.
 -(PROCESS PAGE) - Clear out caption value from previous image on page refresh
@@ -46,6 +40,28 @@ Setup DB / App tests to make sure everything is working as designed.
 
 
 [SECURITY]
+----Can I use OAuth?
+
+Introduce an artificial pause into each admin password check to prevent brute force attacks
+Use separate login pages for users and admin using the same DB table (to stop XSRF and session-stealing granting access to admin areas)
+Consider also adding webserver native authentication to the admin area (e.g. via .htaccess) 
+Consider blocking users IP after a number of failed admin login attempts 
+Add captcha after failed admin login attempts 
+Provide equally strong mechanisms (using the above techniques) for users as well as admins (e.g. don't treat admins specially) 
+Consider Second level authentication (e.g. client certificates, smart cards, cardspace, etc.) 
+Only allow access from trusted IPs/Domains, add check to basic HTTP pipeline (via e.g. HttpModules) if possible.
+[ASP.NET] Lock down IPrincipal & Principal (make them immutable and non-enumerable)
+Federate Rights Elevation - e.g. email other admins when any admin's rights are upgraded.
+Consider fine-grained rights for admins - e.g. rather than roles based rights, define rights for indicidual actions per admin 
+Restrict creation of admins - e.g. Admins cannot change or create other admin accounts. Use a locked-down 'superadmin' client for this. 
+Consider Client Side SSL Certificates, or RSA type keyfobs (electronic tokens) 
+If using cookies for Authentication, use separate cookies for admin and normal pages, by e.g. putting the admin section on a different domain. 
+If practical, consider keeping the admin site on a private subnet, off the public internet.
+Reissue auth/session tickets when moving between admin/normal usage contexts of the website 
+
+
+
+
 
 ----instead of directly deleting files (opening the server up to attack) - perhaps run a backend job that checks for renamed files or that 
 queuries the DB for files to delete and have it delete them.  Don't use the web server at all for that.
@@ -60,6 +76,9 @@ All data that comes to your server must be checked and sanitized. Always. No exc
 
 
 Completed:
+-(FRONT END) - Create 404 Pages
+-(Image Pages) - Create error page for no results returned on /p query and index
+
 -(EVENT PAGE) - Figure out new way to prevent images from resizing because the JQUERY UI object does not close out. (Currently I destroy it then recreate but there's a *slight* delay on switch) -- This is actually fine.
 -(DATABASE) - Setup DB offset for 'next' and 'prev' picture preview
 -(DATABASE) - Implement offset querying
