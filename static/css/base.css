@@ -78,3 +78,13 @@ a:active {text-decoration: none; color:black;}
 	background: black;	
 }
 
+
+@media screen and (max-device-width: 480px) {			
+
+	#container {
+		margin-left: 4%;
+		margin-right: 4%;					
+		min-height: 100%;		
+	}
+
+}

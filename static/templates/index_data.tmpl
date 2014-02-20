@@ -151,9 +151,19 @@
 			%endfor	
 
 			<div id = "image_nav">
-				<a> Prev Images </a>				
+				%if offset == 0:
+					<a><span style="visibility: hidden"> Prev Images </span></a>
+				%else:
+					<a href="/p/${event_main_tag}/${event_sub_tag}/${event_tag}/${(offset-12)}"> Prev Images </a>
+				%endif
+
 				<a style="margin-left: 15%" href="/p/${event_main_tag}/${event_sub_tag}"> - Back -  </a>
-				<a style ="margin-left: 15%">Next Images</a>
+
+				%if len(images) == 12: #Make sure there are actually more pictures to see
+					<a style ="margin-left: 15%" href="/p/${event_main_tag}/${event_sub_tag}/${event_tag}/${(offset+12)}">Next Images</a>
+				%else:
+					<a style ="margin-left: 15%"><span style="visibility: hidden">Next Images<span></a>
+				%endif
 			</div>	
 
 		</div>				
@@ -162,7 +172,7 @@
 %endif
 
 	</div>
-	
+
 
 </body>
 

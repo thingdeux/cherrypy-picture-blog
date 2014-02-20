@@ -1,7 +1,7 @@
 <a id = "left" class = "arrow" href="#"> &lt; </a>
 <a id = "right" class = "arrow" href="#"> &gt; </a>
 
-<div id = "image_container">	
+<div id = "image_container">
 	%for id, name, image_location, thumb_location, date_added,date_taken, caption, width, height in image:
 
 		%try:
@@ -19,11 +19,14 @@
 
 	%endfor	
 
-		<script>					
+		<script>
+			//Get the width/height of the current image thumbnail			
 			var imageWidth = $('.modal_image').attr('dataWidth') * 0.75
-			var imageHeight = $('.modal_image').attr('dataHeight') * 0.75			
+			var imageHeight = $('.modal_image').attr('dataHeight') * 0.75
+			//Get the image array that contains the image_id of each preview image on the page.
 			var imageArray = $('#image_previews').attr('data-imageArray');		
 
+			//Create JqueryUI dialog modal/pop out
 			$( "#modal").dialog({
 				modal: true,
 				draggable: false,
@@ -32,8 +35,12 @@
 				minWidth: imageWidth,							
 				minHeight: imageHeight,				
 				title: $('.modal_image').prop('name'),
+				close: function (event, ui) {
+					$("#modal").html("");				
+					$("#modal").dialog("destroy");
+				},
 			});
-
+			
 			$(".arrow").click(function ( event ) {
 				event.preventDefault();
 				var arrowDirection = $(this).attr('id')
@@ -41,9 +48,10 @@
 				function getNewImageID() {
 					//Do away with the brackets from the imageArray[]			
 					var bracketsRemoved = imageArray.slice( 1,(imageArray.length - 1) );
-					var arrayOfImageIDs = bracketsRemoved.split(',');							
-					var imageID = parseInt( $('.modal_image').attr('id') )					
+					var arrayOfImageIDs = bracketsRemoved.split(',')					
+					var imageID = parseInt( $('.modal_image').attr('id') )				
 
+					//Jump to the next picture in the array
 					for (i=0; i < arrayOfImageIDs.length; i++) {				
 
 						if (imageID == parseInt(arrayOfImageIDs[i]) ) {																	
@@ -64,7 +72,6 @@
 									return ( arrayOfImageIDs[i - 1] )
 								}
 								
-
 							}
 
 							break;
@@ -80,31 +87,34 @@
 						data: { image_id: data }			
 					});
 
-					returnedData.done(function ( response, textStatus, jqXHR) {						
+					returnedData.done(function ( response, textStatus, jqXHR) {					
 						$("#modal").html( response );
 					});		
 				}
 
-				var switch_to_image_id = getNewImageID();				
+				var switch_to_image_id = getNewImageID().replace(" ", "");
+				console.log(switch_to_image_id)
 				/*Need to destroy the jQueryUI dialog instance else there
 				Are issues on re-instantiation. Slow... need to find another way*/
 				$("#modal").html("");				
 				$("#modal").dialog("destroy");
 				/* Switch to new image by re-initializing this template with the
-				New ID */
+				New ID */				
 				setModal(switch_to_image_id);
 
-			});	
+			});
 			
 			/*The default behaviour for the jqueryui dialog window is to have the 
 				close button highlighted.  Remove that highlight */
-			$('button').removeClass('ui-state-hover ui-state-focus');
-			$('#right').css('margin-left', (imageWidth - 110) + "px");			
+			$('button').removeClass('ui-state-hover ui-state-focus');			
+			$('#right').css('margin-left', (imageWidth - 110) + "px");
+			$('.arrow').css('margin-top', (imageHeight*.35) + "px")		
 
+			//Handler for closing the modal if a click event happens outside of the window
 			$('body').click(function(event) {				
 				if ( $(event.target).is(".ui-front") ) {
 					$("#modal").html("");
-					$('#modal').dialog("destroy")	
+					$('#modal').dialog("destroy")
 				}				
 			});
 
@@ -118,7 +128,7 @@
 
 			.arrow {				
 				position: absolute;
-				margin-top: 250px;				
+								
 				font-size: 100px;
 				opacity: 0.4;			
 			}			
@@ -129,7 +139,17 @@
 
 			#left{
 				margin-left: 10px;
-			}			
+			}
+
+			@media {
+				button{ 					
+					min-width: 40px;
+					min-height: 25px;					
+				}
+
+			}
+
+
 			
 		</style>		
 </div>
