@@ -616,12 +616,12 @@ def update_image_data(*args, **kwargs):
 
 		return (False) #BOOL Flag for isImageDeleted cherrypyFunction
 
-def get_top_20_logs():
+def get_top_30_logs():
 	try:
 		db_connection = connect_to_database()
 		db = db_connection.cursor()
 
-		db.execute("SELECT error_type, error, date_time_occured, severity FROM logs LIMIT 20")
+		db.execute("SELECT error_type, error, date_time_occured, severity FROM logs ORDER BY (id) DESC LIMIT 30")
 		logs = db.fetchall()		
 		db_connection.close()
 
@@ -654,7 +654,6 @@ def get_latest_12_images_by_tag(main_tag, sub_tag, event_tag = False, offset = 0
 		tryToCloseDB(db_connection)
 		for error in err:
 			log("Unable to get latest 4 images: " + error, "DATABASE", "SEVERE")
-
 
 def get_random_image_id_by_tag(db_cursor = False, **kwargs):	
 	def query_db_for_acceptable_images(dbcur, tag):
