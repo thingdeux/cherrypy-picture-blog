@@ -2,22 +2,24 @@
 
 -(DATABASE) - Move to mySQL before prod push
 -(ADMIN PAGES) - Create AUTH for admin menu
+
+
 -(FRONT END) - Create 404 Pages
 -(Image Pages) - Create error page for no results returned on /p query and index
 -(DATABASE) - Sanitize POST data (so SQL commands can't be run from inputs)
 -(INDEX) - Prevent the same image from showing up when randomly flipping on slideshow
 
 
--(CSS) - Make button to close modal larger for Mobile. 
+-(CSS) - Make button to close modal larger for Mobile.
 -(CSS) - Create responsive design rules for Mobile.
 -(CSS) - use em instead of px (to account for zoom size)
 
 
 [High]
--(CODE) PEP8 Compliant
 -(DATABASE) - Move Verify_folder_existence to FS
 -(ADMIN PAGE) - Close off all admin functions from access via the browser.
 -(PROCESS PAGE) - Clear out caption value from previous image on page refresh
+-(CODE) - Write Unit tests for every function call / component
 
 
 
@@ -25,6 +27,8 @@
 -(INDEX) - Create Static index page with no Javascript (for no script users)
 -Have the picture transposer get current year instead of hard-coding the year (optionally update year image)
 -Make SURE no special characters are used for tags
+
+-(CODE) PEP8 Compliant
 ERROR CHECKING FOR EVERYTHING!!
 Write cleanup job for erroneous / old process queue entries
 Setup DB / App tests to make sure everything is working as designed.
@@ -55,18 +59,10 @@ All data that comes to your server must be checked and sanitized. Always. No exc
 
 
 
-
-
-
-
-
-
 Completed:
 -(EVENT PAGE) - Figure out new way to prevent images from resizing because the JQUERY UI object does not close out. (Currently I destroy it then recreate but there's a *slight* delay on switch) -- This is actually fine.
 -(DATABASE) - Setup DB offset for 'next' and 'prev' picture preview
 -(DATABASE) - Implement offset querying
-
-
 -(Event page) - allow for clicking outside of the modal to close it.
 -(Event Page) - Fix modal right arrow not positioning itself properly on portrait orientation pictures
 -(Event Page) - Fix caption text not wrapping properly on ^^ pictures

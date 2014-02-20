@@ -87,30 +87,41 @@ class web_server(object):
       for image in images:        
         imageIDList.append(image[0])     
 
-      self.mako_template_render = mako_template.render(event_main_tag = main_tag, event_sub_tag = sub_tag,
-                                                      imageIDList = imageIDList, event_tag = event_tag, 
-                                                      images = images, display_type = "Event", offset = offset)
-        
-      return self.mako_template_render            
+      if len(images) > 0:
+        self.mako_template_render = mako_template.render(event_main_tag = main_tag, event_sub_tag = sub_tag,
+                                                        imageIDList = imageIDList, event_tag = event_tag, 
+                                                        images = images, display_type = "Event", offset = offset)
+          
+        return self.mako_template_render
+      else:
+        return ( self.default() )
+
     except:      
       try:
         sub_tag = args[1]      
         event_tags = database.get_event_tags(sub_tag)
         images = database.get_image_for_each_event_tag(sub_tag)      
-        misc_images = database.get_image_for_misc_sub_tag(main_tag, sub_tag)        
-
-        self.mako_template_render = mako_template.render(parent_main_tag = main_tag, parent_sub_tag = sub_tag, 
-                                    event_tags = event_tags, images = images, misc_images = misc_images, display_type = "Sub")
+        misc_images = database.get_image_for_misc_sub_tag(main_tag, sub_tag)       
         
-        return self.mako_template_render      
+        if len(images) > 0 or len(misc_images) > 0:
+          self.mako_template_render = mako_template.render(parent_main_tag = main_tag, parent_sub_tag = sub_tag, 
+                                      event_tags = event_tags, images = images, misc_images = misc_images, display_type = "Sub")
+          
+          return self.mako_template_render
+        else:
+          return ( self.default() )
 
       except:      
         try:   
           sub_tags = database.get_sub_tags(main_tag)
           images = database.get_image_for_each_sub_tag(main_tag)          
           
-          self.mako_template_render = mako_template.render(main_tag = main_tag, sub_tags = sub_tags, images = images, display_type = "Main")
-          return self.mako_template_render
+          if len(images) > 0:            
+            self.mako_template_render = mako_template.render(main_tag = main_tag, sub_tags = sub_tags, images = images, display_type = "Main")
+            return self.mako_template_render
+          else:         
+            return ( self.default() )
+
         except Exception, err:
           for error in err:
             log("Unable to build Template: " + str(error) )
@@ -159,7 +170,7 @@ class web_server(object):
     main_tags = database.get_tags()
     sub_tags = database.get_sub_tags()
     event_tags = database.get_event_tags()
-    logs = database.get_top_20_logs()
+    logs = database.get_top_30_logs()
 
     #Render the mako template
     self.mako_template_render = mako_template.render(main_tags = main_tags, sub_tags = sub_tags, event_tags = event_tags, logs = logs)
@@ -345,6 +356,17 @@ class web_server(object):
   def insertTag(self, *arguments, **kwargs):
     database.insert_tag(0, kwargs)
     return ( self.manageTags(kwargs) )    
+  
+  @cherrypy.expose
+  def default(self, *arguments):
+    #Create the below template using index.html (and looking up in the static folder)
+    mako_template = Template(filename='static/404.html')
+    arguments = arguments
+
+    #Render the mako template
+    self.mako_template_render = mako_template.render(passed = arguments) 
+
+    return self.mako_template_render  
 
 
 def startServer():
