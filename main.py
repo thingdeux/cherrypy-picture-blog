@@ -65,6 +65,7 @@ class main_site(object):
   @cherrypy.expose
   def p(self, *args, **kwargs): 
     mako_template = Template(filename='static/templates/index_data.tmpl')
+    alerts = database.get_latest_alert()
     main_tag = args[0]
     
     try:
@@ -89,7 +90,8 @@ class main_site(object):
       if len(images) > 0:
         self.mako_template_render = mako_template.render(event_main_tag = main_tag, event_sub_tag = sub_tag,
                                                         imageIDList = imageIDList, event_tag = event_tag, 
-                                                        images = images, display_type = "Event", offset = offset)
+                                                        images = images, display_type = "Event", offset = offset,
+                                                        alerts = alerts)
           
         return self.mako_template_render
       else:
@@ -104,7 +106,8 @@ class main_site(object):
         
         if len(images) > 0 or len(misc_images) > 0:
           self.mako_template_render = mako_template.render(parent_main_tag = main_tag, parent_sub_tag = sub_tag, 
-                                      event_tags = event_tags, images = images, misc_images = misc_images, display_type = "Sub")
+                                      event_tags = event_tags, images = images, misc_images = misc_images, display_type = "Sub",
+                                      alerts = alerts)
           
           return self.mako_template_render
         else:
@@ -116,7 +119,8 @@ class main_site(object):
           images = database.get_image_for_each_sub_tag(main_tag)          
           
           if len(images) > 0:            
-            self.mako_template_render = mako_template.render(main_tag = main_tag, sub_tags = sub_tags, images = images, display_type = "Main")
+            self.mako_template_render = mako_template.render(main_tag = main_tag, sub_tags = sub_tags, 
+                                        images = images, display_type = "Main", alerts = alerts)
             return self.mako_template_render
           else:         
             return ( self.default() )

@@ -28,6 +28,7 @@ a:active {text-decoration: none; color:black;}
 
 #site_title {
 	margin-top: 10px;
+	margin-bottom: 10px;
 	position: relative;
 	font-size: 80px;
 	text-align: center;
@@ -35,8 +36,8 @@ a:active {text-decoration: none; color:black;}
 }
 
 #container {		
-	margin-left: 25%;
-	margin-right: 20%;
+	margin-left: 30%;
+	margin-right: 30%;
 	min-height: 100%;
 }
 
@@ -53,17 +54,17 @@ a:active {text-decoration: none; color:black;}
 }
 
 #tag_nav {
-	position: absolute;
-	margin-left: 750px;
-	margin-top: -520px;
-	width: 250px;
-	height: 400px;
-	font-size: 35px;
+	font-size: 25px;	
+	width: 725px;	
+	text-align: center;
+}
+
+.tag {
+	margin-right: 40px;
 }
 
 #image_previews {	
-	width: 800px;
-	margin-top: 5%;
+	width: 800px;	
 	margin-left: 10%;
 	overflow: hidden;
 	float: left;	
@@ -86,9 +87,44 @@ a:active {text-decoration: none; color:black;}
 }
 
 
+@media screen and (max-width: 400px) {
+	#tag_preview{	
+		width: 320px;
+		height: 244px;
+		
+	}
+
+	#site_title {		
+		margin-bottom: 10px;
+		position: relative;
+		font-size: 40px;
+		text-align: left;		
+	}
+
+	#tag_nav {
+		font-size: 25px;
+		margin-left: -20%;
+		border-collapse: collapse;
+		width: auto;			
+	}
+
+	.tag {
+		margin-right: 10px;
+	}
+}
+
+
+@media screen and (max-width: 1024px) {
+	#container {
+		margin-left: 0%;
+		margin-right: 0%;
+		min-height: 100%;	
+	}
+}
+
 @media screen and (max-device-width: 480px) {
 	#container {
-		margin-left: 4%;
+		margin-left: 10%;
 		margin-right: 0%;
 		min-height: 100%;	
 	}

@@ -20,6 +20,20 @@
 <body>	
 	<div id = "container">
 		<div id = "site_title">The Johnsons</div>
+		<div id = "tag_nav">
+			<table align="center">
+				<tr>
+				%for tag in main_tags:
+					%try:   #Will catch any tags without images in them
+						<% failure_point = images[tag] %>
+						<td><a class = "tag" name="${tag}" href="/p/${tag}">${tag}</a></td>
+					%except:					
+					%endtry					
+				%endfor
+				</tr>
+			</table>
+		</div>
+
 		<div id = "tag_preview">
 			%for tag in main_tags:
 				%try:
@@ -32,18 +46,7 @@
 				%endtry
 
 			%endfor
-		</div>
-		<div id = "tag_nav">
-			<table>
-				%for tag in main_tags:
-					%try:   #Will catch any tags without images in them
-						<% failure_point = images[tag] %>	
-						<tr><td><a class = "tag" name="${tag}" href="/p/${tag}">${tag}</a></td></tr>
-					%except:					
-					%endtry
-				%endfor 
-			</table>
-		</div>
+		</div>		
 
 		<div id = "alert">
 			%for id, alert, status, date_added, inactive_date in alerts:
