@@ -13,14 +13,13 @@ import src.filesystem as filesystem
 server_mode = "debug"
 
 cherrypy.config.update({ 'server.socket_host': '0.0.0.0',
-                         'server.socket_port': 1234,
+                         'server.socket_port': 1234,                         
                          })
-
 
 conf = {        
         '/static': { 'tools.staticdir.on' : True,
                       'tools.staticdir.dir': os.path.join(locations.current_folder(), 'static')
-                    },
+                    },        
          '/static/css': { 'tools.staticdir.on' : True,
                           'tools.staticdir.dir': os.path.join(locations.current_folder(), 'static/css')
                         },
@@ -48,8 +47,7 @@ conf = {
                     }
         }
 
-
-class web_server(object):
+class main_site(object):
 
   @cherrypy.expose	
   def index(self, *args, **kwargs):    
@@ -125,23 +123,29 @@ class web_server(object):
         except Exception, err:
           for error in err:
             log("Unable to build Template: " + str(error) )
-    
-  @cherrypy.expose
-  def admin(self, *args, **kwargs):
-    try:
-      nav_location = args[0].lower()
-
-      if nav_location == "manage":
-        return ( self.manage() )
-      elif nav_location == "upload":
-        return ( self.upload() )
-      elif nav_location == "process":
-        return (self.process() )
-
-    except:
-      return (self.default())
-
   
+  @cherrypy.expose
+  def admin(self, *args, **kwargs):    
+    try:
+      Headers = cherrypy.request.headers 
+      keys = locations.readKeys() 
+      print keys    
+
+      if Headers['Remote-Addr'] in keys:
+        nav_location = args[0].lower()
+
+        if nav_location == "manage":
+          return ( self.manage() )
+        elif nav_location == "upload":
+          return ( self.upload() )
+        elif nav_location == "process":
+          return (self.process() )
+      else:
+        return (self.default())
+
+    except:      
+      return (self.default())  
+    
   def upload(self, **arguments):
     #Create the below template using upload.html (and looking up in the static folder)
     mako_template = Template(filename='static/upload.html')
@@ -379,7 +383,7 @@ def startServer():
         if len( database.get_tags() ) <= 1:
           database.create_test_data()
 
-      cherrypy.quickstart(web_server(), config=conf)
+      cherrypy.quickstart(main_site(), config=conf)
     except Exception, err:
       for error in err:
         log("Unable to start Webserver" + str(error), "WEB", "SEVERE")
@@ -388,5 +392,5 @@ def startServer():
     database.create_fresh_tables()       
     startServer()
 
-
-startServer()
+if __name__ == "__main__":
+  startServer()
