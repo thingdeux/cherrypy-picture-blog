@@ -63,11 +63,10 @@ a:active {text-decoration: none; color:black;}
 	margin-right: 40px;
 }
 
-#image_previews {	
-	width: 800px;	
+#image_previews {
+	width: 800px;		
 	margin-left: 10%;
-	overflow: hidden;
-	float: left;	
+	margin-bottom: 5%;	
 }
 
 #image_nav {
@@ -86,7 +85,7 @@ a:active {text-decoration: none; color:black;}
 	background: black;	
 }
 
-
+/* Responsive controls for small screen PC */
 @media screen and (max-width: 400px) {
 	#tag_preview{	
 		width: 320px;

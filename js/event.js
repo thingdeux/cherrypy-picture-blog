@@ -16,8 +16,7 @@ $(document).ready(function() {
 
 	$(".nav_image").click(function () {
 		image_id = $(this).children().find('img').prop('id');
-		getModal(image_id);
-		
-	});
+		getModal(image_id);		
+	});	
 
 });
