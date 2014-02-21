@@ -15,3 +15,13 @@ def thumbnail_save_location():
 def queue_save_location():
 	save_location = os.path.join(current_folder(), 'queue')
 	return (save_location)
+
+def readKeys():
+	fileLocation = os.path.join(current_folder(), '.ip.key')
+	key = open(fileLocation, 'r')
+	keysToReturn = []
+	for thing in key:		
+		#Get rid of the newline characters
+		keysToReturn.append( thing.rstrip("\n") )
+
+	return keysToReturn
