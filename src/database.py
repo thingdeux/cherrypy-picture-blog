@@ -94,8 +94,7 @@ def create_test_data():
 		(None, 0, "Kids"),
 		(None, 0, "Josh"),
 		(None, 0, "Linz"),				
-		(None, 0, "Family"),
-		#(None, 0, "Vacations"),
+		(None, 0, "Family"),		
 		(None, 0, "Holidays")
 	]
 
@@ -118,12 +117,6 @@ def create_test_data():
 		(None, 0, "Family", "Murello"),
 		(None, 0, "Family", "Williams"),
 		(None, 0, "Family", "Puppies"),
-
-		#(None, 0, "Vacations", "Seattle"),
-		#(None, 0, "Vacations", "Arizona"),
-		#(None, 0, "Vacations", "Hawaii"),
-		#(None, 0, "Vacations", "Road Trips"),
-		#(None, 0, "Vacations", "New York"),
 
 		(None, 0, "Holidays", "Christmas"),
 		(None, 0, "Holidays", "New Years"),
@@ -151,10 +144,7 @@ def create_test_data():
 		(None, 0, "Family", "Johnson", "Anthony and Latonya"),
 		(None, 0, "Family", "Williams", "Teresa"),
 		(None, 0, "Family", "Brownell", "Christine"),
-
-		#(None, 0, "Vacations", "Hawaii", "Cruise Ship"),
-		#(None, 0, "Vacations", "Hawaii", "Island"),
-				
+						
 		(None, 0, "Holidays", "Halloween", "2013"),
 		(None, 0, "Holidays", "Halloween", "2014"),
 		(None, 0, "Holidays", "Christmas", "2013"),
@@ -184,7 +174,7 @@ def create_test_data():
 	db.executemany('INSERT INTO tags VALUES (?,?,?)', tagData)
 	db.executemany('INSERT INTO sub_tags VALUES (?,?,?,?)', subTagData)
 	db.executemany('INSERT INTO event_tags VALUES (?,?,?,?,?)', eventTagData)
-	db.executemany('INSERT INTO alerts VALUES (?,?,?,?,?)', alertData)
+	#db.executemany('INSERT INTO alerts VALUES (?,?,?,?,?)', alertData)
 
 	try:
 		db_connection.commit()
@@ -835,6 +825,22 @@ def sanitizeInputString(string):
 	except:
 		return ("")
 
+def get_latest_alert():
+	try:				
+		db_connection = connect_to_database()
+		db = db_connection.cursor()									
+		db.execute("SELECT * FROM alerts ORDER BY (id) LIMIT 1")
+
+		returned_alert = db.fetchall()
+		db_connection.close()
+
+		return ( returned_alert )
+
+	except Exception, err:
+		tryToCloseDB(db_connection)
+		for error in err:
+			log("Unable to get latest alert " + error, "DATABASE", "SEVERE")
+
 #Class used for breaking down data from process submission POST
 class Posted_Data:
 	def __init__(self, data, dataType):
@@ -901,4 +907,3 @@ class Posted_Data:
 			self.isSuccesful = True
 		else:
 			self.isSuccesful = False
-

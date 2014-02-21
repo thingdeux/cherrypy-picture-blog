@@ -55,9 +55,10 @@ class main_site(object):
     mako_template = Template(filename='static/index.html')
     random_images = database.get_image_for_every_main_tag()
     main_tags = database.get_tags()
+    alerts = database.get_latest_alert()
 
     #Render the mako template
-    self.mako_template_render = mako_template.render(images = random_images, main_tags = main_tags) 
+    self.mako_template_render = mako_template.render(images = random_images, main_tags = main_tags, alerts = alerts) 
 
     return self.mako_template_render
 

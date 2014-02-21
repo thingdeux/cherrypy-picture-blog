@@ -17,7 +17,7 @@
     <script type="text/javascript" src="/js/index.js"></script>    
 </head>
 
-<body>		
+<body>	
 	<div id = "container">
 		<div id = "site_title">The Johnsons</div>
 		<div id = "tag_preview">
@@ -44,7 +44,23 @@
 				%endfor 
 			</table>
 		</div>
-	</div>	
-</body>
 
+		<div id = "alert">
+			%for id, alert, status, date_added, inactive_date in alerts:
+				<span id = "date" style="font-weight: bold">
+					February 20th, 2014<br><br>
+				</span>
+
+				${alert}
+			%endfor
+		</div>
+
+		<div id = "copyright">
+			&copy Joshua Johnson 2014
+		</div>
+
+	</div>
+	
+
+</body>
 </HTML>
