@@ -653,7 +653,7 @@ def get_random_image_id_by_tag(db_cursor = False, **kwargs):
 		#If the key 'misc_parent_tag' is passed it's a query for sub_tags that don't have event tags
 		try:			
 			main_tag = tag['main_tag']			
-			dbcur.execute('SELECT images.id FROM images INNER JOIN tags ON images.id = tags.image_id WHERE tags.tag = ? AND images.width > 720 AND (images.width - images.height) > 280', (main_tag,))
+			dbcur.execute('SELECT images.id FROM images INNER JOIN tags ON images.id = tags.image_id WHERE tags.tag = ? AND images.width > 720 AND images.height < 900 AND (images.width - images.height) > 280', (main_tag,))
 			return( dbcur.fetchall() )
 		except:
 			try:

@@ -23,6 +23,20 @@
 %if display_type == "Main": 
 	<div id = "container">
 		<div id = "site_title">${main_tag}</div>
+		<div id = "tag_nav">
+			<table align="center">
+				<tr>
+				<td><a href="/"> <span style="margin-right: 30px"> &lt; </span></a></td>
+				%for parent_tag, sub_tag in sub_tags:					
+					%try:				
+						<% failure_point = images[sub_tag] %>
+						<td><a class = "tag" name="${sub_tag}" href="/p/${main_tag}/${sub_tag}">${sub_tag}</a></td>
+					%except:
+					%endtry
+				%endfor								
+				</tr>
+			</table>
+		</div>
 
 		<div id = "tag_preview">
 			%for parent_tag, sub_tag in sub_tags:				
@@ -37,24 +51,32 @@
 				%endtry
 			%endfor
 		</div>
-		<div id = "tag_nav">
-			<table>
-				%for parent_tag, sub_tag in sub_tags:
-					
-					%try:				
-						<% failure_point = images[sub_tag] %>
-						<tr><td><a class = "tag" name="${sub_tag}" href="/p/${main_tag}/${sub_tag}">${sub_tag}</a></td></tr>
-					%except:
-					%endtry
-
-				%endfor
-				<tr><td><a href="/">Back</a></td></tr>
-			</table>
-		</div>
+		
 
 %elif display_type == "Sub":
 	<div id = "container">
 		<div id = "site_title">${parent_sub_tag}</div>
+
+		<div id = "tag_nav">
+			<table align="center">
+				<tr>
+				<td><a href="/p/${parent_main_tag}"><span style="margin-right: 30px"> &lt; </span></a></td>
+				%for misc_parent_tag, misc_sub_tag, misc_event_tag in event_tags:					
+					%try:				
+						<% failure_point = images[misc_event_tag] %>
+						<td><a class = "tag" name="${misc_event_tag}" href="/p/${parent_main_tag}/${parent_sub_tag}/${misc_event_tag}">${misc_event_tag}</a></td>
+					%except:						
+					%endtry
+				%endfor
+
+				%try:
+					<% failure_point = misc_images["Misc"] %>
+					<td><a class = "tag" name="Misc" href="/p/${parent_main_tag}/${parent_sub_tag}/Misc">Misc</a></td>
+				%except:
+				%endtry				
+				</tr>
+			</table>
+		</div>
 
 		<div id = "tag_preview">
 			%for misc_parent_tag, misc_sub_tag, misc_event_tag in event_tags:
@@ -78,29 +100,7 @@
 				%endfor
 			%except:
 			%endtry
-		</div>
-
-		<div id = "tag_nav">
-			<table style="font-size: 35px; width: 300px;">
-				%for misc_parent_tag, misc_sub_tag, misc_event_tag in event_tags:
-					
-					%try:				
-						<% failure_point = images[misc_event_tag] %>
-						<tr><td><a class = "tag" name="${misc_event_tag}" href="/p/${parent_main_tag}/${parent_sub_tag}/${misc_event_tag}">${misc_event_tag}</a></td></tr>
-					%except:						
-					%endtry
-
-				%endfor
-
-				%try:
-					<% failure_point = misc_images["Misc"] %>
-					<tr><td><a class = "tag" name="Misc" href="/p/${parent_main_tag}/${parent_sub_tag}/Misc">Misc</a></td></tr>
-				%except:
-				%endtry
-				<tr><td><a href="/p/${parent_main_tag}">Back</a></td></tr>
-			</table>
-		</div>
-
+		</div>		
 
 %elif display_type == "Event":
 	<div id = "modal"></div>
@@ -111,6 +111,26 @@
 		%else:
 			<div id = "site_title">${event_tag}</div>
 		%endif
+
+		<div id = "image_nav">
+			<table align="center">
+				<tr>
+					%if offset == 0:
+						<td><a class = "tag"><span style="visibility: hidden"> Prev Images </span></a></td>
+					%else:
+						<td><a class = "tag" href="/p/${event_main_tag}/${event_sub_tag}/${event_tag}/${(offset-12)}"> Prev Images </a></td>
+					%endif
+
+					<td><a class = "tag" href="/p/${event_main_tag}/${event_sub_tag}">-Up-</a></td>
+					%if len(images) == 12: #Make sure there are actually more pictures to see
+						<td><a class = "tag" href="/p/${event_main_tag}/${event_sub_tag}/${event_tag}/${(offset+12)}">Next Images</a></td>
+					%else:
+						<td><a class = "tag"><span style="visibility: hidden">Next Images<span></a></td>
+					%endif
+				</tr>
+			</table>
+		</div>
+
 		<div id = "image_previews" data-imageArray="${imageIDList}">			
 			<!-- Display a jQuery UI Tooltip only if the text is cutoff !-->
 			%for image_id, name, thumb_location in images:
@@ -134,39 +154,42 @@
 					</table>					
 				%except:
 				%endtry
-			%endfor	
-
-			<div id = "image_nav">
-				%if offset == 0:
-					<a><span style="visibility: hidden"> Prev Images </span></a>
-				%else:
-					<a href="/p/${event_main_tag}/${event_sub_tag}/${event_tag}/${(offset-12)}"> Prev Images </a>
-				%endif
-				<a style="margin-left: 15%" href="/p/${event_main_tag}/${event_sub_tag}"> - Back -  </a>
-				%if len(images) == 12: #Make sure there are actually more pictures to see
-					<a style ="margin-left: 15%" href="/p/${event_main_tag}/${event_sub_tag}/${event_tag}/${(offset+12)}">Next Images</a>
-				%else:
-					<a style ="margin-left: 15%"><span style="visibility: hidden">Next Images<span></a>
-				%endif
-			</div>			
-		</div>
-
+			%endfor						
 	<style>
 		#site_title { 
 			width: 756px;
 			margin-left: 120px;
 			text-align: center;	
 		}
+		#image_nav {
+			font-size: 25px;
+			margin-left: 90px;
+			width: 756px;			
+		}
+				
 		@media screen and (max-device-width: 480px) {
 			#container {
 				margin-left: 0%;
 				margin-right: 0%;
-				min-height: 100%;	
+				min-height: 100%;
 			}
 		}
+	</style>
 
-	</style>				
 %endif
+	<div id = "alert">
+			%for id, alert, status, date_added, inactive_date in alerts:
+				<span id = "date" style="font-weight: bold">
+					February 20th, 2014<br><br>
+				</span>
+
+				${alert}
+			%endfor
+		</div>
+
+		<div id = "copyright">
+			&copy Joshua Johnson 2014
+		</div>
 
 	</div>
 </body>
