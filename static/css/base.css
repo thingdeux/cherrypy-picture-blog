@@ -2,7 +2,7 @@ html {
 	min-height: 100%;
 }
 
-body {
+body {	
 	background: -webkit-linear-gradient(150deg, #CCCCCC, #171717); /* For Safari */
 	background: -o-linear-gradient(150deg,#CCCCCC, #171717); /* For Opera 11.1 to 12.0 */
 	background: -moz-linear-gradient(150deg,#CCCCCC,#171717); /* For Firefox 3.6 to 15 */
@@ -27,13 +27,14 @@ a:active {text-decoration: none; color:black;}
 .thumbs:link { border-color: black; }
 
 #site_title {
+	margin-top: 10px;
 	position: relative;
 	font-size: 80px;
 	text-align: center;
-	
+	width: 735px;
 }
 
-#container {	
+#container {		
 	margin-left: 25%;
 	margin-right: 20%;
 	min-height: 100%;
@@ -41,8 +42,14 @@ a:active {text-decoration: none; color:black;}
 
 #tag_preview{	
 	width: 720px;
-	height: 550px;
-	margin-top: 5%;
+	height: 550px;	
+}
+
+#alert{	
+	position: relative;
+	margin-top: -20px;
+	margin-bottom: 20px;
+	width: 720px;
 }
 
 #tag_nav {
@@ -79,12 +86,11 @@ a:active {text-decoration: none; color:black;}
 }
 
 
-@media screen and (max-device-width: 480px) {			
-
+@media screen and (max-device-width: 480px) {
 	#container {
 		margin-left: 4%;
-		margin-right: 4%;					
-		min-height: 100%;		
+		margin-right: 0%;
+		min-height: 100%;	
 	}
 
 }
