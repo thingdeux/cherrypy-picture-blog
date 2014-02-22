@@ -1,4 +1,5 @@
 [BLOCKING]
+-(DATABASE) - FIX MISC LATEST_12 DB Query
 -(CSS) - Create responsive design rules for Mobile.
 -(CSS) - use em instead of px (to account for zoom size)
 
