@@ -6,6 +6,7 @@
 	<link rel="icon" type="image/png" href="/static/favicon.ico">	
 	<link rel="stylesheet" href="/static/css/base.css" type="text/css">
     <link rel="stylesheet" href="/static/css/normalize.css" type="text/css">
+    <link rel="stylesheet" href="/static/css/responsive.css" type="text/css">
     <!-- Add in Prod
     	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/ui-darkness/jquery-ui.min.css">
     	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>   
@@ -115,23 +116,23 @@
 		<div id = "image_nav">
 			<table align="center">
 				<tr>
+					<td><a class = "tag" href="/p/${event_main_tag}/${event_sub_tag}">&lt;</a></td>
 					%if offset == 0:
-						<td><a class = "tag"><span style="visibility: hidden"> Prev Images </span></a></td>
+						<!-- <td><a class = "tag"><span style="visibility: hidden"> Prev Images </span></a></td> !-->
 					%else:
 						<td><a class = "tag" href="/p/${event_main_tag}/${event_sub_tag}/${event_tag}/${(offset-12)}"> Prev Images </a></td>
 					%endif
-
-					<td><a class = "tag" href="/p/${event_main_tag}/${event_sub_tag}">-Up-</a></td>
+					
 					%if len(images) == 12: #Make sure there are actually more pictures to see
 						<td><a class = "tag" href="/p/${event_main_tag}/${event_sub_tag}/${event_tag}/${(offset+12)}">Next Images</a></td>
 					%else:
-						<td><a class = "tag"><span style="visibility: hidden">Next Images<span></a></td>
+						<!-- <td><a class = "tag"><span style="visibility: hidden">Next Images<span></a></td> !-->
 					%endif
 				</tr>
 			</table>
 		</div>
 
-		<div id = "image_previews" data-imageArray="${imageIDList}">			
+		<div id = "image_previews" data-imageArray="${imageIDList}">		
 			<!-- Display a jQuery UI Tooltip only if the text is cutoff !-->
 			%for image_id, name, thumb_location in images:
 				%try:
@@ -157,25 +158,25 @@
 			%endfor
 		</div>					
 	<style>
-		#container {		
-			margin-left: 25%;
+		#container {			
+			margin-left: 22%;
 			margin-right: 25%;
 			min-height: 100%;
 		}
 
-		#site_title { 
-			width: 756px;
-			margin-left: 120px;
+		#site_title { 			
+			width: 800px;
+			margin-left: 100px;
 			text-align: center;	
 		}
-		#image_nav {
+		#image_nav {						
 			font-size: 25px;
-			margin-left: 90px;
-			width: 756px;			
+			margin-left: 100px;
+			width: 800px;							
 		}
 		#alert {			
-			margin-left: 90px;			
-			width: 756px;
+			margin-left: 100px;			
+			width: 800px;
 		}
 				
 		@media screen and (max-device-width: 480px) {
@@ -203,5 +204,6 @@
 		</div>
 
 	</div>
+	
 </body>
 </HTML>

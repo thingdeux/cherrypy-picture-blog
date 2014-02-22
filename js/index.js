@@ -22,7 +22,7 @@ $(document).ready(function() {
 					$(this).fadeOut(200, 'swing');
 				}
 				if ($(this).attr('id') == name) {
-					$(this).delay(200).show(150, 'swing');
+					$(this).delay(200).fadeIn(150, 'swing');
 				}
 			});
 			//Prevent multiple images from hiding/fading out at the same time.
@@ -37,7 +37,7 @@ $(document).ready(function() {
 
 			main_tags.each(function (index) {
 				if (index == randomSelection) {					
-					$(this).delay(290).show(300, 'swing');				
+					$(this).delay(300).fadeIn(300, 'swing');				
 				}
 			});			
 			
