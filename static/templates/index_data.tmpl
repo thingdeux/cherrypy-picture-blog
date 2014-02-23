@@ -6,7 +6,7 @@
 	<link rel="icon" type="image/png" href="/static/favicon.ico">	
 	<link rel="stylesheet" href="/static/css/base.css" type="text/css">
     <link rel="stylesheet" href="/static/css/normalize.css" type="text/css">
-    <link rel="stylesheet" href="/static/css/responsive.css" type="text/css">
+    <link rel="stylesheet" href="/static/css/responsive.css" type="text/css">    
     <!-- Add in Prod
     	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/ui-darkness/jquery-ui.min.css">
     	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>   
@@ -17,7 +17,7 @@
     <script type="text/javascript" src="/js/lib/jquery-1.10.2.min.js"></script> 
     <script type="text/javascript" src="/js/lib/jquery-ui-1.10.4.min.js"></script>
     <script type="text/javascript" src="/js/index.js"></script>
-    <script type="text/javascript" src="/js/event.js"></script>
+    <script type="text/javascript" src="/js/event.js"></script>    
 </head>
 
 <body>		
@@ -45,7 +45,7 @@
 					%for id, name, image_location, thumb_location, date_added, date_taken, caption, width, height in images[ sub_tag ]:
 						<% strippedLoc = image_location.split('/') %>
 						<% imageLocation = "/images/" + strippedLoc[ len(strippedLoc) - 1 ] %>
-						<img id = "${sub_tag}" class = "tag_preview_image" src = ${imageLocation} style="max-height: 100%; max-width: 100%; border: 5px solid black;">
+						<img id = "${sub_tag}" class = "tag_preview_image" src = ${imageLocation} >
 					%endfor
 
 				%except:
@@ -86,7 +86,7 @@
 					%for id, name, image_location, thumb_location, date_added, date_taken, caption, width, height in images[ misc_event_tag ]:
 						<% strippedLoc = image_location.split('/') %>
 						<% imageLocation = "/images/" + strippedLoc[ len(strippedLoc) - 1 ] %>
-						<img id = "${misc_event_tag}" class = "tag_preview_image" src = ${imageLocation} style="max-height: 100%; max-width: 100%; border: 5px solid black;">
+						<img id = "${misc_event_tag}" class = "tag_preview_image" src = ${imageLocation}>
 					%endfor						
 				%except:					
 				%endtry
@@ -97,13 +97,15 @@
 				%for id, name, image_location, thumb_location, date_added, date_taken, caption, width, height in misc_images[ "Misc" ]:
 					<% strippedLoc = image_location.split('/') %>
 					<% imageLocation = "/images/" + strippedLoc[ len(strippedLoc) - 1 ] %>
-					<img id = "Misc" class = "tag_preview_image" src = ${imageLocation} style="max-height: 100%; max-width: 100%; border: 5px solid black;">
+					<img id = "Misc" class = "tag_preview_image" src = ${imageLocation}>
 				%endfor
 			%except:
 			%endtry
 		</div>		
 
 %elif display_type == "Event":
+	<link rel="stylesheet" href="/static/css/previews.css" type="text/css">
+
 	<div id = "modal"></div>
 	<div id = "container">
 		<!-- Make the I I I have smaller spacing for Joe !-->
@@ -157,45 +159,17 @@
 				%endtry
 			%endfor
 		</div>					
-	<style>
-		#container {			
-			margin-left: 22%;
-			margin-right: 25%;
-			min-height: 100%;
-		}
-
-		#site_title { 			
-			width: 800px;
-			margin-left: 100px;
-			text-align: center;	
-		}
-		#image_nav {						
-			font-size: 25px;
-			margin-left: 100px;
-			width: 800px;							
-		}
-		#alert {			
-			margin-left: 100px;			
-			width: 800px;
-		}
-				
-		@media screen and (max-device-width: 480px) {
-			#container {
-				margin-left: 0%;
-				margin-right: 0%;
-				min-height: 100%;
-			}
-		}
-	</style>
+	
 
 %endif
-	<div id = "alert">
+		<div id = "alert">
 			%for id, alert, status, date_added, inactive_date in alerts:
-				<span id = "date" style="font-weight: bold">
+				<div id = "date" style="font-weight: bold">
 					February 20th, 2014<br><br>
-				</span>
-
-				${alert}
+				</div>
+				<div id = "alert_text">
+					${alert}
+				</div>
 			%endfor
 		</div>
 
@@ -204,6 +178,6 @@
 		</div>
 
 	</div>
-	
+
 </body>
 </HTML>

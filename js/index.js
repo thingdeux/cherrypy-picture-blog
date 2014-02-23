@@ -2,7 +2,7 @@ $(document).ready(function() {
 
 	//  --Global Variables-- //
 	//Keep all elements from query in variable so DOM does not need to be crawled again.
-	var main_tags = $('.tag_preview_image');	
+	var main_tags = $('.tag_preview_image');
 
 	var nav_tag_list = $('#tag_nav').find('.tag');
 	//Global var for determining when the preview image is animating.

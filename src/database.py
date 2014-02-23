@@ -14,7 +14,6 @@ def tryToCloseDB(db_connection):
 	except:
 		pass
 
-
 def verify_database_existence():
 	#Check to see if DB exists
 	if (os.path.isfile(db_path) ):
@@ -653,13 +652,16 @@ def get_random_image_id_by_tag(db_cursor = False, **kwargs):
 		#If the key 'misc_parent_tag' is passed it's a query for sub_tags that don't have event tags
 		try:			
 			main_tag = tag['main_tag']			
-			dbcur.execute('SELECT images.id FROM images INNER JOIN tags ON images.id = tags.image_id WHERE tags.tag = ? AND images.width > 720 AND images.height < 900 AND (images.width - images.height) > 280', (main_tag,))
+			dbcur.execute('''SELECT images.id FROM images INNER JOIN tags ON images.id = tags.image_id WHERE
+			 tags.tag = ? AND images.width > 720 AND images.height > 800 AND images.height <= 900 AND (images.width - images.height) > 280''', (main_tag,))
 			return( dbcur.fetchall() )
 		except:
 			try:
 				sub_tag = tag['sub_tag']
 				parent_tag = tag['parent_tag']						
-				dbcur.execute( 'SELECT images.id FROM images INNER JOIN sub_tags ON images.id = sub_tags.image_id WHERE sub_tags.sub_tag = ? AND sub_tags.parent_tag = ? AND images.width > 720 AND (images.width - images.height) > 280', (sub_tag,parent_tag,) )				
+				dbcur.execute( '''SELECT images.id FROM images INNER JOIN sub_tags ON images.id = sub_tags.image_id WHERE
+				 				sub_tags.sub_tag = ? AND sub_tags.parent_tag = ? AND images.width > 720 AND images.height > 800 AND
+				 				 images.height <= 900 AND (images.width - images.height) > 280''', (sub_tag,parent_tag,) )				
 				return( dbcur.fetchall() )
 			except:
 				try:					
@@ -667,7 +669,8 @@ def get_random_image_id_by_tag(db_cursor = False, **kwargs):
 					parent_sub = tag['parent_sub_tag']
 					parent_tag = tag['parent_tag']					
 					dbcur.execute('''SELECT images.id FROM images INNER JOIN event_tags ON images.id = event_tags.image_id WHERE 
-									event_tags.event_tag = ? AND event_tags.parent_sub_tag = ? AND event_tags.parent_tag = ? AND images.width > 720 AND (images.width - images.height) > 280''', 
+									event_tags.event_tag = ? AND event_tags.parent_sub_tag = ? AND event_tags.parent_tag = ? AND
+									images.width > 720 AND images.height > 800 AND images.height <= 900 AND (images.width - images.height) > 280''', 
 									(event_tag,parent_sub, parent_tag))
 					return ( dbcur.fetchall() )
 				except:
@@ -675,8 +678,9 @@ def get_random_image_id_by_tag(db_cursor = False, **kwargs):
 						misc_parent_tag = tag['misc_parent_tag']
 						misc_sub_tag = tag['misc_sub_tag']
 						dbcur.execute('''SELECT images.id FROM images INNER JOIN sub_tags ON images.id = sub_tags.image_id WHERE 
-										sub_tags.parent_tag = (?) AND sub_tags.sub_tag = (?) AND (images.width > 720) and (images.width - images.height) > 280 AND 
-										image_id NOT IN (SELECT image_id FROM event_tags WHERE parent_tag = (?) AND parent_sub_tag = (?) )''',(misc_parent_tag, misc_sub_tag, misc_parent_tag, misc_sub_tag,) )
+										sub_tags.parent_tag = (?) AND sub_tags.sub_tag = (?) AND images.width > 720 AND images.height > 800 AND images.height <= 900 and (images.width - images.height) > 280 AND 
+										image_id NOT IN (SELECT image_id FROM event_tags WHERE parent_tag = (?) AND parent_sub_tag = (?) )''',
+										(misc_parent_tag, misc_sub_tag, misc_parent_tag, misc_sub_tag,) )
 						return ( dbcur.fetchall() )
 
 					except Exception, err:
