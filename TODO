@@ -1,16 +1,17 @@
 [BLOCKING]
+-(DATABASE) - Create alert title column
+-(INDEX) - Prevent the same image from showing up when randomly flipping on slideshow
 -(DATABASE) - FIX MISC LATEST_12 DB Query
--(CSS) - Create responsive design rules for Mobile.
--(CSS) - use em instead of px (to account for zoom size)
+-(ADMIN) - Create form to update and/or add new alert
 
 [High]
+-(ADMIN PAGE) - Turn image update into JQUERY UI Dialog Modal
+-(ADMIN PAGE) - Create ability to add new tag to image
 -(ADMIN PAGE) - Log attempts on admin page, ban after ... say 5 attempts in a day
 -(EVENT PAGE) - Handlers for navigating the image viewer with keyboard keys.
--(INDEX) - Prevent the same image from showing up when randomly flipping on slideshow
 -(DATABASE) - Move Verify_folder_existence to FS
 -(ADMIN PAGE) - Close off all admin functions from access via the browser.
 -(PROCESS PAGE) - Clear out caption value from previous image on page refresh
-
 
 [Medium]
 -(INDEX) - Create Static index page with no Javascript (for no script users)
@@ -26,6 +27,7 @@ Write cleanup job for erroneous / old process queue entries
 
 
 [Low]
+-(ADMIN) - Create DB job that looks for images without an active main_tag and delete them
 -(MANAGE PAGE) Instead of refreshing on image delete, rebuild the previous list menu - cleaner look and page elements don't need to be re-fetched for no reason
 -(MANAGE PAGE) - Add check to see if #of main tags is reaching the vertical edge and expand it.
 -(LOG PAGE) - allow for sorting by type and severity
@@ -49,6 +51,7 @@ All data that comes to your server must be checked and sanitized. Always. No exc
 
 
 Completed:
+-(CSS) - Create responsive design rules for Mobile.
 -(ADMIN PAGES) - Create AUTH for admin menu
 -(DATABASE) - Sanitize POST data (so SQL commands can't be run from inputs)
 -(FRONT END) - CLEAN UP Formatting on html files

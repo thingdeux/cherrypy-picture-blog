@@ -41,7 +41,7 @@
 					%for id, name, image_location, thumb_location, date_added, date_taken, caption, width, height in images[ tag ]:
 						<% strippedLoc = image_location.split('/') %>
 						<% imageLocation = "/images/" + strippedLoc[ len(strippedLoc) - 1 ] %>
-						<img id = "${tag}" class = "tag_preview_image" src = ${imageLocation} style="max-height: 100%; max-width: 100%; border: 5px solid black;">
+						<img id = "${tag}" class = "tag_preview_image" src = ${imageLocation}>
 					%endfor
 				%except:
 				%endtry
@@ -51,11 +51,12 @@
 
 		<div id = "alert">
 			%for id, alert, status, date_added, inactive_date in alerts:
-				<span id = "date" style="font-weight: bold">
+				<div id = "date" style="font-weight: bold">
 					February 20th, 2014<br><br>
-				</span>
-
-				${alert}
+				</div>
+				<div id = "alert_text">
+					${alert}
+				</div>
 			%endfor
 		</div>
 
