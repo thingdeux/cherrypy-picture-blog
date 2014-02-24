@@ -1,13 +1,13 @@
 [BLOCKING]
 -(DATABASE) - Create alert title column
 -(INDEX) - Prevent the same image from showing up when randomly flipping on slideshow
--(DATABASE) - FIX MISC LATEST_12 DB Query
 -(ADMIN) - Create form to update and/or add new alert
 
 [High]
 -(ADMIN PAGE) - Turn image update into JQUERY UI Dialog Modal
 -(ADMIN PAGE) - Create ability to add new tag to image
 -(ADMIN PAGE) - Log attempts on admin page, ban after ... say 5 attempts in a day
+-(MODAL) - Investiage - JqueryUI object destroying to early error
 -(EVENT PAGE) - Handlers for navigating the image viewer with keyboard keys.
 -(DATABASE) - Move Verify_folder_existence to FS
 -(ADMIN PAGE) - Close off all admin functions from access via the browser.
@@ -51,6 +51,7 @@ All data that comes to your server must be checked and sanitized. Always. No exc
 
 
 Completed:
+-(DATABASE) - FIX MISC LATEST_12 DB Query - Only returns images with no event_tag
 -(CSS) - Create responsive design rules for Mobile.
 -(ADMIN PAGES) - Create AUTH for admin menu
 -(DATABASE) - Sanitize POST data (so SQL commands can't be run from inputs)

@@ -627,8 +627,10 @@ def get_latest_12_images_by_tag(main_tag, sub_tag, event_tag = False, offset = 0
 		db = db_connection.cursor()
 		if event_tag == False:
 			db.execute('''SELECT images.id, images.name, images.thumb_location  FROM images 
-							INNER JOIN sub_tags ON images.id = sub_tags.image_id WHERE sub_tags.parent_tag = ? 
-							AND sub_tags.sub_tag = ? ORDER BY (images.id) DESC LIMIT 12 OFFSET ?''', (main_tag, sub_tag,offset,))
+						  INNER JOIN sub_tags ON images.id = sub_tags.image_id WHERE images.id NOT IN 
+						  (SELECT image_id from event_tags WHERE parent_tag = (?) AND parent_sub_tag = (?) )
+						  AND sub_tags.parent_tag = (?) AND sub_tags.sub_tag =(?) 
+						  ORDER BY (images.id) DESC LIMIT 12 OFFSET ?''', (main_tag, sub_tag, main_tag, sub_tag, offset,))
 		else:
 			db.execute('''SELECT images.id, images.name, images.thumb_location  FROM images 
 							INNER JOIN event_tags ON images.id = event_tags.image_id WHERE event_tags.parent_tag = ? 
@@ -643,6 +645,9 @@ def get_latest_12_images_by_tag(main_tag, sub_tag, event_tag = False, offset = 0
 		tryToCloseDB(db_connection)
 		for error in err:
 			log("Unable to get latest 4 images: " + error, "DATABASE", "SEVERE")
+
+print ( get_latest_12_images_by_tag("Kids", "Callie") )
+
 
 def get_random_image_id_by_tag(db_cursor = False, **kwargs):	
 	def query_db_for_acceptable_images(dbcur, tag):
