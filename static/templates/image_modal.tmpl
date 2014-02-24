@@ -23,7 +23,7 @@
 			//Unable to set JqueryUI width from CSS - used JS - (Will refactor)
 			function resizeOnSmallerScreens() {
 				screenWidth = $(window).width();							
-				screenHeight = $(window).height();
+				screenHeight = $(window).height();				
 				
 				//Shrink the modal window
 				$("#modal").dialog("option", "minWidth", (screenWidth - 20) );				
@@ -33,11 +33,17 @@
 				//Shrink the image to be a bit smaller than the modal
 				$("#image_container").css('width', (screenWidth - 60), 'height', 'auto')
 				$("#image_container").css('margin-right', "30px")
-
+				
 				//*REFACTOR
 				//Reset the arrow distance - should refactor this to use CSS width left/right align
-				$('#right').css('margin-left', (  (screenWidth-20) - 110) + "px");
-				$('.arrow').css('margin-top', (  (screenHeight-20)  *.35) + "px");				
+
+				
+				var arrowOffsetWidth = (screenWidth * 0.63)
+				
+				
+
+				$('#right').css('margin-left', arrowOffsetWidth + "px");
+				$('.arrow').css('margin-top', screenHeight*0.20 + "px");	
 				$('#instructions').css('width', $('#image_container').width() )
 			}
 
@@ -126,9 +132,13 @@
 			
 			/*The default behaviour for the jqueryui dialog window is to have the 
 				close button highlighted.  Remove that highlight */
-			$('button').removeClass('ui-state-hover ui-state-focus');	
+			$('button').removeClass('ui-state-hover ui-state-focus');
+			/*Compensating for chrome/webkit not being able to read image attributes properly ...
+			I attached an image size attribute to the image and I read it and use it to measure
+			Arrow distance */
 			$('#right').css('margin-left', (imageWidth - 110) + "px");
 			$('.arrow').css('margin-top', (imageHeight*.35) + "px");
+						
 			//Make the instructions div as wide as the image above it.
 			$('#instructions').css('width', $('#image_container').width() )		
 
@@ -140,7 +150,8 @@
 				}				
 			});
 
-			if ($(window).width() < 800) {
+			if ($(window).width() < 980) {
+				//Shrink the modal for smaller screens/tablets
 				resizeOnSmallerScreens();
 			}			
 
