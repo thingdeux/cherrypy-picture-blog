@@ -147,9 +147,9 @@
 					%endif
 						<tr><td>
 							<a class = "thumbs">
-							<img id = "${image_id}" src = ${thumbLocation} style="width: 150px; height: 125px; border: 5px solid"></a>	
+							<img id = "${image_id}" class="thumbnail_picture" src = ${thumbLocation} ></a>	
 						</tr>						
-						<th align="center">${name[0:20]}
+						<th class = "thumbnail_name" align="center">${name[0:20]}
 						%if len(name) > 20:
 							...
 						%endif

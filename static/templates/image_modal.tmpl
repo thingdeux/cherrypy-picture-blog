@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="/static/css/previews.css" type="text/css">
 <a id = "left" class = "arrow" href="#"> &lt; </a>
 <a id = "right" class = "arrow" href="#"> &gt; </a>
 
@@ -10,14 +11,36 @@
 			<img id = "${id}" name = "${name}" class = "modal_image" dataWidth="${width}" dataHeight = "${height}" style= "max-height: 100%; max-width: 100%; border: 5px solid black;" src = ${imageLocation}>
 
 			%if len(caption) > 1:
-				<em style="color: white;">${caption}</em>
+				<div id = "image_caption">${caption}</div>
 			%endif			
 		%except:
 		%endtry			
 	%endfor
-	<br><span id="instructions" style='font-size: 12px;'>Use the Arrow keys to navigate, ESC to close</span>
+	<br><div id="instructions" style='font-size: 12px;'>Use the Arrow keys to navigate, ESC to close</div>
 
 		<script>
+			//*REFACTOR
+			//Unable to set JqueryUI width from CSS - used JS - (Will refactor)
+			function resizeOnSmallerScreens() {
+				screenWidth = $(window).width();							
+				screenHeight = $(window).height();
+				
+				//Shrink the modal window
+				$("#modal").dialog("option", "minWidth", (screenWidth - 20) );				
+				$("#modal").dialog("option", "width", (screenWidth - 20) );				
+				$("#modal").dialog("option", "minHeight", "auto" );
+
+				//Shrink the image to be a bit smaller than the modal
+				$("#image_container").css('width', (screenWidth - 60), 'height', 'auto')
+				$("#image_container").css('margin-right', "30px")
+
+				//*REFACTOR
+				//Reset the arrow distance - should refactor this to use CSS width left/right align
+				$('#right').css('margin-left', (  (screenWidth-20) - 110) + "px");
+				$('.arrow').css('margin-top', (  (screenHeight-20)  *.35) + "px");				
+				$('#instructions').css('width', $('#image_container').width() )
+			}
+
 			//Get the width/height of the current image thumbnail			
 			var imageWidth = $('.modal_image').attr('dataWidth') * 0.75
 			var imageHeight = $('.modal_image').attr('dataHeight') * 0.75
@@ -31,7 +54,7 @@
 				resizable: false,
 				hide: {effect: "clip", duration: 250},
 				minWidth: imageWidth,							
-				minHeight: imageHeight,				
+				minHeight: imageHeight,		
 				title: $('.modal_image').prop('name'),
 				close: function (event, ui) {
 					$("#modal").html("");				
@@ -103,11 +126,11 @@
 			
 			/*The default behaviour for the jqueryui dialog window is to have the 
 				close button highlighted.  Remove that highlight */
-			$('button').removeClass('ui-state-hover ui-state-focus');			
+			$('button').removeClass('ui-state-hover ui-state-focus');	
 			$('#right').css('margin-left', (imageWidth - 110) + "px");
 			$('.arrow').css('margin-top', (imageHeight*.35) + "px");
-			//Center the instructions text half the width of the image minus half the length of the text
-			$('#instructions').css('margin-left', (imageWidth/2 - 125) + "px");
+			//Make the instructions div as wide as the image above it.
+			$('#instructions').css('width', $('#image_container').width() )		
 
 			//Handler for closing the modal if a click event happens outside of the window
 			$('body').click(function(event) {				
@@ -117,28 +140,15 @@
 				}				
 			});
 
-		</script>
+			if ($(window).width() < 800) {
+				resizeOnSmallerScreens();
+			}			
 
-		<style>
-			.ui-dialog-title {				
-				text-align: center;				
-			}
 			
 
-			.arrow {				
-				position: absolute;
-								
-				font-size: 100px;
-				opacity: 0.4;			
-			}			
-			.arrow:link { text-decoration: none; color: gray; }
-			.arrow:visited { text-decoration: none; color: gray; }
-			.arrow:hover { text-decoration: none; color: #0078a3; opacity: 1; }
-			.arrow:active { text-decoration: none; color: gray; }
+		</script>
 
-			#left{
-				margin-left: 10px;
-			}
+		<style>			
 
 			@media {
 				button{ 					

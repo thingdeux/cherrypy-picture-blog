@@ -113,6 +113,12 @@ a:active {text-decoration: none; color:black;}
 	padding: 15px;
 }
 
+.thumbnail_picture {
+	width: 150px;
+	height: 125px;
+	border: 5px solid;
+}
+
 .ui-tooltip {
 	background: black;	
 }
