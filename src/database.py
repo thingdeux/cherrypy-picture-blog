@@ -44,6 +44,8 @@ def create_fresh_tables():
 		db.execute('''CREATE TABLE event_tags (id INTEGER PRIMARY KEY, image_id INTEGER NOT NULL, parent_tag TEXT NOT NULL, parent_sub_tag NOT NULL, event_tag NOT NULL)''')
 
 		db.execute('''CREATE TABLE alerts (id INTEGER PRIMARY KEY, alert TEXT, status TEXT, date_added INTEGER, inactive_date INTEGER)''')
+		db.execute('''CREATE TABLE blogs (id INTEGER PRIMARY KEY, title TEXT NOT NULL, post TEXT NOT NULL, author TEXT NOT NULL, date_added DATETIME NOT NULL DEFAULT CURRENT_DATE)''')
+
 		db.execute('''CREATE TABLE processing_queue (id INTEGER PRIMARY KEY, image_name TEXT)''')
 		db.execute('''CREATE TABLE logs (id INTEGER PRIMARY KEY, error_type TEXT, error TEXT, date_time_occured DATETIME NOT NULL, severity TEXT)''')
 
@@ -646,9 +648,6 @@ def get_latest_12_images_by_tag(main_tag, sub_tag, event_tag = False, offset = 0
 		for error in err:
 			log("Unable to get latest 4 images: " + error, "DATABASE", "SEVERE")
 
-print ( get_latest_12_images_by_tag("Kids", "Callie") )
-
-
 def get_random_image_id_by_tag(db_cursor = False, **kwargs):	
 	def query_db_for_acceptable_images(dbcur, tag):
 		#If the key main_tag is passed it's a main tag query
@@ -849,6 +848,27 @@ def get_latest_alert():
 		tryToCloseDB(db_connection)
 		for error in err:
 			log("Unable to get latest alert " + error, "DATABASE", "SEVERE")
+
+def get_blogs(query_type = "latest", blog_id = False):
+	try:
+		db_connection = connect_to_database()
+		db = db_connection.cursor()
+		if query_type == "latest":
+			db.execute("SELECT * FROM blogs ORDER BY (id) LIMIT 1")
+		elif query_type == "titles":
+			db.execute("SELECT id, title FROM blogs ORDER BY (id)")
+		elif query_type == "id":
+			db.execute("SELECT * FROM blogs WHERE id == ? ORDER BY (id)", (blog_id,))
+
+
+		returned_blog = db.fetchall()
+		db_connection.close()
+
+		return ( returned_blog )
+	except Exception, err:
+		tryToCloseDB(db_connection)
+		for error in err:
+			log("Unable to get latest blog " + error, "DATABASE", "SEVERE")
 
 #Class used for breaking down data from process submission POST
 class Posted_Data:

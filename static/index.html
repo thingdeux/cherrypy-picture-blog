@@ -50,12 +50,12 @@
 		</div>		
 
 		<div id = "alert">
-			%for id, alert, status, date_added, inactive_date in alerts:
+			%for id, title, post, author, date_added in blog:
 				<div id = "date" style="font-weight: bold">
-					February 20th, 2014<br><br>
+					${title}<br><br>
 				</div>
-				<div id = "alert_text">
-					${alert}
+				<div id = "alert_text">					
+					${post}<br>					
 				</div>
 			%endfor
 		</div>

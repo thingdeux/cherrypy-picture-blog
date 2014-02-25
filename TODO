@@ -1,6 +1,6 @@
 [BLOCKING]
--(DATABASE) - Create alert title column
 -(INDEX) - Prevent the same image from showing up when randomly flipping on slideshow
+-(DATABASE) - Create alert title column
 -(ADMIN) - Create form to update and/or add new alert
 
 [High]

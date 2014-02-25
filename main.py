@@ -47,6 +47,18 @@ conf = {
                     }
         }
 
+def isAllowedInAdminArea(header):   
+  keys = locations.readKeys()    
+  try:
+    if header['Remote-Addr'] in keys:      
+      return (True)
+    else:
+      return (False)
+  except:
+    return (False)
+
+
+
 class main_site(object):
 
   @cherrypy.expose	
@@ -55,17 +67,17 @@ class main_site(object):
     mako_template = Template(filename='static/index.html')
     random_images = database.get_image_for_every_main_tag()
     main_tags = database.get_tags()
-    alerts = database.get_latest_alert()
+    blog = database.get_blogs()
 
     #Render the mako template
-    self.mako_template_render = mako_template.render(images = random_images, main_tags = main_tags, alerts = alerts) 
+    self.mako_template_render = mako_template.render(images = random_images, main_tags = main_tags, blog = blog) 
 
     return self.mako_template_render
 
   @cherrypy.expose
   def p(self, *args, **kwargs): 
     mako_template = Template(filename='static/templates/index_data.tmpl')
-    alerts = database.get_latest_alert()
+    blog = database.get_blogs()
     main_tag = args[0]
     
     try:
@@ -91,7 +103,7 @@ class main_site(object):
         self.mako_template_render = mako_template.render(event_main_tag = main_tag, event_sub_tag = sub_tag,
                                                         imageIDList = imageIDList, event_tag = event_tag, 
                                                         images = images, display_type = "Event", offset = offset,
-                                                        alerts = alerts)
+                                                        blog = blog)
           
         return self.mako_template_render
       else:
@@ -107,7 +119,7 @@ class main_site(object):
         if len(images) > 0 or len(misc_images) > 0:
           self.mako_template_render = mako_template.render(parent_main_tag = main_tag, parent_sub_tag = sub_tag, 
                                       event_tags = event_tags, images = images, misc_images = misc_images, display_type = "Sub",
-                                      alerts = alerts)
+                                      blog = blog)
           
           return self.mako_template_render
         else:
@@ -120,7 +132,7 @@ class main_site(object):
           
           if len(images) > 0:            
             self.mako_template_render = mako_template.render(main_tag = main_tag, sub_tags = sub_tags, 
-                                        images = images, display_type = "Main", alerts = alerts)
+                                        images = images, display_type = "Main", blog = blog)
             return self.mako_template_render
           else:         
             return ( self.default() )
@@ -132,13 +144,10 @@ class main_site(object):
   @cherrypy.expose
   def admin(self, *args, **kwargs):    
     try:
-      Headers = cherrypy.request.headers 
-      keys = locations.readKeys() 
-      print keys    
+      Headers = cherrypy.request.headers
 
-      if Headers['Remote-Addr'] in keys:
+      if isAllowedInAdminArea(Headers):
         nav_location = args[0].lower()
-
         if nav_location == "manage":
           return ( self.manage() )
         elif nav_location == "upload":
@@ -179,10 +188,12 @@ class main_site(object):
     main_tags = database.get_tags()
     sub_tags = database.get_sub_tags()
     event_tags = database.get_event_tags()
+    blogs = database.get_blogs("titles")    
     logs = database.get_top_30_logs()
 
     #Render the mako template
-    self.mako_template_render = mako_template.render(main_tags = main_tags, sub_tags = sub_tags, event_tags = event_tags, logs = logs)
+    self.mako_template_render = mako_template.render(main_tags = main_tags, sub_tags = sub_tags, 
+                                                     event_tags = event_tags, logs = logs, blogs = blogs)
 
     return self.mako_template_render
 
@@ -224,22 +235,26 @@ class main_site(object):
         #Create Thumbnail for queue process page          
         pictureConverter.create_queue_thumbnail( file_location, locations.queue_save_location() )
 
-    try:      
-      #Object of each file passed to the server via post
-      uploadObj = kwargs.get('file[]')
+    Headers = cherrypy.request.headers
+    if isAllowedInAdminArea(Headers):
+      try:      
+        #Object of each file passed to the server via post
+        uploadObj = kwargs.get('file[]')
 
-      try:
-        imageCount = len(uploadObj)
-                
-        for image in uploadObj:
-          uploadImage(image)
+        try:
+          imageCount = len(uploadObj)
+                  
+          for image in uploadObj:
+            uploadImage(image)
 
-      except:        
-        uploadImage(uploadObj)
+        except:        
+          uploadImage(uploadObj)
 
-    except Exception, err:
-      for error in err:
-        log("Unable to receive upload - " + error, "WEB", "MEDIUM")
+      except Exception, err:
+        for error in err:
+          log("Unable to receive upload - " + error, "WEB", "MEDIUM")
+    else:
+      return (self.default())
   
   @cherrypy.expose
   def processPicture(self, **kwargs):
@@ -288,35 +303,44 @@ class main_site(object):
 
   @cherrypy.expose
   def updateImageData(self, *arguments, **kwargs):
-    if len(kwargs) > 0:          
-      isImageDeleted = database.update_image_data(kwargs)
+    Headers = cherrypy.request.headers
+    if isAllowedInAdminArea(Headers):
+      if len(kwargs) > 0:          
+        isImageDeleted = database.update_image_data(kwargs)
 
-      if isImageDeleted:
-        return ('<span id = "deleted" class = "ui-widget ui-widget-content">Image deleted</span>')
-      else:
-        return ('<span class = "ui-widget ui-widget-content">Image metadata updated</span>')      
+        if isImageDeleted:
+          return ('<span id = "deleted" class = "ui-widget ui-widget-content">Image deleted</span>')
+        else:
+          return ('<span class = "ui-widget ui-widget-content">Image metadata updated</span>')
+    else:
+      return (self.default())
   
   @cherrypy.expose
   def deleteTags(self, *arguments, **kwargs):
-    isImageStillActive = database.delete_image_tags(kwargs)    
-    
-    if isImageStillActive:
-      image_id = kwargs['image_id']      
-      returned_data = database.get_image_by_id ( image_id )
-      tag_data = database.get_image_tags_by_image_id( image_id )
-      main_tags = tag_data[0]
-      sub_tags = tag_data[1]
-      event_tags = tag_data[2]
 
-      mako_template = Template(filename='static/templates/manage_images.tmpl')    
-
-      self.mako_template_render = mako_template.render(image_data = returned_data, main_tags = main_tags, 
-                                  sub_tags = sub_tags, event_tags = event_tags, menu_location = "selected")
-
-      return self.mako_template_render
+    Headers = cherrypy.request.headers
+    if isAllowedInAdminArea(Headers):
+      isImageStillActive = database.delete_image_tags(kwargs)    
       
-    else:      
-      return ('<span id = "deleted" class = "ui-widget ui-widget-content">Image Deleted</span>')
+      if isImageStillActive:
+        image_id = kwargs['image_id']      
+        returned_data = database.get_image_by_id ( image_id )
+        tag_data = database.get_image_tags_by_image_id( image_id )
+        main_tags = tag_data[0]
+        sub_tags = tag_data[1]
+        event_tags = tag_data[2]
+
+        mako_template = Template(filename='static/templates/manage_images.tmpl')    
+
+        self.mako_template_render = mako_template.render(image_data = returned_data, main_tags = main_tags, 
+                                    sub_tags = sub_tags, event_tags = event_tags, menu_location = "selected")
+
+        return self.mako_template_render
+        
+      else:      
+        return ('<span id = "deleted" class = "ui-widget ui-widget-content">Image Deleted</span>')
+    else:
+      return(self.default())
 
   @cherrypy.expose
   def deleteProcessingPicture(self, *arguments, **kwargs):
@@ -333,25 +357,49 @@ class main_site(object):
         except:
           return ("")         
     
-    #Check to see if the POST passed just a main tag, or also a sub - if they were passed
-    #Send them to mako for filtering.
-    #When manage tags is called from within main it passes a tuple instead of a dict so check for that as well.
-    tag_type = checkIfParamExists('tag_type')
-    main_tag = checkIfParamExists('main_tag')
-    sub_tag = checkIfParamExists('sub_tag')
+    Headers = cherrypy.request.headers
+    if isAllowedInAdminArea(Headers):
+      #Check to see if the POST passed just a main tag, or also a sub - if they were passed
+      #Send them to mako for filtering.
+      #When manage tags is called from within main it passes a tuple instead of a dict so check for that as well.
+      tag_type = checkIfParamExists('tag_type')
+      main_tag = checkIfParamExists('main_tag')
+      sub_tag = checkIfParamExists('sub_tag')
 
-    mako_template = Template(filename='static/templates/manage_images.tmpl')
-    tags = database.get_tags()    
-    sub_tags = database.get_sub_tags()
-    event_tags = database.get_event_tags()
-    
-    #Render the mako template
-    self.mako_template_render = mako_template.render(main_tags = tags, sub_tags = sub_tags, 
-                    event_tags = event_tags, menu_location = "get_tags", tag_type = tag_type,
-                    main_tag_query = main_tag, sub_tag_query = sub_tag)
+      mako_template = Template(filename='static/templates/manage_images.tmpl')
+      tags = database.get_tags()    
+      sub_tags = database.get_sub_tags()
+      event_tags = database.get_event_tags()
+      
+      #Render the mako template
+      self.mako_template_render = mako_template.render(main_tags = tags, sub_tags = sub_tags, 
+                      event_tags = event_tags, menu_location = "get_tags", tag_type = tag_type,
+                      main_tag_query = main_tag, sub_tag_query = sub_tag)
 
-    return self.mako_template_render
+      return self.mako_template_render
+    else:
+      return (self.default())
   
+  @cherrypy.expose
+  def manageBlogs(self, *arguments, **kwargs):
+    Headers = cherrypy.request.headers
+    if isAllowedInAdminArea(Headers):
+      try:        
+        blog = database.get_blogs("id", kwargs['blog_id'])
+        perform_action = kwargs['perform_action']
+        mako_template = Template(filename='static/templates/manage_blogs.tmpl')
+
+        self.mako_template_render = mako_template.render(blog = blog, perform_action = perform_action)
+
+        return (self.mako_template_render)
+
+      except Exception, err:
+        return ( self.default() )
+        for error in err:
+          log("Unable to Manage Blog - " + error, "WEB", "LOW")
+    else:
+      return (self.default())
+
   @cherrypy.expose
   def getModalPicture(self, *args, **kwargs):
     image = database.get_image_by_id( kwargs.get('image_id') )
@@ -363,8 +411,12 @@ class main_site(object):
 
   @cherrypy.expose
   def insertTag(self, *arguments, **kwargs):
-    database.insert_tag(0, kwargs)
-    return ( self.manageTags(kwargs) )    
+    Headers = cherrypy.request.headers
+    if isAllowedInAdminArea(Headers):
+      database.insert_tag(0, kwargs)
+      return ( self.manageTags(kwargs) )
+    else:
+      return (self.default())
   
   @cherrypy.expose
   def default(self, *arguments):
@@ -375,14 +427,15 @@ class main_site(object):
     #Render the mako template
     self.mako_template_render = mako_template.render(passed = arguments) 
 
-    return self.mako_template_render  
+    return self.mako_template_render
 
 
 def startServer():
 
   if database.verify_database_existence():
     try:
-      database.verify_folder_existence()  #If the images /thumbnails / queue folders don't exist create them.
+      #If the images /thumbnails / queue folders don't exist create them.
+      database.verify_folder_existence()
       
       if server_mode is "debug":
         if len( database.get_tags() ) <= 1:

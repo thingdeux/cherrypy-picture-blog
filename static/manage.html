@@ -39,9 +39,11 @@
 				<li><a href = "#images" id ="image_management">Images</a></li>
 				<li><a href = "#tags" id ="tag_management">Tags</a></li>
 				<li><a href = "#alerts" id ="alert_management">Alerts</a></li>
+				<li><a href = "#blogs" id ="blog_management">Blogs</a></li>
 				<li><a href = "#db" id ="db_management">DB Maintenance</a></li>
 				<li><a href = "#logs" id ="log_management">Logs</a></li>
-			</ul>			
+			</ul>
+
 			<div id = "images">
 				<ul id = "image_tag_menu" class = "ui_menu">
 					%for tag in main_tags:					
@@ -70,6 +72,7 @@
 				<div id = "image_picture_menu"></div>		
 				<div id = "selected_picture"></div>
 			</div>
+
 			<div id = "tags">
 				<ul id = "tags_menu" class = "ui_menu">				
 						<li><a> New Tag </a>
@@ -104,9 +107,26 @@
 				</ul>
 				<div id = "tags_selection" class = "ui_menu"></div>
 			</div>
-			<div id = "alerts">				
+			<div id = "alerts">		
 				Alert | Status | Date_Added | Inactive_date
 			</div>
+			<div id = "blogs">
+				<ul id = "blogs_menu" class = "ui_menu">
+					<li><a>Create New Post</a></li>
+					<li>-</li>
+
+					%for id, title in blogs:
+						<li dataBlogId="${id}"><a>${title[0:13]}
+						%if len(title) > 13:
+							...
+						%endif
+						</a></li>
+					%endfor					
+									
+				</ul>
+				<div id = "blogs_selection" class = "ui_menu"></div>
+			</div>
+
 			<div id = "db">
 				Manual Backup | Clean up processing queue | Find Images with no tags | Delete all logs
 			</div>
