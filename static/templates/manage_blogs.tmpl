@@ -1,0 +1,41 @@
+%if perform_action == "display":
+	<div id = "blog_form">
+		<form>
+			<table>			
+				%for id, title, post, author, date_added in blog:
+					<input id = "blog_id" type="hidden"></input>
+					
+					<tr><td><label for="title">TITLE</label>
+					<input type="text" id = "title" value = "${title}" label="Boo"></input></td></tr>	
+					<tr><td><label for="blog_post">POST</label>
+					<textarea name = "blog_post" rows = 10 cols="30">${post}</textarea></tr></td>
+					<tr><td><label for="author">AUTHOR</label>
+					<input type="text" id = "author" value = "${author}"></input></tr></td>
+					<tr><td><label for="date_added">DATE</label>
+					<input type="text" id = "date_added" value = "${date_added}"></input></tr></td>
+
+				%endfor
+				
+			</table>
+		</form>
+	</div>
+
+
+
+	<script>
+		$("#blog_form").dialog({			
+			minWidth: "500px",
+			minHeight: "1000px",
+			modal: true,
+
+			buttons: {
+				"Submit": function(){
+					console.log("SUBMITTING")
+				}
+			}
+		})
+
+		
+	</script>
+	
+%endif

@@ -56,6 +56,19 @@ $(document).ready(function() {
 				});
 			}
 		}
+		else if (  $(this).is('#blogs_menu')  ) {			
+			var data = {
+						blog_id: $(ui).attr('item').attr('dataBlogId'),						
+						perform_action: "display"
+						}			
+			
+			if (data['blog_id']) {				
+				var returnedTemplate = silentlySendDataWithPost("/manageBlogs/", data);				
+				returnedTemplate.done (function (response, textStatus, jqXHR) {
+					$('#blogs_selection').html(response);								
+				});
+			}
+		}
 
 	});
 
