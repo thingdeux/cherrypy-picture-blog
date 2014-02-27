@@ -14,6 +14,7 @@ $(document).ready(function() {
 
 	window.setTimeout(function() { allowHoverBuffer = true; }, 1000);
 
+	//Fadeout the currently visible image and replace with a passed preview image. (Happens on rollover)
 	function showPreviewImageByName(name) {
 		
 		if (isAPreviewImageAnimating() == false && isTransitioning == false && allowHoverBuffer == true) {
@@ -31,23 +32,37 @@ $(document).ready(function() {
 		}
 	}
 
-	function shufflePreviewImage() {
-			randomSelection = getRandomPreviewImage();
-			fadeAllPreviewImagesOut(300);
-
-			main_tags.each(function (index) {
-				if (index == randomSelection) {					
-					$(this).delay(300).fadeIn(300, 'swing');				
-				}
-			});			
-			
-			shuffleTimeOutObject = window.setTimeout(function() { shufflePreviewImage() }, slideshowShuffleSpeed);
-	}
+	function shufflePreviewImage() {		
+		randomSelection = getRandomPreviewImage();
 		
+		//Ensure the shuffle doesn't return the same image
+		var currentlyActiveTag = main_tags.filter(":visible").attr('id')
+		if ($(main_tags[randomSelection]).attr('id') == currentlyActiveTag) {				
+			if (randomSelection == (main_tags.length - 1) ) {
+				randomSelection--
+			}				
+			else {
+				randomSelection++
+			}				
+		}
+
+
+		fadeAllPreviewImagesOut(300);
+
+		main_tags.each(function (index) {
+			if (index == randomSelection) {
+				$(this).delay(300).fadeIn(300, 'swing');				
+			}
+		});			
+		
+		shuffleTimeOutObject = window.setTimeout(function() { shufflePreviewImage() }, slideshowShuffleSpeed);
+	}
+
 	function setTransitioning() {
 		isTransitioning = !isTransitioning;	
 	}
 
+	//Sets a slight timeout BOOL so that the user can't mouseover an image during a transition
 	function isAPreviewImageAnimating() {
 		var is_an_image_animating = false;
 		
