@@ -29,7 +29,7 @@ $(document).ready(function() {
 	$(".long_sub_tag").width(150);
 	$(".long_event_tag").width(200);	
 
-	//JQUERY UI Handler for 'images tab'
+	//JQUERY UI Handler for 'images and blog tabs'
 	$(".ui-menu").on( "menuselect", function(event, ui) {
 
 		if ( $(this).is('#image_tag_menu') ) {
@@ -57,21 +57,22 @@ $(document).ready(function() {
 			}
 		}
 		else if (  $(this).is('#blogs_menu')  ) {			
-			var data = {
-						blog_id: $(ui).attr('item').attr('dataBlogId'),						
-						perform_action: "display"
-						}			
-			
-			if (data['blog_id']) {				
-				var returnedTemplate = silentlySendDataWithPost("/manageBlogs/", data);				
-				returnedTemplate.done (function (response, textStatus, jqXHR) {
-					$('#blogs_selection').html(response);								
-				});
+			if ( $(ui).attr('item').attr('dataBlogId') ) {
+				var data = {
+					blog_id: $(ui).attr('item').attr('dataBlogId'),					
+					perform_action: $(ui).attr('item').attr('dataPostType'),
+					}
 			}
+			else {
+				var data = { perform_action: $(ui).attr('item').attr('dataPostType') }
+			}
+											
+			var returnedTemplate = silentlySendDataWithPost("/manageBlogs/", data);				
+			returnedTemplate.done (function (response, textStatus, jqXHR) {
+				$('#blogs_selection').html(response);								
+			});			
 		}
 
 	});
-
 	
-
 });

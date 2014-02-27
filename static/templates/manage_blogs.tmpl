@@ -1,41 +1,151 @@
 %if perform_action == "display":
 	<div id = "blog_form">
-		<form>
+		<form id = "blog_modal">
 			<table>			
 				%for id, title, post, author, date_added in blog:
-					<input id = "blog_id" type="hidden"></input>
-					
-					<tr><td><label for="title">TITLE</label>
-					<input type="text" id = "title" value = "${title}" label="Boo"></input></td></tr>	
-					<tr><td><label for="blog_post">POST</label>
-					<textarea name = "blog_post" rows = 10 cols="30">${post}</textarea></tr></td>
-					<tr><td><label for="author">AUTHOR</label>
-					<input type="text" id = "author" value = "${author}"></input></tr></td>
-					<tr><td><label for="date_added">DATE</label>
-					<input type="text" id = "date_added" value = "${date_added}"></input></tr></td>
+					<input id = "blog_id" type="hidden" dataID="${id}" dataPostType="update"></input>
+										
+					<tr><td><label for="author">AUTHOR:</label></td>
+					<td><input type="text" id = "author" value = "${author}" class = "form_input"></input></tr></td>
+					<tr><td><label for="date_added">DATE:</label></td>
+					<td><input type="text" id = "date_added" value = "${date_added}" class = "form_input"></input></tr></td>
 
+					<tr><td><label for="title">TITLE:</label></td>
+					<td><input type="text" id = "title" value = "${title}" class = "form_input"></input></td></tr>
+					<tr><td><label for="blog_post">BLOG:</label></td>
+					<td><textarea id = "blog_post" rows = "12" cols="31" class = "form_input">${post}</textarea></tr></td>
 				%endfor
 				
 			</table>
 		</form>
 	</div>
 
+%elif perform_action == "new":
+	<div id = "blog_form">
+		<form id = "blog_modal">
+			<table>					
+					<input id = "blog_id" type="hidden" dataPostType="insert"></input>
 
-
-	<script>
-		$("#blog_form").dialog({			
-			minWidth: "500px",
-			minHeight: "1000px",
-			modal: true,
-
-			buttons: {
-				"Submit": function(){
-					console.log("SUBMITTING")
-				}
-			}
-		})
-
-		
-	</script>
+					<tr><td><label for="author">AUTHOR:</label></td>
+					<td><input type="text" id = "author" class = "form_input"></input></tr></td>
+					<tr><td><label for="date_added">DATE:</label></td>
+					<td><input type="text" id = "date_added" class = "form_input"></input></tr></td>
+					<tr><td><label for="title">TITLE:</label></td>
+					<td><input type="text" id = "title" value="" class = "form_input"></input></td></tr>
+					<tr><td><label for="blog_post">BLOG:</label></td>
+					<td><textarea id = "blog_post" rows = "12" cols="31" class = "form_input"></textarea></tr></td>								
+			</table>
+		</form>
+	</div>
 	
 %endif
+
+<script>
+	function silentlySendDataWithPost(location, data) {				
+		var data = $.ajax({
+						type: "POST",
+						url: location,
+						data: data,								
+						contentType: 'application/x-www-form-urlencoded',
+						responseType: 'XMLHttpRequestResponseType'
+						});
+			
+		return (data);
+	}
+
+	function killModal() {
+		$("#blog_form").html("")
+		$("#blog_form").dialog('destroy');
+	}
+
+	function lenCheck(data, size) {
+		if (data.length > size) { 
+			return true 
+		}
+		else {
+			return false
+		}
+	}
+
+	$("#blog_form").dialog({			
+		width: 500,
+		height: 500,
+		modal: true,
+		title: $("#title").val(),
+		closeOnEscape: false,		
+
+		buttons: {
+			"Cancel": function(){
+				var answer = confirm("Are you sure you want to abandon any changes?")
+				if (answer == true) {
+					$("#blog_form").dialog("close");
+				}					
+			},
+			"Delete": function (event, ui) {						
+				if ( !$(event.target).children().hasClass('inactive') ) {
+					var respone = confirm("ARE YOU SUUUUUURE YOU WANT TO DELETE THIS?!?");
+					
+					if (respone == true) {
+						var data = {
+							blog_id: $("#blog_id").attr("dataID"),
+							postType: "delete",
+						}
+
+						var template = silentlySendDataWithPost('/updateBlogData', data)
+
+						template.done (function (response, textStatus, jqXHR) {			
+							killModal()
+							$("#blog_form").html(response);
+							$("#blog_form").css('text-align', 'center')		
+						});	
+
+					}
+				}				
+			},
+			"Update": function(){
+				var answer = confirm("You sure you want to update this entry?")
+				if (answer == true) {
+					var data = {							
+						author: $("#author").val(),
+						title: $("#title").val(),
+						id: $("#blog_id").attr("dataID"),
+						date_added: $("#date_added").val(),
+						post: $("#blog_post").val(),
+						postType: $("#blog_id").attr('dataPostType'),
+					}
+
+					if ( lenCheck(data['author'], 3) && lenCheck(data['title'], 3) &&
+						 lenCheck(data['post'], 3) ) {
+
+						var template = silentlySendDataWithPost('/updateBlogData', data)
+
+						template.done (function (response, textStatus, jqXHR) {			
+							killModal()
+							$("#blog_form").html(response);
+							$("#blog_form").css('text-align', 'center')			
+						});						
+					}
+					else {
+						alert("Ensure all fields are filled in");
+					}
+											
+				}
+			},
+
+		},
+
+		close: function (event, ui) {
+			killModal()
+		}
+	})	
+	
+	$(".ui-dialog-titlebar-close").hide();
+	
+	if ( $("#blog_id").attr("dataPostType") == "insert") {
+		$(".ui-button-text").each( function (){			
+			if ( $(this).html() == "Delete" ) {
+				$(this).addClass('ui-state-disabled').addClass("inactive")				
+			}
+		});
+	}
+</script>
