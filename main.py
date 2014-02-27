@@ -12,9 +12,19 @@ import src.filesystem as filesystem
 
 server_mode = "debug"
 
-cherrypy.config.update({ 'server.socket_host': '0.0.0.0',
-                         'server.socket_port': 1234,                         
-                         })
+if server_mode == "debug":
+  cherrypy.config.update({ 'server.socket_host': '0.0.0.0',
+                           'server.socket_port': 1234,                         
+                           })
+elif server_mode == "production":
+  cherrypy.config.update({ 
+                           'environment': 'production',
+                           'log.screen': False,
+                           'log.error_file': '/home/thingdeux/webapps/dev/joshandlinz.com/error.log',
+                           'server.socket_host': '127.0.0.1',
+                           'server.socket_port': 31344,
+                           })
+
 
 conf = {        
         '/static': { 'tools.staticdir.on' : True,
@@ -64,7 +74,7 @@ class main_site(object):
   @cherrypy.expose	
   def index(self, *args, **kwargs):    
   	#Create the below template using index.html (and looking up in the static folder)
-    mako_template = Template(filename='static/index.html')
+    mako_template = Template(filename=os.path.join(locations.current_folder(), 'static/index.html') )
     random_images = database.get_image_for_every_main_tag()
     main_tags = database.get_tags()
     blog = database.get_blogs()
@@ -76,7 +86,7 @@ class main_site(object):
 
   @cherrypy.expose
   def p(self, *args, **kwargs): 
-    mako_template = Template(filename='static/templates/index_data.tmpl')
+    mako_template = Template(filename=os.path.join(locations.current_folder(),'static/templates/index_data.tmpl') )
     blog = database.get_blogs()
     main_tag = args[0]
     
@@ -162,7 +172,7 @@ class main_site(object):
     
   def upload(self, **arguments):
     #Create the below template using upload.html (and looking up in the static folder)
-    mako_template = Template(filename='static/upload.html')
+    mako_template = Template(filename=os.path.join(locations.current_folder(),'static/upload.html') )
     
     #Render the mako template
     self.mako_template_render = mako_template.render()                 
@@ -171,7 +181,7 @@ class main_site(object):
   
   def process(self, **arguments):
     #Create the below template using index.html (and looking up in the static folder)
-    mako_template = Template(filename='static/process.html')
+    mako_template = Template(filename=os.path.join(locations.current_folder(),'static/process.html') )
     queued_files = filesystem.get_queue_directory_list()
     tags = database.get_tags()    
     sub_tags = database.get_sub_tags()
@@ -184,7 +194,7 @@ class main_site(object):
   
   def manage(self, **arguments):
     #Create the below template using index.html (and looking up in the static folder)
-    mako_template = Template(filename='static/manage.html')
+    mako_template = Template(filename=os.path.join(locations.current_folder(),'static/manage.html') )
     main_tags = database.get_tags()
     sub_tags = database.get_sub_tags()
     event_tags = database.get_event_tags()
@@ -279,7 +289,7 @@ class main_site(object):
   @cherrypy.expose
   def getPictures(self, *arguments, **kwargs):    
     returned_data = database.get_images_by_tag( kwargs )
-    mako_template = Template(filename='static/templates/manage_images.tmpl')    
+    mako_template = Template(filename=os.path.join(locations.current_folder(),'static/templates/manage_images.tmpl')    )
 
     self.mako_template_render = mako_template.render(image_data = returned_data, menu_location = "list")
 
@@ -294,7 +304,7 @@ class main_site(object):
     sub_tags = tag_data[1]
     event_tags = tag_data[2]
 
-    mako_template = Template(filename='static/templates/manage_images.tmpl')
+    mako_template = Template(filename=os.path.join(locations.current_folder(),'static/templates/manage_images.tmpl') )
 
     self.mako_template_render = mako_template.render(image_data = returned_data, main_tags = main_tags, 
                                 sub_tags = sub_tags, event_tags = event_tags, menu_location = "selected")
@@ -355,7 +365,7 @@ class main_site(object):
         sub_tags = tag_data[1]
         event_tags = tag_data[2]
 
-        mako_template = Template(filename='static/templates/manage_images.tmpl')    
+        mako_template = Template(filename=os.path.join(locations.current_folder(),'static/templates/manage_images.tmpl')    )
 
         self.mako_template_render = mako_template.render(image_data = returned_data, main_tags = main_tags, 
                                     sub_tags = sub_tags, event_tags = event_tags, menu_location = "selected")
@@ -391,7 +401,7 @@ class main_site(object):
       main_tag = checkIfParamExists('main_tag')
       sub_tag = checkIfParamExists('sub_tag')
 
-      mako_template = Template(filename='static/templates/manage_images.tmpl')
+      mako_template = Template(filename=os.path.join(locations.current_folder(),'static/templates/manage_images.tmpl') )
       tags = database.get_tags()    
       sub_tags = database.get_sub_tags()
       event_tags = database.get_event_tags()
@@ -418,7 +428,7 @@ class main_site(object):
           blog = ""          
 
         perform_action = kwargs['perform_action']
-        mako_template = Template(filename='static/templates/manage_blogs.tmpl')
+        mako_template = Template(filename=os.path.join(locations.current_folder(),'static/templates/manage_blogs.tmpl') )
         self.mako_template_render = mako_template.render(blog = blog, perform_action = perform_action)
 
         return (self.mako_template_render)
@@ -433,7 +443,7 @@ class main_site(object):
   @cherrypy.expose
   def getModalPicture(self, *args, **kwargs):
     image = database.get_image_by_id( kwargs.get('image_id') )
-    mako_template = Template(filename='static/templates/image_modal.tmpl')  
+    mako_template = Template(filename=os.path.join(locations.current_folder(),'static/templates/image_modal.tmpl')  )
     
     self.mako_template_render = mako_template.render(image = image)
 
@@ -451,7 +461,7 @@ class main_site(object):
   @cherrypy.expose
   def default(self, *arguments):
     #Create the below template using index.html (and looking up in the static folder)
-    mako_template = Template(filename='static/404.html')
+    mako_template = Template(filename=os.path.join(locations.current_folder(),'static/404.html') )
     arguments = arguments
 
     #Render the mako template
