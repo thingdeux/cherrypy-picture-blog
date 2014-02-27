@@ -314,6 +314,31 @@ class main_site(object):
           return ('<span class = "ui-widget ui-widget-content">Image metadata updated</span>')
     else:
       return (self.default())
+
+  @cherrypy.expose
+  def updateBlogData(self, *arguments, **kwargs):    
+    Headers = cherrypy.request.headers
+    if isAllowedInAdminArea(Headers):    
+      try:
+        if kwargs['postType'] == "update":
+          succesfulUpdate = database.update_blog(kwargs)
+        elif kwargs['postType'] == "insert":          
+          succesfulUpdate = database.insert_blog(kwargs)
+        elif kwargs['postType'] == "delete":
+          succesfulUpdate = database.delete_blog_by_id(kwargs['blog_id'])
+
+        if succesfulUpdate:
+          return ('UPDATED')
+        else:        
+          return ("ERROR - UNABLE TO UPDATE")
+
+      except Exception, err:
+        for error in err:
+          log("Couldn't update blog - " + error, "DATABASE", "SEVERE")
+
+        return ("Error updating blog - contact admin")
+    else:
+      return (self.default())
   
   @cherrypy.expose
   def deleteTags(self, *arguments, **kwargs):
@@ -379,16 +404,21 @@ class main_site(object):
       return self.mako_template_render
     else:
       return (self.default())
-  
+
   @cherrypy.expose
   def manageBlogs(self, *arguments, **kwargs):
     Headers = cherrypy.request.headers
     if isAllowedInAdminArea(Headers):
-      try:        
-        blog = database.get_blogs("id", kwargs['blog_id'])
+      #Dirty double try :( -REFACTOR
+      try:
+        #If blog_id doesn't exist then a new entry is being created so no blog db values
+        try:     
+          blog = database.get_blogs("id", kwargs['blog_id'])                 
+        except:
+          blog = ""          
+
         perform_action = kwargs['perform_action']
         mako_template = Template(filename='static/templates/manage_blogs.tmpl')
-
         self.mako_template_render = mako_template.render(blog = blog, perform_action = perform_action)
 
         return (self.mako_template_render)

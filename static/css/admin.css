@@ -166,7 +166,14 @@ a.silent_link:active {text-decoration: none; color:white;}
 }
 
 #blogs_menu {
-	width: 155px;
+	width: 180px;
 	float: left;
 }
 
+.form_input {
+	margin-left: 20px;
+}
+
+#title, #date_added, #author {
+	width: 340px;
+}	

@@ -270,6 +270,25 @@ def insert_tag(image_id, tagData):
 		for error in err:
 			log("Unable to add tags: " + error, "DATABASE","MEDIUM")
 
+def insert_blog(*args):
+	try:		
+		author = args[0]['author']
+		title = args[0]['title']
+		date_added = args[0]['date_added']
+		post = args[0]['post']
+		
+		db_connection = connect_to_database()
+		db = db_connection.cursor()
+		db.execute('''INSERT INTO blogs VALUES (?,?,?,?,?)''', (None, title, post, author, date_added,))
+
+		db_connection.commit()
+		db_connection.close()
+		return (True)		
+	except Exception, err:
+		for error in err:
+			log("Unable to insert post - " + error, "DATABASE", "SEVERE")
+		return (False)
+
 #Get a list of all tags in the DB
 def get_tags():
 	db_connection = connect_to_database()
@@ -550,6 +569,20 @@ def delete_image_tags(*args):
 		for error in err:
 			log("Unable to delete tag: " + error, "DATABASE","MEDIUM")
 			return (True)
+
+def delete_blog_by_id(blog_id):
+	try:				
+		db_connection = connect_to_database()
+		db = db_connection.cursor()
+		db.execute( 'DELETE FROM blogs WHERE id == ?', (blog_id,) )
+
+		db_connection.commit()
+		db_connection.close()
+		return (True)		
+	except Exception, err:
+		for error in err:
+			log("Unable to delete blog - " + error, "DATABASE", "SEVERE")
+		return (False)
 			
 def update_image_data(*args, **kwargs):	
 	if args:
@@ -606,6 +639,26 @@ def update_image_data(*args, **kwargs):
 				log("Unable to update Image #" + str(image_id) + ": " + error, "DATABASE","MEDIUM")
 
 		return (False) #BOOL Flag for isImageDeleted cherrypyFunction
+
+def update_blog(*args):
+	try:
+		blog_id = args[0]['id']
+		author = args[0]['author']
+		title = args[0]['title']
+		date_added = args[0]['date_added']
+		post = args[0]['post']
+		
+		db_connection = connect_to_database()
+		db = db_connection.cursor()
+		db.execute('''UPDATE blogs SET author = ?, title = ?, date_added = ?, post = ? WHERE id == ?''', (author,title,date_added, post,blog_id,))
+
+		db_connection.commit()
+		db_connection.close()
+		return (True)		
+	except Exception, err:
+		for error in err:
+			log("Unable to update post - " + error, "DATABASE", "SEVERE")
+		return (False)
 
 def get_top_30_logs():
 	try:
@@ -854,11 +907,11 @@ def get_blogs(query_type = "latest", blog_id = False):
 		db_connection = connect_to_database()
 		db = db_connection.cursor()
 		if query_type == "latest":
-			db.execute("SELECT * FROM blogs ORDER BY (id) LIMIT 1")
+			db.execute("SELECT * FROM blogs ORDER BY (id) DESC LIMIT 1")
 		elif query_type == "titles":
-			db.execute("SELECT id, title FROM blogs ORDER BY (id)")
+			db.execute("SELECT id, title FROM blogs ORDER BY (id) DESC")
 		elif query_type == "id":
-			db.execute("SELECT * FROM blogs WHERE id == ? ORDER BY (id)", (blog_id,))
+			db.execute("SELECT * FROM blogs WHERE id == ? ORDER BY (id) DESC", (blog_id,))
 
 
 		returned_blog = db.fetchall()

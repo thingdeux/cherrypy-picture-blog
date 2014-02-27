@@ -112,11 +112,11 @@
 			</div>
 			<div id = "blogs">
 				<ul id = "blogs_menu" class = "ui_menu">
-					<li><a>Create New Post</a></li>
+					<li dataPostType="new"><a>Create New Post</a></li>
 					<li>-</li>
 
 					%for id, title in blogs:
-						<li dataBlogId="${id}"><a>${title[0:13]}
+						<li dataBlogId="${id}" dataPostType="display"><a>${title[0:13]}
 						%if len(title) > 13:
 							...
 						%endif
@@ -124,7 +124,7 @@
 					%endfor					
 									
 				</ul>
-				<div id = "blogs_selection" class = "ui_menu"></div>
+				<div id = "blogs_selection"></div>
 			</div>
 
 			<div id = "db">
