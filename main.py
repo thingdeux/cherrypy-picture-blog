@@ -60,10 +60,16 @@ conf = {
 def isAllowedInAdminArea(header):   
   keys = locations.readKeys()    
   try:
-    if header['Remote-Addr'] in keys:      
-      return (True)
-    else:
-      return (False)
+    if server_mode == "debug":    
+      if header['Remote-Addr'] in keys:      
+        return (True)
+      else:
+        return (False)
+    elif server_mode == "production":
+      if header['X-Forwarded-For'] in keys:      
+        return (True)
+      else:
+        return (False)
   except:
     return (False)
 
@@ -117,6 +123,7 @@ class main_site(object):
           
         return self.mako_template_render
       else:
+        log("Not enough images")
         return ( self.default() )
 
     except:      
@@ -155,7 +162,7 @@ class main_site(object):
   def admin(self, *args, **kwargs):    
     try:
       Headers = cherrypy.request.headers
-
+      print (Headers)
       if isAllowedInAdminArea(Headers):
         nav_location = args[0].lower()
         if nav_location == "manage":
