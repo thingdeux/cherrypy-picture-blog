@@ -1,10 +1,7 @@
 [BLOCKING]
--(INDEX) - Prevent the same image from showing up when randomly flipping on slideshow
--(DATABASE) - Create alert title column
--(ADMIN) - Create form to update and/or add new alert
+-YAY!!! Ready for v1
 
 [High]
--(ADMIN PAGE) - Turn image update into JQUERY UI Dialog Modal
 -(ADMIN PAGE) - Create ability to add new tag to image
 -(ADMIN PAGE) - Log attempts on admin page, ban after ... say 5 attempts in a day
 -(MODAL) - Investiage - JqueryUI object destroying to early error
@@ -14,7 +11,6 @@
 -(PROCESS PAGE) - Clear out caption value from previous image on page refresh
 
 [Medium]
--(INDEX) - Create Static index page with no Javascript (for no script users)
 -Have the picture transposer get current year instead of hard-coding the year (optionally update year image)
 -Make SURE no special characters are used for tags
 -(CODE) - ERROR CHECKING FOR EVERYTHING!!
@@ -27,6 +23,7 @@ Write cleanup job for erroneous / old process queue entries
 
 
 [Low]
+-(INDEX) - Create Static index page with no Javascript (for no script users)
 -(ADMIN) - Create DB job that looks for images without an active main_tag and delete them
 -(MANAGE PAGE) Instead of refreshing on image delete, rebuild the previous list menu - cleaner look and page elements don't need to be re-fetched for no reason
 -(MANAGE PAGE) - Add check to see if #of main tags is reaching the vertical edge and expand it.
@@ -34,6 +31,7 @@ Write cleanup job for erroneous / old process queue entries
 -(DATABASE) - SORT ORDER Row on each table, order by sort order ASC -- deferred
 (MANAGE PAGE) Get rid of 'reload' after delete /update *too many calls after
 -(INDEX) - Create flexible main tags for index page so that if I double the amount it won't scroll too far - shrink font or perhaps spacing if it's longer than x height
+-(ADMIN PAGE) - Turn image update into JQUERY UI Dialog Modal
 
 
 
@@ -51,6 +49,9 @@ All data that comes to your server must be checked and sanitized. Always. No exc
 
 
 Completed:
+-(INDEX) - Prevent the same image from showing up when randomly flipping on slideshow
+-(DATABASE) - Create blog title column
+-(ADMIN) - Create form to update and/or add new blog
 -(DATABASE) - FIX MISC LATEST_12 DB Query - Only returns images with no event_tag
 -(CSS) - Create responsive design rules for Mobile.
 -(ADMIN PAGES) - Create AUTH for admin menu
