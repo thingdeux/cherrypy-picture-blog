@@ -51,6 +51,8 @@ a:active {text-decoration: none; color:black;}
 	height: 480px;
 	max-width: 720px;
 	max-height: 480px;
+	min-width: 720px;
+	min-height: 480px;
 	border: 5px solid black;
 }
 
