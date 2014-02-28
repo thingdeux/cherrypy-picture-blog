@@ -1,6 +1,4 @@
 [BLOCKING]
--(WEB) - preview shuffles make the screen jump (as the image hides and is no longer taking up space in the DOM for a second.)
-
 
 [High]
 -(ADMIN PAGE) - Create ability to add new tag to image
@@ -50,6 +48,7 @@ All data that comes to your server must be checked and sanitized. Always. No exc
 
 
 Completed:
+-(WEB) - preview shuffles make the screen jump (as the image hides and is no longer taking up space in the DOM for a second.)
 [INVALID W3]
 -(WEB*Index) - Replace Table align on line 25 of index.html with CSS
 -(WEB*Index) - Add an alt tag to every IMG 
