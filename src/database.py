@@ -129,8 +129,7 @@ def create_test_data():
 		(None, 0, "Holidays", "Halloween")
 	]
 
-	eventTagData = [
-		(None, 0, "Kids", "Callie", "Callies 1st Birthday"),
+	eventTagData = [		
 		(None, 0, "Kids", "Callie", "Growing Girl"),
 		(None, 0, "Kids", "Callie", "Birthdays"),
 		(None, 0, "Kids", "Callie", "Callies 1st Birthday"),		

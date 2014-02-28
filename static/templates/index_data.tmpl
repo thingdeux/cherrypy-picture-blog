@@ -3,6 +3,7 @@
 <title>
 	JoshandLinz
 </title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<link rel="icon" type="image/png" href="/static/favicon.ico">	
 	<link rel="stylesheet" href="/static/css/base.css" type="text/css">
     <link rel="stylesheet" href="/static/css/normalize.css" type="text/css">
@@ -18,14 +19,15 @@
     <script type="text/javascript" src="/js/lib/jquery-ui-1.10.4.min.js"></script>
     <script type="text/javascript" src="/js/index.js"></script>
     <script type="text/javascript" src="/js/event.js"></script>    
-</head>
 
-<body>		
 %if display_type == "Main": 
+	</head>
+
+	<body>
 	<div id = "container">
 		<div id = "site_title">${main_tag}</div>
 		<div id = "tag_nav">
-			<table align="center">
+			<table>
 				<tr>
 				<td><a href="/"> <span style="margin-right: 30px"> &lt; </span></a></td>
 				%for parent_tag, sub_tag in sub_tags:					
@@ -45,7 +47,7 @@
 					%for id, name, image_location, thumb_location, date_added, date_taken, caption, width, height in images[ sub_tag ]:
 						<% strippedLoc = image_location.split('/') %>
 						<% imageLocation = "/images/" + strippedLoc[ len(strippedLoc) - 1 ] %>
-						<img id = "${sub_tag}" class = "tag_preview_image" src = ${imageLocation} >
+						<img id = "${sub_tag}" alt="A shuffling picture from the ${sub_tag} picture section" class = "tag_preview_image" src = ${imageLocation} >
 					%endfor
 
 				%except:
@@ -55,11 +57,14 @@
 		
 
 %elif display_type == "Sub":
+	</head>
+	<body>
+
 	<div id = "container">
 		<div id = "site_title">${parent_sub_tag}</div>
 
 		<div id = "tag_nav">
-			<table align="center">
+			<table>
 				<tr>
 				<td><a href="/p/${parent_main_tag}"><span style="margin-right: 30px"> &lt; </span></a></td>
 				%for misc_parent_tag, misc_sub_tag, misc_event_tag in event_tags:					
@@ -86,7 +91,7 @@
 					%for id, name, image_location, thumb_location, date_added, date_taken, caption, width, height in images[ misc_event_tag ]:
 						<% strippedLoc = image_location.split('/') %>
 						<% imageLocation = "/images/" + strippedLoc[ len(strippedLoc) - 1 ] %>
-						<img id = "${misc_event_tag}" class = "tag_preview_image" src = ${imageLocation}>
+						<img id = "${misc_event_tag}" alt="A shuffling picture from the ${misc_event_tag} picture section" class = "tag_preview_image" src = ${imageLocation}>
 					%endfor						
 				%except:					
 				%endtry
@@ -97,7 +102,7 @@
 				%for id, name, image_location, thumb_location, date_added, date_taken, caption, width, height in misc_images[ "Misc" ]:
 					<% strippedLoc = image_location.split('/') %>
 					<% imageLocation = "/images/" + strippedLoc[ len(strippedLoc) - 1 ] %>
-					<img id = "Misc" class = "tag_preview_image" src = ${imageLocation}>
+					<img id = "Misc" alt="A shuffling picture named ${name} picture section" class = "tag_preview_image" src = ${imageLocation}>
 				%endfor
 			%except:
 			%endtry
@@ -105,6 +110,9 @@
 
 %elif display_type == "Event":
 	<link rel="stylesheet" href="/static/css/previews.css" type="text/css">
+	</head>
+
+	<body>
 
 	<div id = "modal"></div>
 	<div id = "container">
@@ -116,7 +124,7 @@
 		%endif
 
 		<div id = "image_nav">
-			<table align="center">
+			<table>
 				<tr>
 					<td><a class = "tag" href="/p/${event_main_tag}/${event_sub_tag}">&lt;</a></td>
 					%if offset == 0:
@@ -147,13 +155,14 @@
 					%endif
 						<tr><td>
 							<a class = "thumbs">
-							<img id = "${image_id}" class="thumbnail_picture" src = ${thumbLocation} ></a>	
-						</tr>						
-						<th class = "thumbnail_name" align="center">${name[0:20]}
+							<img id = "${image_id}" alt="A small picture titled ${name}" class="thumbnail_picture" src = ${thumbLocation} ></a>	
+						</td></tr>
+
+						<tr><td class = "thumbnail_name">${name[0:20]}
 						%if len(name) > 20:
 							...
 						%endif
-						</th>
+						</td></tr>
 					</table>					
 				%except:
 				%endtry
@@ -174,7 +183,7 @@
 		</div>
 
 		<div id = "copyright">
-			&copy Joshua Johnson 2014
+			&copy; Joshua Johnson 2014
 		</div>
 
 	</div>

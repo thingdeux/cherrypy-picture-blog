@@ -1,5 +1,6 @@
 [BLOCKING]
--YAY!!! Ready for v1
+-(WEB) - preview shuffles make the screen jump (as the image hides and is no longer taking up space in the DOM for a second.)
+
 
 [High]
 -(ADMIN PAGE) - Create ability to add new tag to image
@@ -49,6 +50,14 @@ All data that comes to your server must be checked and sanitized. Always. No exc
 
 
 Completed:
+[INVALID W3]
+-(WEB*Index) - Replace Table align on line 25 of index.html with CSS
+-(WEB*Index) - Add an alt tag to every IMG 
+-(WEB*Event) - Add an alt tag to every IMG
+-(WEB*Event) - Fix link pointing to previews.css (Doesn't exist?)
+-(WEB) - Escaped '&copy'
+[INVALID W3]
+
 -(INDEX) - Prevent the same image from showing up when randomly flipping on slideshow
 -(DATABASE) - Create blog title column
 -(ADMIN) - Create form to update and/or add new blog

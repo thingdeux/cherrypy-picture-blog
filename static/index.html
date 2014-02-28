@@ -4,6 +4,7 @@
 <title>
 	JoshandLinz
 </title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<link rel="icon" type="image/png" href="/static/favicon.ico">
 	<link rel="stylesheet" href="/static/css/base.css" type="text/css">
     <link rel="stylesheet" href="/static/css/normalize.css" type="text/css">
@@ -22,7 +23,7 @@
 	<div id = "container">
 		<div id = "site_title">The Johnsons</div>
 		<div id = "tag_nav">
-			<table align="center">
+			<table>
 				<tr>
 				%for tag in main_tags:
 					%try:   #Will catch any tags without images in them
@@ -41,7 +42,7 @@
 					%for id, name, image_location, thumb_location, date_added, date_taken, caption, width, height in images[ tag ]:
 						<% strippedLoc = image_location.split('/') %>
 						<% imageLocation = "/images/" + strippedLoc[ len(strippedLoc) - 1 ] %>
-						<img id = "${tag}" class = "tag_preview_image" src = ${imageLocation}>
+						<img id = "${tag}" alt="A shuffling picture from the ${tag} picture section" class = "tag_preview_image" src = ${imageLocation}>
 					%endfor
 				%except:
 				%endtry
@@ -61,7 +62,7 @@
 		</div>
 
 		<div id = "copyright">
-			&copy Joshua Johnson 2014
+			&copy; Joshua Johnson 2014
 		</div>
 
 	</div>
