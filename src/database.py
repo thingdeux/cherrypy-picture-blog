@@ -24,7 +24,7 @@ def verify_database_existence():
 		except Exception, err:
 			db_connection.close()
 			for error in err:
-				logger.log("DataBase: Unable to verify existence" + error, "DATABASE","SEVERE")
+				logger.log("DataBase: Unable to verify existence" + str(error), "DATABASE","SEVERE")
 	else:
 		return(False)
 	
@@ -35,8 +35,8 @@ def create_fresh_tables():
 		db = db_connection.cursor()
 			
 		db.execute('''CREATE TABLE images 
-				(id INTEGER PRIMARY KEY, name TEXT, image_location TEXT, thumb_location TEXT, date_added INTEGER,
-					date_taken INTEGER, caption TEXT, width INTEGER, height INTEGER)''')
+				(id INTEGER PRIMARY KEY, name TEXT, image_location TEXT, thumb_location TEXT, date_added DATETIME,
+					date_taken DATETIME NOT NULL, caption TEXT, width INTEGER, height INTEGER)''')
 
 		#Create 3 Tag tables - primary / sub / and event
 		db.execute('''CREATE TABLE tags (id INTEGER PRIMARY KEY, image_id INTEGER NOT NULL, tag TEXT NOT NULL)''')	
@@ -62,7 +62,7 @@ def create_fresh_tables():
 	except Exception, err:
 		tryToCloseDB(db_connection)
 		for error in err:
-			log("Unable to create DB Tables: " + error, "DAtABASE", "SEVERE")
+			log("Unable to create DB Tables: " + str(error), "DAtABASE", "SEVERE")
 
 def connect_to_database():
 	try:
@@ -72,7 +72,7 @@ def connect_to_database():
 	except Exception, err:
 		tryToCloseDB(db_connection)
 		for error in err:
-			logger.log("DATABASE","DataBase: Unable to connect" + error, "SEVERE")
+			logger.log("DATABASE","DataBase: Unable to connect" + str(error), "SEVERE")
 			return (False)
 
 def create_test_data():
@@ -183,7 +183,7 @@ def create_test_data():
 	except Exception, err:
 		tryToCloseDB(db_connection)
 		for error in err:
-			log("DataBase: Unable to insert test data - " + error, "DATABASE","INFO")					
+			log("DataBase: Unable to insert test data - " + str(error), "DATABASE","INFO")					
 
 def verify_folder_existence():
 
@@ -192,21 +192,21 @@ def verify_folder_existence():
 			os.mkdir( locations.image_save_location() )
 		except OSError, err:
 			for error in err:
-				log(error, "FILESYSTEM", "SEVERE")
+				log(str(error), "FILESYSTEM", "SEVERE")
 
 	if not os.path.isdir(locations.thumbnail_save_location()):		
 		try:
 			os.mkdir( locations.thumbnail_save_location() )
 		except OSError, err:
 			for error in err:
-				log(error, "FILESYSTEM", "SEVERE")
+				log(str(error), "FILESYSTEM", "SEVERE")
 
 	if not os.path.isdir(locations.queue_save_location()):
 		try:
 			os.mkdir( locations.queue_save_location() )
 		except OSError, err:
 			for error in err:
-				log(error, "FILESYSTEM", "SEVERE")
+				log(str(error), "FILESYSTEM", "SEVERE")
 
 def get_latest_image_id():
 	db_connection = connect_to_database()
@@ -267,7 +267,7 @@ def insert_tag(image_id, tagData):
 	except Exception, err:
 		tryToCloseDB(db_connection)		
 		for error in err:
-			log("Unable to add tags: " + error, "DATABASE","MEDIUM")
+			log("Unable to add tags: " + str(error), "DATABASE","MEDIUM")
 
 def insert_blog(*args):
 	try:		
@@ -285,7 +285,7 @@ def insert_blog(*args):
 		return (True)		
 	except Exception, err:
 		for error in err:
-			log("Unable to insert post - " + error, "DATABASE", "SEVERE")
+			log("Unable to insert post - " + str(error), "DATABASE", "SEVERE")
 		return (False)
 
 #Get a list of all tags in the DB
@@ -403,7 +403,7 @@ def insert_currently_processing_job(image_name):
 		db_connection.close()
 	except Exception, err:
 		for error in err:
-			log("Unable to add job to processing_queue tags: " + error, "DATABASE","SEVERE")
+			log("Unable to add job to processing_queue tags: " + str(error), "DATABASE","SEVERE")
 
 def delete_currently_processing_job(image):
 	db_connection = connect_to_database()
@@ -444,15 +444,15 @@ def get_images_by_tag(*args, **kwargs):
 
 	try:		
 		if event_tag:			
-			db.execute('SELECT * from images WHERE id IN (SELECT image_id FROM event_tags WHERE parent_tag == (?) AND parent_sub_tag == (?) AND event_tag == (?) )', (main_tag, sub_tag, event_tag,) )			
+			db.execute('SELECT * from images WHERE id IN (SELECT image_id FROM event_tags WHERE parent_tag == (?) AND parent_sub_tag == (?) AND event_tag == (?) ) ORDER BY (date_taken) ASC', (main_tag, sub_tag, event_tag,) )			
 		elif sub_tag:
-			db.execute('SELECT * from images WHERE id IN (SELECT image_id FROM sub_tags WHERE parent_tag == (?) AND sub_tag == (?) )', (main_tag, sub_tag,) )			
+			db.execute('SELECT * from images WHERE id IN (SELECT image_id FROM sub_tags WHERE parent_tag == (?) AND sub_tag == (?) ) ORDER BY (date_taken) ASC', (main_tag, sub_tag,) )			
 		elif main_tag:
-			db.execute('SELECT * from images WHERE id IN (SELECT image_id FROM tags WHERE tag == (?) )', (main_tag,) )	
+			db.execute('SELECT * from images WHERE id IN (SELECT image_id FROM tags WHERE tag == (?) )  ORDER BY (date_taken) ASC', (main_tag,) )	
 	except Exception, err:
 		tryToCloseDB(db_connection)
 		for error in err:
-			log("Unable to query images: " + error, "DATABASE","SEVERE")
+			log("Unable to query images: " + str(error), "DATABASE","SEVERE")
 
 		return ("")
 
@@ -470,7 +470,7 @@ def get_image_by_id(image_id):
 	except Exception, err:
 		db.connection.close()
 		for error in err:
-			log("Unable to get image by ID: " + error, "DATABASE","HIGH")	
+			log("Unable to get image by ID: " + str(error), "DATABASE","HIGH")	
 		return ("")
 
 	query = db.fetchall()
@@ -495,7 +495,7 @@ def get_image_tags_by_image_id(image_id):
 		tryToCloseDB(db_connection)
 
 		for error in err:
-			log("Unable to get image by ID: " + error, "DATABASE","HIGH")		
+			log("Unable to get image by ID: " + str(error), "DATABASE","HIGH")		
 		return ("")
 
 	returnedList = [
@@ -529,7 +529,7 @@ def does_image_have_at_least_one_tag(image_id):
 	except Exception, err:
 		tryToCloseDB(db_connection)
 		for error in err:			
-			log("Unable to determine if image has at least one tag: " + error, "DATABASE","MEDIUM")
+			log("Unable to determine if image has at least one tag: " + str(error), "DATABASE","MEDIUM")
 			return (True)
 
 def delete_image_tags(*args):
@@ -566,7 +566,7 @@ def delete_image_tags(*args):
 	except Exception, err:
 		tryToCloseDB(db_connection)
 		for error in err:
-			log("Unable to delete tag: " + error, "DATABASE","MEDIUM")
+			log("Unable to delete tag: " + str(error), "DATABASE","MEDIUM")
 			return (True)
 
 def delete_blog_by_id(blog_id):
@@ -580,7 +580,7 @@ def delete_blog_by_id(blog_id):
 		return (True)		
 	except Exception, err:
 		for error in err:
-			log("Unable to delete blog - " + error, "DATABASE", "SEVERE")
+			log("Unable to delete blog - " + str(error), "DATABASE", "SEVERE")
 		return (False)
 			
 def update_image_data(*args, **kwargs):	
@@ -617,8 +617,9 @@ def update_image_data(*args, **kwargs):
 
 			except Exception, err:
 				tryToCloseDB(db_connection)
+				return ("ERROR")
 				for error in err:
-					log("Unable to delete image " + image_id + " - " + error, "DATABASE","MEDIUM")
+					log("Unable to delete image " + image_id + " - " + str(error), "DATABASE","MEDIUM")					
 
 	#Not a deletion request, update image metadata
 	except:
@@ -635,7 +636,7 @@ def update_image_data(*args, **kwargs):
 		except Exception, err:
 			tryToCloseDB(db_connection)
 			for error in err:				
-				log("Unable to update Image #" + str(image_id) + ": " + error, "DATABASE","MEDIUM")
+				log("Unable to update Image #" + str(image_id) + ": " + str(error), "DATABASE","MEDIUM")
 
 		return (False) #BOOL Flag for isImageDeleted cherrypyFunction
 
@@ -656,7 +657,7 @@ def update_blog(*args):
 		return (True)		
 	except Exception, err:
 		for error in err:
-			log("Unable to update post - " + error, "DATABASE", "SEVERE")
+			log("Unable to update post - " + str(error), "DATABASE", "SEVERE")
 		return (False)
 
 def get_top_30_logs():
@@ -673,7 +674,7 @@ def get_top_30_logs():
 		tryToCloseDB(db_connection)
 		return ("")
 		for error in err:
-			log("Unable to get logs", "DATABASE", "LOW")
+			log("Unable to get logs: " + str(error), "DATABASE", "LOW")
 
 def get_latest_12_images_by_tag(main_tag, sub_tag, event_tag = False, offset = 0):	
 	try:
@@ -684,11 +685,11 @@ def get_latest_12_images_by_tag(main_tag, sub_tag, event_tag = False, offset = 0
 						  INNER JOIN sub_tags ON images.id = sub_tags.image_id WHERE images.id NOT IN 
 						  (SELECT image_id from event_tags WHERE parent_tag = (?) AND parent_sub_tag = (?) )
 						  AND sub_tags.parent_tag = (?) AND sub_tags.sub_tag =(?) 
-						  ORDER BY (images.id) DESC LIMIT 12 OFFSET ?''', (main_tag, sub_tag, main_tag, sub_tag, offset,))
+						  ORDER BY (images.date_taken) ASC LIMIT 12 OFFSET ?''', (main_tag, sub_tag, main_tag, sub_tag, offset,))
 		else:
 			db.execute('''SELECT images.id, images.name, images.thumb_location  FROM images 
 							INNER JOIN event_tags ON images.id = event_tags.image_id WHERE event_tags.parent_tag = ? 
-							AND event_tags.parent_sub_tag = ? AND event_tags.event_tag = ? ORDER BY (images.id) DESC LIMIT 12 OFFSET ?''', (main_tag, sub_tag,event_tag, offset,))	
+							AND event_tags.parent_sub_tag = ? AND event_tags.event_tag = ? ORDER BY (images.date_taken) ASC LIMIT 12 OFFSET ?''', (main_tag, sub_tag,event_tag, offset,))	
 
 		latest_10 = db.fetchall()
 		db_connection.close()
@@ -698,7 +699,7 @@ def get_latest_12_images_by_tag(main_tag, sub_tag, event_tag = False, offset = 0
 	except Exception, err:
 		tryToCloseDB(db_connection)
 		for error in err:
-			log("Unable to get latest 4 images: " + error, "DATABASE", "SEVERE")
+			log("Unable to get latest 4 images: " + str(error), "DATABASE", "SEVERE")
 
 def get_random_image_id_by_tag(db_cursor = False, **kwargs):	
 	def query_db_for_acceptable_images(dbcur, tag):
@@ -709,7 +710,8 @@ def get_random_image_id_by_tag(db_cursor = False, **kwargs):
 		try:			
 			main_tag = tag['main_tag']			
 			dbcur.execute('''SELECT images.id FROM images INNER JOIN tags ON images.id = tags.image_id WHERE
-			 tags.tag = ? AND images.width > 720 AND images.height > 800 AND images.height <= 900 AND (images.width - images.height) > 280''', (main_tag,))
+			 tags.tag = ? AND images.width > 720 AND images.height > 800 AND images.height <= 900 AND 
+			 (images.width - images.height) > 280''', (main_tag,))
 			return( dbcur.fetchall() )
 		except:
 			try:
@@ -734,14 +736,15 @@ def get_random_image_id_by_tag(db_cursor = False, **kwargs):
 						misc_parent_tag = tag['misc_parent_tag']
 						misc_sub_tag = tag['misc_sub_tag']
 						dbcur.execute('''SELECT images.id FROM images INNER JOIN sub_tags ON images.id = sub_tags.image_id WHERE 
-										sub_tags.parent_tag = (?) AND sub_tags.sub_tag = (?) AND images.width > 720 AND images.height > 800 AND images.height <= 900 and (images.width - images.height) > 280 AND 
-										image_id NOT IN (SELECT image_id FROM event_tags WHERE parent_tag = (?) AND parent_sub_tag = (?) )''',
+										sub_tags.parent_tag = ? AND sub_tags.sub_tag = ? AND images.width > 720 AND 
+										images.height > 800 AND images.height <= 900 and (images.width - images.height) > 280 AND 
+										image_id NOT IN (SELECT image_id FROM event_tags WHERE parent_tag = ? AND parent_sub_tag = ? )''',
 										(misc_parent_tag, misc_sub_tag, misc_parent_tag, misc_sub_tag,) )
 						return ( dbcur.fetchall() )
 
 					except Exception, err:
 						for error in err:
-							log("Unable to query db for acceptable images: " + error, "DATABASE", "MEDIUM")
+							log("Unable to query db for acceptable images: " + str(error), "DATABASE", "MEDIUM")
 						return ("")
 
 	def return_random_number(db):
@@ -776,7 +779,7 @@ def get_random_image_id_by_tag(db_cursor = False, **kwargs):
 		except Exception, err:
 			tryToCloseDB(db_connection)
 			for error in err:
-				log("Unable to get random Image_id  " + error, "DATABASE", "SEVERE")
+				log("Unable to get random Image_id  " + str(error), "DATABASE", "SEVERE")
 			return(False)			
 	else:
 		return ( return_random_number(db_cursor) )
@@ -806,7 +809,7 @@ def get_image_for_every_main_tag():
 	except Exception, err:
 		tryToCloseDB(db_connection)
 		for error in err:
-			log("Unable to get latest images " + error, "DATABASE", "SEVERE")
+			log("Unable to get latest images " + str(error), "DATABASE", "SEVERE")
 
 def get_image_for_each_sub_tag(main_tag):
 	try:		
@@ -829,7 +832,7 @@ def get_image_for_each_sub_tag(main_tag):
 	except Exception, err:
 		tryToCloseDB(db_connection)
 		for error in err:
-			log("Unable to get latest images " + error, "DATABASE", "SEVERE")
+			log("Unable to get latest images " + str(error), "DATABASE", "SEVERE")
 
 def get_image_for_each_event_tag(sub_tag):
 	try:		
@@ -853,7 +856,7 @@ def get_image_for_each_event_tag(sub_tag):
 	except Exception, err:
 		tryToCloseDB(db_connection)
 		for error in err:
-			log("Unable to get latest images " + error, "DATABASE", "SEVERE")	
+			log("Unable to get latest images " + str(error), "DATABASE", "SEVERE")	
 
 def get_image_for_misc_sub_tag(main_tag, sub_tag):
 	try:				
@@ -875,7 +878,7 @@ def get_image_for_misc_sub_tag(main_tag, sub_tag):
 	except Exception, err:
 		tryToCloseDB(db_connection)
 		for error in err:
-			log("Unable to get latest images " + error, "DATABASE", "SEVERE")
+			log("Unable to get latest images " + str(error), "DATABASE", "SEVERE")
 
 def sanitizeInputString(string):
 	try:
@@ -899,7 +902,7 @@ def get_latest_alert():
 	except Exception, err:
 		tryToCloseDB(db_connection)
 		for error in err:
-			log("Unable to get latest alert " + error, "DATABASE", "SEVERE")
+			log("Unable to get latest alert " + str(error), "DATABASE", "SEVERE")
 
 def get_blogs(query_type = "latest", blog_id = False):
 	try:
@@ -920,7 +923,7 @@ def get_blogs(query_type = "latest", blog_id = False):
 	except Exception, err:
 		tryToCloseDB(db_connection)
 		for error in err:
-			log("Unable to get latest blog " + error, "DATABASE", "SEVERE")
+			log("Unable to get latest blog " + str(error), "DATABASE", "SEVERE")
 
 #Class used for breaking down data from process submission POST
 class Posted_Data:
@@ -936,7 +939,7 @@ class Posted_Data:
 			except Exception, err:
 				self.isSuccesful = False
 				for error in err:
-					log("Unable to completely process image: " + error, "DATABASE","MEDIUM")
+					log("Unable to completely process image: " + str(error), "DATABASE","MEDIUM")
 
 	def image_processor(self):
 
