@@ -84,7 +84,6 @@ class WebsiteImage:
 			for error in err:
 				log("Thumbnail Save Error" + str(error), "CONVERTER", "MEDIUM" )
 
-
 	def create_watermark(self):
 		try:
 			picObject = self.picObject
@@ -111,7 +110,7 @@ class WebsiteImage:
 		except Exception, err:
 			self.isSuccesful = False
 			for error in err:
-				log("Unable to create watermark " + error, "CONVERTER", "MEDIUM")
+				log("Unable to create watermark " + str(error), "CONVERTER", "MEDIUM")
 
 	def save_uploaded_images(self):	
 		self.thumb_location = os.path.join(thumbnail_save_location(), str(get_latest_image_id() ) + '.jpg')	
@@ -133,8 +132,6 @@ class WebsiteImage:
 			return (self.watermarked_image.size)
 		except:
 			return ( (0,0) )
-
-
 
 
 def create_queue_thumbnail(file_location,save_location):	
@@ -163,11 +160,9 @@ def get_date_exif(image_name):
 
 		built_date_string = formatted_date[1] + "/" + formatted_date[2].split(' ')[0] + "/" + formatted_date[0]
 				
-		#Get the 'date taken' exif data and return it
+		#Get the 'date taken' exif data and return it if available
 		return (  built_date_string )				
-	except Exception, err:
-		for error in err:
-			log("Unable to get EXIF" + error, "CONVERTER", "MEDIUM")
-			return("Unknown")
+	except:				
+		return("01/01/84")
 	
 

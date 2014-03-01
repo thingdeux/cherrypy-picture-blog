@@ -9,7 +9,7 @@ def delete_file(filename):
 		log("Deleting: " + str(filename), "FILESYSTEM", "INFO" )
 	except Exception, err:
 		for error in err:
-			log("Unable to delete file: " + filename + " - " + error, "FILESYSTEM", "LOW")
+			log("Unable to delete file: " + filename + " - " + str(error), "FILESYSTEM", "LOW")
 
 
 def get_queue_directory_list():

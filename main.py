@@ -161,8 +161,7 @@ class main_site(object):
   @cherrypy.expose
   def admin(self, *args, **kwargs):    
     try:
-      Headers = cherrypy.request.headers
-      print (Headers)
+      Headers = cherrypy.request.headers      
       if isAllowedInAdminArea(Headers):
         nav_location = args[0].lower()
         if nav_location == "manage":
@@ -269,7 +268,7 @@ class main_site(object):
 
       except Exception, err:
         for error in err:
-          log("Unable to receive upload - " + error, "WEB", "MEDIUM")
+          log("Unable to receive upload - " + str(error), "WEB", "MEDIUM")
     else:
       return (self.default())
   
@@ -323,12 +322,15 @@ class main_site(object):
     Headers = cherrypy.request.headers
     if isAllowedInAdminArea(Headers):
       if len(kwargs) > 0:          
-        isImageDeleted = database.update_image_data(kwargs)
+        isImageDeleted = database.update_image_data(kwargs)        
 
-        if isImageDeleted:
+        if isImageDeleted == True:
           return ('<span id = "deleted" class = "ui-widget ui-widget-content">Image deleted</span>')
-        else:
+        elif isImageDeleted == False:          
           return ('<span class = "ui-widget ui-widget-content">Image metadata updated</span>')
+        else:
+          return ('<span class = "ui-widget ui-widget-content">ERROR</span>')
+
     else:
       return (self.default())
 
@@ -351,7 +353,7 @@ class main_site(object):
 
       except Exception, err:
         for error in err:
-          log("Couldn't update blog - " + error, "DATABASE", "SEVERE")
+          log("Couldn't update blog - " + str(error), "DATABASE", "SEVERE")
 
         return ("Error updating blog - contact admin")
     else:
@@ -443,7 +445,7 @@ class main_site(object):
       except Exception, err:
         return ( self.default() )
         for error in err:
-          log("Unable to Manage Blog - " + error, "WEB", "LOW")
+          log("Unable to Manage Blog - " + str(error), "WEB", "LOW")
     else:
       return (self.default())
 
