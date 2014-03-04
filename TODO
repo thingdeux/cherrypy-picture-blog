@@ -1,5 +1,9 @@
 [BLOCKING]
 -2014 Image transposer
+-Fix IMG links so that they do not cache and mess things up. ?Data=xyz
+
+
+-Write unit test for page/link displays
 
 
 [High]
