@@ -484,11 +484,9 @@ def startServer():
   if database.verify_database_existence():
     try:
       #If the images /thumbnails / queue folders don't exist create them.
-      database.verify_folder_existence()
-      
-      if server_mode is "debug":
-        if len( database.get_tags() ) <= 1:
-          database.create_test_data()
+      database.verify_folder_existence()            
+      if len( database.get_tags() ) <= 1:
+        database.create_test_data()
 
       cherrypy.quickstart(main_site(), config=conf)
     except Exception, err:

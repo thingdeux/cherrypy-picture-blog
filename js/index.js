@@ -23,12 +23,12 @@ $(document).ready(function() {
 					$(this).fadeOut(200, 'swing');
 				}
 				if ($(this).attr('id') == name) {
-					$(this).delay(200).fadeIn(150, 'swing');
+					$(this).delay(210).fadeIn(150, 'swing');
 				}
 			});
 			//Prevent multiple images from hiding/fading out at the same time.
 			setTransitioning()
-			window.setTimeout(function() { setTransitioning() }, 450);
+			window.setTimeout(function() { setTransitioning() }, 480);
 		}
 	}
 
@@ -51,7 +51,7 @@ $(document).ready(function() {
 
 		main_tags.each(function (index) {
 			if (index == randomSelection) {
-				$(this).delay(300).fadeIn(300, 'swing');				
+				$(this).delay(310).fadeIn(300, 'swing');			
 			}
 		});			
 		

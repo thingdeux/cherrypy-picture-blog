@@ -42,7 +42,7 @@
 					%for id, name, image_location, thumb_location, date_added, date_taken, caption, width, height in images[ tag ]:
 						<% strippedLoc = image_location.split('/') %>
 						<% imageLocation = "/images/" + strippedLoc[ len(strippedLoc) - 1 ] %>
-						<img id = "${tag}" alt="A shuffling picture from the ${tag} picture section" class = "tag_preview_image" src = ${imageLocation}>
+						<img id = "${tag}" alt="A shuffling picture from the ${tag} picture section" class = "tag_preview_image" src = "${imageLocation}?name=${name}">
 					%endfor
 				%except:
 				%endtry
