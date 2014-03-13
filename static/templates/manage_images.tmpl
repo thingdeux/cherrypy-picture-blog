@@ -4,7 +4,7 @@
 		%for id, name, image_location, thumb_location, date_added, date_taken, caption, width, height in image_data:					
 			<% thumbpath = thumb_location.split('/') %>
 			<tr><td imageID = "${id}" class = "image_menu_link image_menu_name">${name}</td></tr>
-			<tr><td imageID = "${id}" class = "image_menu_link"><img src="${'/' + thumbpath[6] + '/' + thumbpath[7]}"></img></td></tr>			
+			<tr><td imageID = "${id}" class = "image_menu_link"><img src="${'/' + thumbpath[6] + '/' + thumbpath[7]}?name=${name}"></img></td></tr>			
 		%endfor	
 	</table>
 

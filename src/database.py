@@ -131,8 +131,7 @@ def create_test_data():
 
 	eventTagData = [		
 		(None, 0, "Kids", "Callie", "Growing Girl"),
-		(None, 0, "Kids", "Callie", "Birthdays"),
-		(None, 0, "Kids", "Callie", "Callies 1st Birthday"),		
+		(None, 0, "Kids", "Callie", "Birthdays"),				
 		(None, 0, "Kids", "Callie", "Silly"),
 
 		(None, 0, "Family", "Zamudio", "Brandon and Dakota"),
@@ -712,15 +711,16 @@ def get_random_image_id_by_tag(db_cursor = False, **kwargs):
 			dbcur.execute('''SELECT images.id FROM images INNER JOIN tags ON images.id = tags.image_id WHERE
 			 tags.tag = ? AND images.width > 720 AND images.height > 800 AND images.height <= 900 AND 
 			 (images.width - images.height) > 280''', (main_tag,))
-			return( dbcur.fetchall() )
+			return ( dbcur.fetchall() )
 		except:
-			try:
+			try:				
 				sub_tag = tag['sub_tag']
-				parent_tag = tag['parent_tag']						
+				parent_tag = tag['parent_tag']											
 				dbcur.execute( '''SELECT images.id FROM images INNER JOIN sub_tags ON images.id = sub_tags.image_id WHERE
 				 				sub_tags.sub_tag = ? AND sub_tags.parent_tag = ? AND images.width > 720 AND images.height > 800 AND
-				 				 images.height <= 900 AND (images.width - images.height) > 280''', (sub_tag,parent_tag,) )				
-				return( dbcur.fetchall() )
+				 				 images.height <= 900 AND (images.width - images.height) > 280''', (sub_tag,parent_tag,) )							
+
+				return ( dbcur.fetchall() )
 			except:
 				try:					
 					event_tag = tag['event_tag']
@@ -749,12 +749,12 @@ def get_random_image_id_by_tag(db_cursor = False, **kwargs):
 
 	def return_random_number(db):
 		try:			
-			image_id_list = query_db_for_acceptable_images(db, kwargs)						
+			image_id_list = query_db_for_acceptable_images(db, kwargs)			
 			#Select a random record from 1 to length of results and return the id
 			try: 
-				random_image = randint(1, (len(image_id_list) - 1) )				
+				random_image = randint(1, (len(image_id_list) - 1) )								
 			except:
-				if len(random_image) >= 1:
+				if len(image_id_list) >= 1:
 					random_image = 0
 				else:
 					return(False)			
@@ -818,8 +818,8 @@ def get_image_for_each_sub_tag(main_tag):
 		db = db_connection.cursor()					
 		returned_list_of_dicts = {}
 
-		for parent_tag, sub_tag in sub_tags:			
-			random_image = get_random_image_id_by_tag(db, parent_tag = main_tag, sub_tag = sub_tag)
+		for parent_tag, sub_tag in sub_tags:						
+			random_image = get_random_image_id_by_tag(db, parent_tag = main_tag, sub_tag = sub_tag)			
 			if random_image == False:
 				pass
 			else:
@@ -836,7 +836,7 @@ def get_image_for_each_sub_tag(main_tag):
 
 def get_image_for_each_event_tag(sub_tag):
 	try:		
-		event_tags = get_event_tags(sub_tag)
+		event_tags = get_event_tags(sub_tag)		
 		db_connection = connect_to_database()
 		db = db_connection.cursor()					
 		returned_list_of_dicts = {}
@@ -879,6 +879,41 @@ def get_image_for_misc_sub_tag(main_tag, sub_tag):
 		tryToCloseDB(db_connection)
 		for error in err:
 			log("Unable to get latest images " + str(error), "DATABASE", "SEVERE")
+
+def get_misc_count_by_tag(*args, **kwargs):
+	tags = args[0]
+
+	#Check to see if the argument contains an event_tag or just a sub
+	try:		
+		sub_tag = tags['sub_tag']		
+		main_tag = tags['main_tag']
+	except:				
+		return (False)
+		
+	db_connection = connect_to_database()
+	db = db_connection.cursor()
+
+	try:				
+		
+		db.execute('''SELECT count(*) FROM images INNER JOIN sub_tags ON images.id = sub_tags.image_id WHERE 
+									sub_tags.parent_tag = ? AND sub_tags.sub_tag = ? AND 
+									image_id NOT IN (SELECT image_id FROM event_tags WHERE parent_tag = ? AND parent_sub_tag = ? )''',
+									(main_tag, sub_tag, main_tag, sub_tag,) )
+
+		to_return = db.fetchall()		
+
+		return ( to_return[0][0] )		
+	except Exception, err:
+		tryToCloseDB(db_connection)
+		for error in err:
+			log("Unable to misc count images: " + str(error), "DATABASE","SEVERE")
+
+		return ("")
+
+	query = db.fetchall()	
+	db_connection.close()
+
+	return ( query )
 
 def sanitizeInputString(string):
 	try:
@@ -991,3 +1026,14 @@ class Posted_Data:
 			self.isSuccesful = True
 		else:
 			self.isSuccesful = False
+
+
+if __name__ == "__main__":
+	print (  get_random_image_id_by_tag(parent_tag =  "Holidays", sub_tag = "Dragon Day")      )
+
+	'''
+	test = get_image_for_each_sub_tag("Holidays")
+
+	for thing in test:
+		print thing
+	'''

@@ -99,7 +99,7 @@ class main_site(object):
     try:
       event_tag = args[2]      
       sub_tag = args[1]
-      imageIDList = []      
+      imageIDList = []     
 
       #SQL Offset number for DB Query
       try:
@@ -112,7 +112,8 @@ class main_site(object):
       else:
         images = database.get_latest_12_images_by_tag(main_tag, sub_tag, event_tag, offset)      
 
-      for image in images:        
+      for image in images:
+        #To be used by the front-end JS to scroll through pictures       
         imageIDList.append(image[0])     
 
       if len(images) > 0:
@@ -128,10 +129,10 @@ class main_site(object):
 
     except:      
       try:
-        sub_tag = args[1]      
+        sub_tag = args[1]        
         event_tags = database.get_event_tags(sub_tag)
         images = database.get_image_for_each_event_tag(sub_tag)      
-        misc_images = database.get_image_for_misc_sub_tag(main_tag, sub_tag)       
+        misc_images = database.get_image_for_misc_sub_tag(main_tag, sub_tag)  
         
         if len(images) > 0 or len(misc_images) > 0:
           self.mako_template_render = mako_template.render(parent_main_tag = main_tag, parent_sub_tag = sub_tag, 
@@ -145,7 +146,7 @@ class main_site(object):
       except:      
         try:   
           sub_tags = database.get_sub_tags(main_tag)
-          images = database.get_image_for_each_sub_tag(main_tag)          
+          images = database.get_image_for_each_sub_tag(main_tag)       
           
           if len(images) > 0:            
             self.mako_template_render = mako_template.render(main_tag = main_tag, sub_tags = sub_tags, 
