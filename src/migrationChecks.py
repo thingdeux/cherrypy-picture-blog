@@ -10,7 +10,7 @@ def check_links(show = "all"):
 					
 		#If the main_tag has images in it
 		if (len(images) >= 1):
-			print("\n" + main_tag + ": " + str( len(images) ) + " Total Images"), 
+			print("\n" + main_tag + ": " + str( len(images) ) + " Total Images"),
 
 			#Did the main_tag return at least 1 random image
 			try:

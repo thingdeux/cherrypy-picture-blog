@@ -1026,14 +1026,3 @@ class Posted_Data:
 			self.isSuccesful = True
 		else:
 			self.isSuccesful = False
-
-
-if __name__ == "__main__":
-	print (  get_random_image_id_by_tag(parent_tag =  "Holidays", sub_tag = "Dragon Day")      )
-
-	'''
-	test = get_image_for_each_sub_tag("Holidays")
-
-	for thing in test:
-		print thing
-	'''

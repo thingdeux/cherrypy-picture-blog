@@ -9,13 +9,9 @@
 	<link rel="stylesheet" href="/static/css/base.css" type="text/css">
     <link rel="stylesheet" href="/static/css/normalize.css" type="text/css">
     <link rel="stylesheet" href="/static/css/responsive.css" type="text/css">
-    <!-- Add in Prod
-    	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>   
-		<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-    !-->
-    <!--Instead of local !-->
-    <script type="text/javascript" src="/js/lib/jquery-1.10.2.min.js"></script> 
-    <script type="text/javascript" src="/js/lib/jquery-ui-1.10.4.min.js"></script>
+        
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>   
+	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>         
     <script type="text/javascript" src="/js/index.js"></script>    
 </head>
 
@@ -23,17 +19,14 @@
 	<div id = "container">
 		<div id = "site_title">The Johnsons</div>
 		<div id = "tag_nav">
-			<table>
-				<tr>
+			
 				%for tag in main_tags:
 					%try:   #Will catch any tags without images in them
 						<% failure_point = images[tag] %>
-						<td><a class = "tag" name="${tag}" href="/p/${tag}">${tag}</a></td>
+						<a class = "tag" name="${tag}" href="/p/${tag}">${tag}</a>
 					%except:					
 					%endtry					
-				%endfor
-				</tr>
-			</table>
+				%endfor				
 		</div>
 
 		<div id = "tag_preview">
