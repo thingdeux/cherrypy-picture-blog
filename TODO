@@ -1,5 +1,4 @@
 [BLOCKING]
-Fix Formatting for links with a number of entries
 
 [High]
 -(EVENT PAGE) - Instead of destroying the JQUERYUI Modal - resize it when it goes to the next image
@@ -22,7 +21,6 @@ Fix Formatting for links with a number of entries
 Write cleanup job for erroneous / old process queue entries
 
 
-
 [Low]
 -(INDEX) - Create Static index page with no Javascript (for no script users)
 -(ADMIN) - Create DB job that looks for images without an active main_tag and delete them
@@ -31,25 +29,19 @@ Write cleanup job for erroneous / old process queue entries
 -(LOG PAGE) - allow for sorting by type and severity
 -(DATABASE) - SORT ORDER Row on each table, order by sort order ASC -- deferred
 (MANAGE PAGE) Get rid of 'reload' after delete /update *too many calls after
--(INDEX) - Create flexible main tags for index page so that if I double the amount it won't scroll too far - shrink font or perhaps spacing if it's longer than x height
 -(ADMIN PAGE) - Turn image update into JQUERY UI Dialog Modal
 
 
 
 [SECURITY]
------instead of directly deleting files (opening the server up to attack) - perhaps run a backend job that checks for renamed files or that 
+-(ADMIN) - instead of directly deleting files (opening the server up to attack) - perhaps run a backend job that checks for renamed files or that 
 queuries the DB for files to delete and have it delete them.  Don't use the web server at all for that.
 
-Be paranoid: Never trust your users
-All data that comes to your server must be checked and sanitized. Always. No exception.
-
-    Escape potentially dangerous characters. The specific characters you should be cautious with vary depending on the context in which the data is used and the server platform you employ, but all server-side languages have functions for this.
-    Limit the incoming amount of data to allow only what's necessary.
-    Sandbox uploaded files (store them on a different server and allow access to the file only through a different subdomain or even better through a fully different domain name).
 
 
 
 Completed:
+Fix Formatting for links with a number of entries
 -2014 Image transposer
 -Write test for page/link displays
 -Fix IMG links so that they do not cache and mess things up. ?Data=xyz

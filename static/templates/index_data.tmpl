@@ -4,19 +4,14 @@
 	JoshandLinz
 </title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<link rel="icon" type="image/png" href="/static/favicon.ico">	
+	<link rel="icon" type="image/png" href="/static/favicon.ico">
 	<link rel="stylesheet" href="/static/css/base.css" type="text/css">
     <link rel="stylesheet" href="/static/css/normalize.css" type="text/css">
-    <link rel="stylesheet" href="/static/css/responsive.css" type="text/css">    
-    <!-- Add in Prod
-    	<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/ui-darkness/jquery-ui.min.css">
-    	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>   
-		<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-    !-->
-    <!--Instead of local !-->
-    <link rel="stylesheet" href="/static/css/ui-darkness/jquery-ui-1.10.4.custom.css">
-    <script type="text/javascript" src="/js/lib/jquery-1.10.2.min.js"></script> 
-    <script type="text/javascript" src="/js/lib/jquery-ui-1.10.4.min.js"></script>
+    <link rel="stylesheet" href="/static/css/responsive.css" type="text/css">
+    
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/ui-darkness/jquery-ui.min.css">    
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>   
+	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>          
     <script type="text/javascript" src="/js/index.js"></script>
     <script type="text/javascript" src="/js/event.js"></script>    
 
@@ -26,19 +21,15 @@
 	<body>
 	<div id = "container">
 		<div id = "site_title">${main_tag}</div>
-		<div id = "tag_nav">
-			<table>
-				<tr>
-				<td><a href="/"> <span style="margin-right: 30px"> &lt; </span></a></td>
+		<div id = "tag_nav">			
+				<a href="/"> <span style="margin-right: 30px"> &lt; </span></a>
 				%for parent_tag, sub_tag in sub_tags:					
 					%try:				
 						<% failure_point = images[sub_tag] %>
-						<td><a class = "tag" name="${sub_tag}" href="/p/${main_tag}/${sub_tag}">${sub_tag}</a></td>
+						<a class = "tag" name="${sub_tag}" href="/p/${main_tag}/${sub_tag}">${sub_tag}</a>
 					%except:
 					%endtry
-				%endfor								
-				</tr>
-			</table>
+				%endfor											
 		</div>
 
 		<div id = "tag_preview">
@@ -63,25 +54,21 @@
 	<div id = "container">
 		<div id = "site_title">${parent_sub_tag}</div>
 
-		<div id = "tag_nav">
-			<table>
-				<tr>
-				<td><a href="/p/${parent_main_tag}"><span style="margin-right: 30px"> &lt; </span></a></td>
+		<div id = "tag_nav">			
+				<a href="/p/${parent_main_tag}"><span style="margin-right: 30px"> &lt; </span></a>
 				%for misc_parent_tag, misc_sub_tag, misc_event_tag in event_tags:					
 					%try:				
 						<% failure_point = images[misc_event_tag] %>
-						<td><a class = "tag" name="${misc_event_tag}" href="/p/${parent_main_tag}/${parent_sub_tag}/${misc_event_tag}">${misc_event_tag}</a></td>
+						<a class = "tag" name="${misc_event_tag}" href="/p/${parent_main_tag}/${parent_sub_tag}/${misc_event_tag}">${misc_event_tag}</a>
 					%except:						
 					%endtry
 				%endfor
 
 				%try:
 					<% failure_point = misc_images["Misc"] %>
-					<td><a class = "tag" name="Misc" href="/p/${parent_main_tag}/${parent_sub_tag}/Misc">Misc</a></td>
+					<a class = "tag" name="Misc" href="/p/${parent_main_tag}/${parent_sub_tag}/Misc">Misc</a>
 				%except:
-				%endtry				
-				</tr>
-			</table>
+				%endtry								
 		</div>
 
 		<div id = "tag_preview">
