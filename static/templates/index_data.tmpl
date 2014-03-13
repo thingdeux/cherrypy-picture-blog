@@ -47,7 +47,7 @@
 					%for id, name, image_location, thumb_location, date_added, date_taken, caption, width, height in images[ sub_tag ]:
 						<% strippedLoc = image_location.split('/') %>
 						<% imageLocation = "/images/" + strippedLoc[ len(strippedLoc) - 1 ] %>
-						<img id = "${sub_tag}" alt="A shuffling picture from the ${sub_tag} picture section" class = "tag_preview_image" src = ${imageLocation} >
+						<img id = "${sub_tag}" alt="A shuffling picture from the ${sub_tag} picture section" class = "tag_preview_image" src = "${imageLocation}?name=${name}" >
 					%endfor
 
 				%except:
@@ -91,7 +91,7 @@
 					%for id, name, image_location, thumb_location, date_added, date_taken, caption, width, height in images[ misc_event_tag ]:
 						<% strippedLoc = image_location.split('/') %>
 						<% imageLocation = "/images/" + strippedLoc[ len(strippedLoc) - 1 ] %>
-						<img id = "${misc_event_tag}" alt="A shuffling picture from the ${misc_event_tag} picture section" class = "tag_preview_image" src = ${imageLocation}>
+						<img id = "${misc_event_tag}" alt="A shuffling picture from the ${misc_event_tag} picture section" class = "tag_preview_image" src = "${imageLocation}?name=${name}">
 					%endfor						
 				%except:					
 				%endtry
@@ -102,7 +102,7 @@
 				%for id, name, image_location, thumb_location, date_added, date_taken, caption, width, height in misc_images[ "Misc" ]:
 					<% strippedLoc = image_location.split('/') %>
 					<% imageLocation = "/images/" + strippedLoc[ len(strippedLoc) - 1 ] %>
-					<img id = "Misc" alt="A shuffling picture named ${name} picture section" class = "tag_preview_image" src = ${imageLocation}>
+					<img id = "Misc" alt="A shuffling picture named ${name} picture section" class = "tag_preview_image" src = "${imageLocation}?name=${name}">
 				%endfor
 			%except:
 			%endtry
@@ -155,7 +155,7 @@
 					%endif
 						<tr><td>
 							<a class = "thumbs">
-							<img id = "${image_id}" alt="A small picture titled ${name}" class="thumbnail_picture" src = ${thumbLocation} ></a>	
+							<img id = "${image_id}" alt="A small picture titled ${name}" class="thumbnail_picture" src = "${thumbLocation}?name=${name}"></a>	
 						</td></tr>
 
 						<tr><td class = "thumbnail_name">${name[0:20]}

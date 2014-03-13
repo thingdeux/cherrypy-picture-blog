@@ -1,17 +1,17 @@
 html {
-	min-height: 100%;
+	min-height: 100%;	
 }
 
 body {	
-	background: -webkit-linear-gradient(150deg, #CCCCCC, #171717); /* For Safari */
-	background: -o-linear-gradient(150deg,#CCCCCC, #171717); /* For Opera 11.1 to 12.0 */
-	background: -moz-linear-gradient(150deg,#CCCCCC,#171717); /* For Firefox 3.6 to 15 */
-	background: linear-gradient(150deg,#CCCCCC, #171717); /* Standard syntax */
+	background: -webkit-linear-gradient(150deg, ##D7D7DA, #47478D); /* For Safari */
+	background: -o-linear-gradient(150deg,#D7D7DA, #47478D); /* For Opera 11.1 to 12.0 */
+	background: -moz-linear-gradient(150deg,#D7D7DA,#47478D); /* For Firefox 3.6 to 15 */
+	background: linear-gradient(150deg,#D7D7DA, #47478D); /* Standard syntax */	
 
 	height: 100%;
 	font-size: 16px;
 	font-family: "Times New Roman", Times, serif;
-	color: black;
+	color: black;	
 }
 
 ul {
@@ -25,7 +25,7 @@ table {
 
 a:link {text-decoration: none; color:black;}
 a:visited {text-decoration: none; color:black;}
-a:hover {text-decoration: none; color:white;}
+a:hover {text-decoration: none; color:purple;}
 a:active {text-decoration: none; color:black;}
 
 .thumbs:hover { border-color: white; }
@@ -38,12 +38,13 @@ a:active {text-decoration: none; color:black;}
 	font-size: 80px;
 	text-align: center;
 	width: 725px;
+	font-family:Arial,Helvetica,sans-serif;	
 }
 
 #container {	
 	margin: auto;
 	width: 730px;
-	min-height: 100%;
+	min-height: 100%;	
 }
 
 #tag_preview{	
@@ -66,34 +67,35 @@ a:active {text-decoration: none; color:black;}
 #alert{	
 	position: relative;
 	margin-bottom: 20px;
-	width: 730px;
+	width: 730px;	
 }
 
 #date {	
 	padding-top: 5px;
 	padding-bottom: 3px;
-	color: #CCCCCC;
+	color: #373747;
 	font-size: 24px;
 	text-align: center;
 	width: 730px;
 	height: 30px;		
-	-moz-box-shadow:    inset 0 0 10px #000000;
-   	-webkit-box-shadow: inset 0 0 10px #000000;
-   	box-shadow:         inset 0 0 10px #000000;
+	-moz-box-shadow:     inset 0 0 20px #000000;
+   	-webkit-box-shadow:  inset 0 0 20px #000000;
+   	box-shadow:          inset 0 0 20px #000000;   	
 }
 #alert_text {
 	border-style: solid;
 	border-width: 5px;
-	padding: 6px;		
+	padding: 6px;
+	background: #CCCCFF;
 }
 
 #tag_nav {	
 	font-size: 25px;	
 	width: 730px;	
 	text-align: center;
-	-moz-box-shadow:    inset 0 0 10px #000000;
-   	-webkit-box-shadow: inset 0 0 10px #000000;
-   	box-shadow:         inset 0 0 10px #000000;
+	-moz-box-shadow:     inset 0 0 10px #000000;
+   	-webkit-box-shadow:  inset 0 0 10px #000000;
+   	box-shadow:          inset 0 0 10px #000000;   	
 }
 
 .tag {
@@ -128,4 +130,9 @@ a:active {text-decoration: none; color:black;}
 
 .ui-tooltip {
 	background: black;	
+}
+
+#copyright {
+	text-align: right;
+	padding-right: 20px;
 }

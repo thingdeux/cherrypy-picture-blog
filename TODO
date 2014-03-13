@@ -1,12 +1,8 @@
 [BLOCKING]
--2014 Image transposer
--Fix IMG links so that they do not cache and mess things up. ?Data=xyz
-
-
--Write unit test for page/link displays
-
+Fix Formatting for links with a number of entries
 
 [High]
+-(EVENT PAGE) - Instead of destroying the JQUERYUI Modal - resize it when it goes to the next image
 -(ADMIN PAGE) - Create ability to add new tag to image
 -(ADMIN PAGE) - Log attempts on admin page, ban after ... say 5 attempts in a day
 -(MODAL) - Investiage - JqueryUI object destroying to early error
@@ -54,6 +50,11 @@ All data that comes to your server must be checked and sanitized. Always. No exc
 
 
 Completed:
+-2014 Image transposer
+-Write test for page/link displays
+-Fix IMG links so that they do not cache and mess things up. ?Data=xyz
+-Fixed major problem with query not returning random images properly.
+
 -(WEB) - preview shuffles make the screen jump (as the image hides and is no longer taking up space in the DOM for a second.)
 [INVALID W3]
 -(WEB*Index) - Replace Table align on line 25 of index.html with CSS
