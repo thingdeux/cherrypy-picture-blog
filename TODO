@@ -1,21 +1,23 @@
 [BLOCKING]
-Tag removal from manage page not working correctly.
 
 [High]
+-(ADMIN PAGE) - Close off all admin functions from access via the browser.
+-(ADMIN PAGE) - Log attempts on admin page, ban after ... say 5 attempts in a day
+-(INDEX PAGE) - Add 'latest images' (Maybe get latest 12)
+-(EVENT PAGE) - Handlers for navigating the image viewer with keyboard keys.
+
 -(EVENT PAGE) - Instead of destroying the JQUERYUI Modal - resize it when it goes to the next image
 -(ADMIN PAGE) - Create ability to add new tag to image
--(ADMIN PAGE) - Log attempts on admin page, ban after ... say 5 attempts in a day
--(MODAL) - Investiage - JqueryUI object destroying to early error
--(EVENT PAGE) - Handlers for navigating the image viewer with keyboard keys.
+-(MODAL) - Investiage - JqueryUI object destroying too early error
 -(DATABASE) - Move Verify_folder_existence to FS
--(ADMIN PAGE) - Close off all admin functions from access via the browser.
 -(PROCESS PAGE) - Clear out caption value from previous image on page refresh
 
 [Medium]
--Have the picture transposer get current year instead of hard-coding the year (optionally update year image)
--Make SURE no special characters are used for tags
 -(CODE) - ERROR CHECKING FOR EVERYTHING!!
 -(CODE) - PEP8 Compliant
+
+-Have the picture transposer get current year instead of hard-coding the year (optionally update year image)
+-Make SURE no special characters are used for tags
 -(CODE) - Write Unit tests for every function call / component
 		  Setup DB / App tests to make sure everything is working as designed.
 
@@ -26,12 +28,10 @@ Write cleanup job for erroneous / old process queue entries
 -(INDEX) - Create Static index page with no Javascript (for no script users)
 -(ADMIN) - Create DB job that looks for images without an active main_tag and delete them
 -(MANAGE PAGE) Instead of refreshing on image delete, rebuild the previous list menu - cleaner look and page elements don't need to be re-fetched for no reason
--(MANAGE PAGE) - Add check to see if #of main tags is reaching the vertical edge and expand it.
 -(LOG PAGE) - allow for sorting by type and severity
 -(DATABASE) - SORT ORDER Row on each table, order by sort order ASC -- deferred
 (MANAGE PAGE) Get rid of 'reload' after delete /update *too many calls after
 -(ADMIN PAGE) - Turn image update into JQUERY UI Dialog Modal
-
 
 
 [SECURITY]
@@ -42,6 +42,9 @@ queuries the DB for files to delete and have it delete them.  Don't use the web 
 
 
 Completed:
+-Added argument for setting dev vs prod cherrypy environment
+
+Tag removal from manage page not working correctly.
 Fix Formatting for links with a number of entries
 -2014 Image transposer
 -Write test for page/link displays

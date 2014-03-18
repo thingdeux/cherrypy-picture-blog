@@ -1,4 +1,5 @@
 import cherrypy
+import sys
 from mako.template import Template
 from mako.lookup import TemplateLookup
 from mako import exceptions
@@ -9,53 +10,6 @@ import src.database as database
 import src.pictureConverter as pictureConverter
 import src.locations as locations
 import src.filesystem as filesystem
-
-server_mode = "debug"
-
-if server_mode == "debug":
-  cherrypy.config.update({ 'server.socket_host': '0.0.0.0',
-                           'server.socket_port': 1234,                         
-                           })
-elif server_mode == "production":
-  cherrypy.config.update({ 
-                           'environment': 'production',
-                           'log.screen': False,
-                           'log.error_file': '/home/thingdeux/webapps/dev/joshandlinz.com/error.log',
-                           'server.socket_host': '127.0.0.1',
-                           'server.socket_port': 31344,
-                           })
-
-
-conf = {        
-        '/static': { 'tools.staticdir.on' : True,
-                      'tools.staticdir.dir': os.path.join(locations.current_folder(), 'static')
-                    },        
-         '/static/css': { 'tools.staticdir.on' : True,
-                          'tools.staticdir.dir': os.path.join(locations.current_folder(), 'static/css')
-                        },
-         '/js': { 'tools.staticdir.on' : True,
-                      'tools.staticdir.dir': os.path.join(locations.current_folder(), 'js')
-                    },
-         '/queue': { 'tools.staticdir.on' : True,
-                      'tools.staticdir.dir': os.path.join(locations.current_folder(), 'queue'),
-                      'tools.staticdir.content_types': {'jpg': 'image/jpeg'}
-                        },
-          '/images': { 'tools.staticdir.on' : True,
-                      'tools.staticdir.dir': os.path.join(locations.current_folder(), 'images'),
-                      'tools.staticdir.content_types': {'jpg': 'image/jpeg'}
-                        },
-          '/thumbnails': { 'tools.staticdir.on' : True,
-                      'tools.staticdir.dir': os.path.join(locations.current_folder(), 'thumbnails'),
-                      'tools.staticdir.content_types': {'jpg': 'image/jpeg'}
-                        },
-         '/js/lib': { 'tools.staticdir.on' : True,
-                          'tools.staticdir.dir': os.path.join(locations.current_folder(), 'js/lib')
-                        },
-        'favicon.ico': {
-                        'tools.staticfile.on': True,
-                        'tools.staticfile.filename': os.path.join(locations.current_folder(), "static/favicon.ico")
-                    }
-        }
 
 def isAllowedInAdminArea(header):   
   keys = locations.readKeys()    
@@ -72,8 +26,6 @@ def isAllowedInAdminArea(header):
         return (False)
   except:
     return (False)
-
-
 
 class main_site(object):
 
@@ -479,7 +431,6 @@ class main_site(object):
 
     return self.mako_template_render
 
-
 def startServer():
 
   if database.verify_database_existence():
@@ -499,4 +450,63 @@ def startServer():
     startServer()
 
 if __name__ == "__main__":
+  argument = sys.argv
+  try:
+    argument[1]
+    if argument[1] == "production":
+      server_mode = argument[1]
+    else:
+      server_mode = "debug"
+  except:
+    server_mode = "debug"
+  
+
+  if server_mode == "debug":
+    cherrypy.config.update({ 'server.socket_host': '0.0.0.0',
+                           'server.socket_port': 1234,                         
+                           })
+  elif server_mode == "production":
+    cherrypy.config.update({ 
+                             'environment': 'production',
+                             'log.screen': False,
+                             'log.error_file': '/home/thingdeux/webapps/dev/joshandlinz.com/error.log',
+                             'server.socket_host': '127.0.0.1',
+                             'server.socket_port': 17472,
+                             })
+
+  conf = {        
+          '/static': { 'tools.staticdir.on' : True,
+                        'tools.staticdir.dir': os.path.join(locations.current_folder(), 'static')
+                      },        
+           '/static/css': { 'tools.staticdir.on' : True,
+                            'tools.staticdir.dir': os.path.join(locations.current_folder(), 'static/css')
+                          },
+           '/js': { 'tools.staticdir.on' : True,
+                        'tools.staticdir.dir': os.path.join(locations.current_folder(), 'js')
+                      },
+           '/queue': { 'tools.staticdir.on' : True,
+                        'tools.staticdir.dir': os.path.join(locations.current_folder(), 'queue'),
+                        'tools.staticdir.content_types': {'jpg': 'image/jpeg'}
+                          },
+            '/images': { 'tools.staticdir.on' : True,
+                        'tools.staticdir.dir': os.path.join(locations.current_folder(), 'images'),
+                        'tools.staticdir.content_types': {'jpg': 'image/jpeg'}
+                          },
+            '/thumbnails': { 'tools.staticdir.on' : True,
+                        'tools.staticdir.dir': os.path.join(locations.current_folder(), 'thumbnails'),
+                        'tools.staticdir.content_types': {'jpg': 'image/jpeg'}
+                          },
+           '/js/lib': { 'tools.staticdir.on' : True,
+                            'tools.staticdir.dir': os.path.join(locations.current_folder(), 'js/lib')
+                          },
+          'favicon.ico': {
+                          'tools.staticfile.on': True,
+                          'tools.staticfile.filename': os.path.join(locations.current_folder(), "static/favicon.ico")
+                      }
+          }
+
+
+
+
+
   startServer()
