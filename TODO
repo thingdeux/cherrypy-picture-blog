@@ -1,4 +1,5 @@
 [BLOCKING]
+Tag removal from manage page not working correctly.
 
 [High]
 -(EVENT PAGE) - Instead of destroying the JQUERYUI Modal - resize it when it goes to the next image

@@ -51,20 +51,34 @@
 					<tr><td>Date Taken:</td> <td><input type = "text" id = "date_taken" name = "date_taken" size="8" value="${date_taken}"></input>  
 						(Date Format: MM/DD/YY)</td>
 					<tr><td>&nbsp;</td></tr>
-					<tr><td></td><td align='center'> Associated Tags </td></tr><tr><td>&nbsp;</td></tr>					
+					<tr><td></td><td align='left'> Associated Tags </td></tr><tr><td>&nbsp;</td></tr>				
 					%for sub_id, main_tag, sub_tag in sub_tags:
-						<tr><td>Tag:</td>
-								<td class = "tags">${main_tag}														
+						<tr>
+								<td>${main_tag}													
 									<span style="color: #665874">-></span><span class = "sub_tag_id" dataSubID = "${sub_id}">${sub_tag}</span>
-
-									%for event_id, parent_main_tag, parent_sub_tag, event_tag in event_tags:
-										%if parent_sub_tag in sub_tag:
-											<span style="color: #665874">-></span> <span class = "event_tag_id" dataEventID = "${event_id}">${event_tag}</span>
-										%endif										
-									%endfor
 									<input id = "${image_id}" type = "button" align="center" class = "tag_delete_button" value ="X"></input>
-								</td>
-					%endfor				
+									%if len(event_tags) <= 1:
+										%for event_id, parent_main_tag, parent_sub_tag, event_tag in event_tags:
+											%if parent_sub_tag in sub_tag:												
+												<span style="color: #665874">-></span> <span class = "event_tag_id" dataEventID = "${event_id}">${event_tag}</span>
+												<input id = "event_length" type="hidden" dataEventLength="${len(event_tags) }"></input>												
+											%endif																				
+										%endfor										
+									%else:										
+										%for event_id, parent_main_tag, parent_sub_tag, event_tag in event_tags:											
+											%if parent_sub_tag in sub_tag:
+												<tr><td>&nbsp;</td><td>											
+													<span style="color: #665874" class = "event_tag_bullets">*</span> <span class = "event_tag_id" dataEventID = "${event_id}">${event_tag}</span>
+													<input id = "${image_id}" type = "button" align="center" class = "tag_delete_button" value ="X"></input>
+													<input type = "hidden" class = "sub_tag_id" dataSubID = "${sub_id}"></input>
+													<input id = "event_length" type="hidden" dataEventLength="${len(event_tags) }"></input>
+												<td></tr>
+											%endif																
+										%endfor										
+									%endif																		
+									
+								</td>								
+					%endfor
 					<tr><td></td><td>
 						<input id = "update_image_button" type ="button" class = "image_button" value="Update"></input>	
 						<input id = "delete_image_button" type = "button" class = "image_button" value="Delete"></input>
@@ -141,14 +155,15 @@
 
 			if (response == true) {
 				var images_id = $(this).attr('id');
-				//Get all of the span elements to the left of the delete button
-				var tags_to_post = $(this).closest('tr').children().filter('.tags').children();			
+				//Get all of the span elements to the left of the delete button				
+				var tags_to_post = $(this).closest('td').children()				
 				
 				//Prepare array to pass server for deletion of ID's.
 				var arrayToPush = {
 								image_id: images_id, 				
-								sub_tag_id: $(tags_to_post).filter('.sub_tag_id').attr('dataSubID'),		
-								event_tag_id: $(tags_to_post).filter('.event_tag_id').attr('dataEventID')
+								sub_tag_id: $(tags_to_post).filter('.sub_tag_id').attr('dataSubID'),
+								event_tag_id: $(tags_to_post).filter('.event_tag_id').attr('dataEventID'),
+								number_of_event_tags: $(tags_to_post).filter('#event_length').attr('dataEventLength')
 				}
 
 				var returnedData = sendPostData('/deleteTags/', arrayToPush);
@@ -160,6 +175,7 @@
 					}
 					$("#selected_picture").html(response);			
 				});
+				
 			}
 		});
 

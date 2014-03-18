@@ -96,7 +96,8 @@ def create_test_data():
 		(None, 0, "Josh"),
 		(None, 0, "Linz"),				
 		(None, 0, "Family"),		
-		(None, 0, "Holidays")
+		(None, 0, "Holidays"),
+		(None, 0, "Friends")
 	]
 
 	subTagData = [
@@ -126,13 +127,17 @@ def create_test_data():
 		(None, 0, "Holidays", "Dragon Day"),
 		(None, 0, "Holidays", "Thanksgiving"),
 		(None, 0, "Holidays", "4th of July"),
-		(None, 0, "Holidays", "Halloween")
+		(None, 0, "Holidays", "Halloween"),
+		
+		(None, 0, "Friends", "Childhood"),
+		(None, 0, "Friends", "Adult"),
 	]
 
 	eventTagData = [		
 		(None, 0, "Kids", "Callie", "Growing Girl"),
 		(None, 0, "Kids", "Callie", "Birthdays"),				
 		(None, 0, "Kids", "Callie", "Silly"),
+		(None, 0, "Kids", "Callie", "Portraits"),
 
 		(None, 0, "Family", "Zamudio", "Brandon and Dakota"),
 		(None, 0, "Family", "Zamudio", "Roger"),
@@ -531,15 +536,17 @@ def does_image_have_at_least_one_tag(image_id):
 			log("Unable to determine if image has at least one tag: " + str(error), "DATABASE","MEDIUM")
 			return (True)
 
-def delete_image_tags(*args):
+def delete_image_tags(*args):	
 
-	try:
+	try:		
 		data = args[0]
 		image_id = data['image_id']
 		sub_tag_id = data['sub_tag_id']
 		
 		try:			
-			event_tag_id = data['event_tag_id']	
+			event_tag_id = data['event_tag_id']
+			#Cast number_of_event_tags into an int so we can use math operations on it
+			event_tag_length = int( data['number_of_event_tags'] )
 		except:
 			event_tag_id = False
 		
@@ -547,7 +554,10 @@ def delete_image_tags(*args):
 		db = db_connection.cursor()
 
 		if event_tag_id:
-			db.execute('DELETE FROM sub_tags WHERE id = ?', (sub_tag_id,) )			
+			#Make sure no other event tags are present before removing from the sub_tags table
+			if event_tag_length <= 1:
+				db.execute('DELETE FROM sub_tags WHERE id = ?', (sub_tag_id,) )				
+
 			db.execute('DELETE FROM event_tags WHERE id = ?', (event_tag_id,) )						
 		elif not event_tag_id:
 			db.execute('DELETE FROM sub_tags WHERE id = ?', (sub_tag_id,) )	
@@ -559,11 +569,13 @@ def delete_image_tags(*args):
 			return (True)
 		else:
 			return (False)
-
 		
-
 	except Exception, err:
-		tryToCloseDB(db_connection)
+		try:
+			db_connection
+			tryToCloseDB(db_connection)
+		except:
+			no_db = True
 		for error in err:
 			log("Unable to delete tag: " + str(error), "DATABASE","MEDIUM")
 			return (True)
@@ -684,11 +696,11 @@ def get_latest_12_images_by_tag(main_tag, sub_tag, event_tag = False, offset = 0
 						  INNER JOIN sub_tags ON images.id = sub_tags.image_id WHERE images.id NOT IN 
 						  (SELECT image_id from event_tags WHERE parent_tag = (?) AND parent_sub_tag = (?) )
 						  AND sub_tags.parent_tag = (?) AND sub_tags.sub_tag =(?) 
-						  ORDER BY (images.date_taken) ASC LIMIT 12 OFFSET ?''', (main_tag, sub_tag, main_tag, sub_tag, offset,))
+						  ORDER BY (images.date_taken) DESC LIMIT 12 OFFSET ?''', (main_tag, sub_tag, main_tag, sub_tag, offset,))
 		else:
 			db.execute('''SELECT images.id, images.name, images.thumb_location  FROM images 
 							INNER JOIN event_tags ON images.id = event_tags.image_id WHERE event_tags.parent_tag = ? 
-							AND event_tags.parent_sub_tag = ? AND event_tags.event_tag = ? ORDER BY (images.date_taken) ASC LIMIT 12 OFFSET ?''', (main_tag, sub_tag,event_tag, offset,))	
+							AND event_tags.parent_sub_tag = ? AND event_tags.event_tag = ? ORDER BY (images.date_taken) DESC LIMIT 12 OFFSET ?''', (main_tag, sub_tag,event_tag, offset,))	
 
 		latest_10 = db.fetchall()
 		db_connection.close()

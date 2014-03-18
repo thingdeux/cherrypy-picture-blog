@@ -1,4 +1,6 @@
 import database
+import locations
+import sys
 
 def check_links(show = "all"):
 	
@@ -66,11 +68,22 @@ def check_links(show = "all"):
 			except:
 				print ("- Missing Carousel")
 								
-			
+def verify_admin_ip():
+	somethingReturned = locations.readKeys()
+	if len(somethingReturned) > 1:
+		print ("Key File Found")
+	else:
+		print ("No Key File Found")
 					
 if __name__ == "__main__":
-	check_links()
+	command = sys.argv
 
-
-
-
+	if len(command) == 1:
+		print ("Usage: all_links | failed_links | ip")
+	else:
+		if command[1] == "-all_links":
+			check_links("all")
+		elif command[1] == "-ip":
+			verify_admin_ip()
+		elif command[1] == "-failed_links":
+			check_links("failed")
