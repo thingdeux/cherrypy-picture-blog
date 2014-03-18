@@ -17,11 +17,14 @@ def queue_save_location():
 	return (save_location)
 
 def readKeys():
-	fileLocation = os.path.join(current_folder(), '.ip.key')
-	key = open(fileLocation, 'r')
-	keysToReturn = []
-	for thing in key:		
-		#Get rid of the newline characters
-		keysToReturn.append( thing.rstrip("\n") )
+	try:
+		fileLocation = os.path.join(current_folder(), '.ip.key')
+		key = open(fileLocation, 'r')
+		keysToReturn = []
+		for thing in key:		
+			#Get rid of the newline characters
+			keysToReturn.append( thing.rstrip("\n") )
+	except:
+		keysToReturn = ""
 
 	return keysToReturn
