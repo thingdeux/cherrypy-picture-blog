@@ -710,7 +710,23 @@ def get_latest_12_images_by_tag(main_tag, sub_tag, event_tag = False, offset = 0
 	except Exception, err:
 		tryToCloseDB(db_connection)
 		for error in err:
-			log("Unable to get latest 4 images: " + str(error), "DATABASE", "SEVERE")
+			log("Unable to get latest 10 images: " + str(error), "DATABASE", "SEVERE")
+
+def get_latest_images(number_of_images = 5):
+	try:
+		db_connection = connect_to_database()
+		db = db_connection.cursor()
+		db.execute('''SELECT * FROM images ORDER BY ID DESC LIMIT ?''', (number_of_images,))		
+
+		latest_images = db.fetchall()
+		db_connection.close()
+
+		return ( latest_images )
+
+	except Exception, err:
+		tryToCloseDB(db_connection)
+		for error in err:
+			log("Unable to get latest images: " + str(error), "DATABASE", "SEVERE")	
 
 def get_random_image_id_by_tag(db_cursor = False, **kwargs):	
 	def query_db_for_acceptable_images(dbcur, tag):
