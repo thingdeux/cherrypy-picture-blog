@@ -34,7 +34,7 @@ class main_site(object):
   	#Create the below template using index.html (and looking up in the static folder)
     mako_template = Template(filename=os.path.join(locations.current_folder(), 'static/index.html') )
     random_images = database.get_image_for_every_main_tag()
-    latest_uploads = database.get_latest_images(6)
+    latest_uploads = database.get_latest_images(10)
     main_tags = database.get_tags()
     blog = database.get_blogs()
     
