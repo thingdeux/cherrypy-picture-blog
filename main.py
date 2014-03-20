@@ -14,7 +14,7 @@ import src.filesystem as filesystem
 def isAllowedInAdminArea(header):   
   keys = locations.readKeys()    
   try:
-    if server_mode == "debug":    
+    if server_mode == "dev":    
       if header['Remote-Addr'] in keys:      
         return (True)
       else:
@@ -122,11 +122,11 @@ class main_site(object):
   def admin(self, *args, **kwargs):    
     try:
       Headers = cherrypy.request.headers      
-      if isAllowedInAdminArea(Headers):
+      if isAllowedInAdminArea(Headers):        
         nav_location = args[0].lower()
-        if nav_location == "manage":
+        if nav_location == "manage":          
           return ( self.manage() )
-        elif nav_location == "upload":
+        elif nav_location == "upload":          
           return ( self.upload() )
         elif nav_location == "process":
           return (self.process() )

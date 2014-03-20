@@ -112,9 +112,10 @@ class WebsiteImage:
 			for error in err:
 				log("Unable to create watermark " + str(error), "CONVERTER", "MEDIUM")
 
-	def save_uploaded_images(self):	
-		self.thumb_location = os.path.join(thumbnail_save_location(), str(get_latest_image_id() ) + '.jpg')	
-		self.image_location = os.path.join(image_save_location(), str(get_latest_image_id() ) + '.jpg')	
+	def save_uploaded_images(self):			
+
+		self.thumb_location = os.path.join(thumbnail_save_location(), str(get_latest_image_id() ) + '.jpg')
+		self.image_location = os.path.join(image_save_location(), str(get_latest_image_id() ) + '.jpg')			
 
 		try:		
 			self.watermarked_image.save(self.image_location, "JPEG")	
