@@ -467,15 +467,15 @@ if __name__ == "__main__":
   argument = sys.argv
   try:
     argument[1]
-    if argument[1] == "production":
+    if argument[1] == "dev":
       server_mode = argument[1]
     else:
-      server_mode = "debug"
+      server_mode = "production"
   except:
-    server_mode = "debug"
+    server_mode = "production"
   
 
-  if server_mode == "debug":
+  if server_mode == "dev":
     cherrypy.config.update({ 'server.socket_host': '0.0.0.0',
                            'server.socket_port': 1234,                         
                            })
