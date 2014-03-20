@@ -33,19 +33,20 @@ class main_site(object):
   def index(self, *args, **kwargs):    
   	#Create the below template using index.html (and looking up in the static folder)
     mako_template = Template(filename=os.path.join(locations.current_folder(), 'static/index.html') )
-    random_images = database.get_image_for_every_main_tag()
-    latest_uploads = database.get_latest_images(10)
+    random_images = database.get_image_for_every_main_tag()    
     main_tags = database.get_tags()
     blog = database.get_blogs()
+    upcoming = database.manage_upcoming_alerts()
     
-    #To be used by the front-end JS to scroll through pictures
+    latest_uploads = database.get_latest_images(10)
+    #To be used by the front-end JS to scroll through pictures    
     imageIDList = []         
     for image in latest_uploads:      
       imageIDList.append(image[0])
 
     #Render the mako template
     self.mako_template_render = mako_template.render(images = random_images, main_tags = main_tags, blog = blog, 
-                                                    latest_uploads = latest_uploads, imageIDList = imageIDList) 
+                                                    latest_uploads = latest_uploads, imageIDList = imageIDList, upcoming = upcoming) 
 
     return self.mako_template_render
 
@@ -53,7 +54,7 @@ class main_site(object):
   def p(self, *args, **kwargs): 
     mako_template = Template(filename=os.path.join(locations.current_folder(),'static/templates/index_data.tmpl') )
     blog = database.get_blogs()
-    main_tag = args[0]
+    main_tag = args[0]  
     
     try:
       event_tag = args[2]      
@@ -73,7 +74,7 @@ class main_site(object):
 
       for image in images:
         #To be used by the front-end JS to scroll through pictures       
-        imageIDList.append(image[0])     
+        imageIDList.append(image[0])
 
       if len(images) > 0:
         self.mako_template_render = mako_template.render(event_main_tag = main_tag, event_sub_tag = sub_tag,
@@ -87,16 +88,23 @@ class main_site(object):
         return ( self.default() )
 
     except:      
-      try:
+      try:        
         sub_tag = args[1]        
         event_tags = database.get_event_tags(sub_tag)
         images = database.get_image_for_each_event_tag(sub_tag)      
         misc_images = database.get_image_for_misc_sub_tag(main_tag, sub_tag)  
+        latest_uploads = database.get_latest_images(10)
+        upcoming = database.manage_upcoming_alerts()
+    
+        #To be used by the front-end JS to scroll through pictures    
+        imageIDList = []         
+        for image in latest_uploads:      
+          imageIDList.append(image[0])
         
         if len(images) > 0 or len(misc_images) > 0:
           self.mako_template_render = mako_template.render(parent_main_tag = main_tag, parent_sub_tag = sub_tag, 
                                       event_tags = event_tags, images = images, misc_images = misc_images, display_type = "Sub",
-                                      blog = blog)
+                                      blog = blog, imageIDList = imageIDList, latest_uploads = latest_uploads, upcoming = upcoming)
           
           return self.mako_template_render
         else:
@@ -105,11 +113,19 @@ class main_site(object):
       except:      
         try:   
           sub_tags = database.get_sub_tags(main_tag)
-          images = database.get_image_for_each_sub_tag(main_tag)       
+          images = database.get_image_for_each_sub_tag(main_tag)
+          latest_uploads = database.get_latest_images(10)
+          upcoming = database.manage_upcoming_alerts()
+    
+          #To be used by the front-end JS to scroll through pictures    
+          imageIDList = []         
+          for image in latest_uploads:      
+            imageIDList.append(image[0])      
           
           if len(images) > 0:            
             self.mako_template_render = mako_template.render(main_tag = main_tag, sub_tags = sub_tags, 
-                                        images = images, display_type = "Main", blog = blog)
+                                        images = images, display_type = "Main", blog = blog, imageIDList = imageIDList, latest_uploads = latest_uploads,
+                                        upcoming = upcoming)
             return self.mako_template_render
           else:         
             return ( self.default() )
