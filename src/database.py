@@ -216,7 +216,8 @@ def get_latest_image_id():
 	db_connection = connect_to_database()
 	db = db_connection.cursor()
 	try:
-		db.execute('''SELECT Count(*) from images''')
+		#Get the last primary key in the table and add 1 to it for the new image_id
+		db.execute('''SELECT id FROM images ORDER BY ID DESC LIMIT 1''')
 		the_count = db.fetchone()
 		db_connection.close()
 
