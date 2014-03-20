@@ -43,7 +43,9 @@ def create_fresh_tables():
 		db.execute('''CREATE TABLE sub_tags (id INTEGER PRIMARY KEY, image_id INTEGER NOT NULL, parent_tag TEXT NOT NULL, sub_tag TEXT NOT NULL)''')
 		db.execute('''CREATE TABLE event_tags (id INTEGER PRIMARY KEY, image_id INTEGER NOT NULL, parent_tag TEXT NOT NULL, parent_sub_tag NOT NULL, event_tag NOT NULL)''')
 
-		db.execute('''CREATE TABLE alerts (id INTEGER PRIMARY KEY, alert TEXT, status TEXT, date_added INTEGER, inactive_date INTEGER)''')
+		db.execute('''CREATE TABLE alerts (id INTEGER PRIMARY KEY, alert TEXT, status TEXT NOT NULL DEFAULT "ACTIVE", 
+					date_added DATETIME NOT NULL DEFAULT CURRENT_DATE, inactive_date DATETIME NOT NULL DEFAULT CURRENT_DATE)''')
+
 		db.execute('''CREATE TABLE blogs (id INTEGER PRIMARY KEY, title TEXT NOT NULL, post TEXT NOT NULL, author TEXT NOT NULL, date_added DATETIME NOT NULL DEFAULT CURRENT_DATE)''')
 
 		db.execute('''CREATE TABLE processing_queue (id INTEGER PRIMARY KEY, image_name TEXT)''')
@@ -989,6 +991,32 @@ def get_blogs(query_type = "latest", blog_id = False):
 		for error in err:
 			log("Unable to get latest blog " + str(error), "DATABASE", "SEVERE")
 
+def manage_upcoming_alerts(query_type = "get"):
+	try:
+		db_connection = connect_to_database()
+		db = db_connection.cursor()
+
+		#Get all of the alert id's that haven't reached their inactive date
+		if query_type == "get":
+			today = time.strftime("%Y-%m-%d", time.localtime() )
+			db.execute('''SELECT * FROM alerts  WHERE inactive_date >= ? ORDER BY inactive_date ASC''', (today,))
+			returned_alerts = db.fetchall()
+			db_connection.close()
+			return ( returned_alerts )
+		#Insert a new alert into the DB
+		elif query_type == "insert":			
+			db.execute('''SELECT * FROM alerts  WHERE inactive_date >= ? ORDER BY inactive_date ASC''', (today,))
+		#Delete an alert from the DB
+		elif query_type == "delete":
+			id_to_delete = args[0]
+			db.execute('''DELETE FROM alerts WHERE id = ?''', (id_to_delete,) )
+		
+		db_connection.close()		
+	except Exception, err:
+		tryToCloseDB(db_connection)
+		for error in err:
+			log("Unable to manage upcoming alerts" + str(error), "DATABASE", "SEVERE")	
+
 #Class used for breaking down data from process submission POST
 class Posted_Data:
 	def __init__(self, data, dataType):
@@ -1055,3 +1083,6 @@ class Posted_Data:
 			self.isSuccesful = True
 		else:
 			self.isSuccesful = False
+
+
+	

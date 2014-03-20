@@ -20,6 +20,31 @@
 
 	<body>
 	<div id = "container">
+		<div id = "modal"></div>
+		<div id = "sidebar">
+			<div id = "latest_images" data-imageArray = "${imageIDList}">
+				<div id = "latest_title">Latest Uploads</div>
+				<div id = "latest_image_container">
+					%for image_id, name, image_location, thumb_location, date_added, date_taken, caption, width, height in latest_uploads:
+						%try:
+							<% strippedLoc = thumb_location.split('/') %>
+							<% thumbLocation = "/thumbnails/" + strippedLoc[ len(strippedLoc) - 1 ] %>
+							<a class="nav_image" id = "${image_id}">
+							<img class = "latest_image thumbs" alt="Thumbnail of recent upload" src = "${thumbLocation}?name=${name}" style="border-width: 5px;"></a>
+						%except:							
+						%endtry
+					%endfor			
+				</div>
+			</div>			
+			<div id = "upcoming">
+				<div id = "upcoming_title">Important Dates</div>
+				<div id = "upcoming_dates">
+					%for upcoming_id, upcoming_name, upcoming_status, upcoming_added, upcoming_inactive in upcoming:
+						${upcoming_inactive} - <b>${upcoming_name}</b><br>
+					%endfor
+				</div>
+			</div>
+		</div>
 		<div id = "site_title">${main_tag}</div>
 		<div id = "tag_nav">			
 				<a href="/"> <span style="margin-right: 30px"> &lt; </span></a>
@@ -52,6 +77,32 @@
 	<body>
 
 	<div id = "container">
+		<div id = "modal"></div>
+		<div id = "sidebar">
+			<div id = "latest_images" data-imageArray = "${imageIDList}">
+				<div id = "latest_title">Latest Uploads</div>
+				<div id = "latest_image_container">
+					%for image_id, name, image_location, thumb_location, date_added, date_taken, caption, width, height in latest_uploads:
+						%try:
+							<% strippedLoc = thumb_location.split('/') %>
+							<% thumbLocation = "/thumbnails/" + strippedLoc[ len(strippedLoc) - 1 ] %>
+							<a class="nav_image" id = "${image_id}">
+							<img class = "latest_image thumbs" alt="Thumbnail of recent upload" src = "${thumbLocation}?name=${name}" style="border-width: 5px;"></a>
+						%except:							
+						%endtry
+					%endfor			
+				</div>
+			</div>			
+			<div id = "upcoming">
+				<div id = "upcoming_title">Important Dates</div>
+				<div id = "upcoming_dates">
+					%for upcoming_id, upcoming_name, upcoming_status, upcoming_added, upcoming_inactive in upcoming:
+						${upcoming_inactive} - <b>${upcoming_name}</b><br>
+					%endfor
+				</div>
+			</div>
+		</div>
+
 		<div id = "site_title">${parent_sub_tag}</div>
 
 		<div id = "tag_nav">			
