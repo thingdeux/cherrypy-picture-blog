@@ -37,9 +37,15 @@ class main_site(object):
     latest_uploads = database.get_latest_images(6)
     main_tags = database.get_tags()
     blog = database.get_blogs()
+    
+    #To be used by the front-end JS to scroll through pictures
+    imageIDList = []         
+    for image in latest_uploads:      
+      imageIDList.append(image[0])
 
     #Render the mako template
-    self.mako_template_render = mako_template.render(images = random_images, main_tags = main_tags, blog = blog, latest_uploads = latest_uploads) 
+    self.mako_template_render = mako_template.render(images = random_images, main_tags = main_tags, blog = blog, 
+                                                    latest_uploads = latest_uploads, imageIDList = imageIDList) 
 
     return self.mako_template_render
 
@@ -406,9 +412,16 @@ class main_site(object):
   @cherrypy.expose
   def getModalPicture(self, *args, **kwargs):
     image = database.get_image_by_id( kwargs.get('image_id') )
+    onIndex = kwargs.get('onIndex')
+
+    #IF the modal is opened from the index page do not load the responsive css file for the event page
+    if onIndex == "true":
+      onIndex = True
+    else:
+      onIndex = False
     mako_template = Template(filename=os.path.join(locations.current_folder(),'static/templates/image_modal.tmpl')  )
     
-    self.mako_template_render = mako_template.render(image = image)
+    self.mako_template_render = mako_template.render(image = image, onIndex = onIndex)
 
     return self.mako_template_render
 

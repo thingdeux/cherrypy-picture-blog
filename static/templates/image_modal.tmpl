@@ -1,4 +1,7 @@
-<link rel="stylesheet" href="/static/css/previews.css" type="text/css">
+%if not onIndex:
+	<link rel="stylesheet" href="/static/css/previews.css" type="text/css">
+%endif
+
 <a id = "left" class = "arrow" href="#"> &lt; </a>
 <a id = "right" class = "arrow" href="#"> &gt; </a>
 
@@ -8,7 +11,7 @@
 			<% strippedLoc = image_location.split('/') %>
 			<% imageLocation = "/images/" + strippedLoc[ len(strippedLoc) - 1 ] %>						
 
-			<img id = "${id}" name = "${name}" alt="A picture titled ${name}" class = "modal_image" dataWidth="${width}" dataHeight = "${height}" style= "max-height: 100%; max-width: 100%; border: 5px solid black;" src = ${imageLocation}>
+			<img id = "${id}" name = "${name}" alt="A picture titled ${name}" class = "modal_image" dataWidth="${width}" dataHeight = "${height}" style= "max-height: 100%; max-width: 100%; border: 5px solid black;" src = "${imageLocation}?name=${name}">
 
 			%if len(caption) > 1:
 				<div id = "image_caption">${caption}</div>
@@ -36,7 +39,6 @@
 				
 				//*REFACTOR
 				//Reset the arrow distance - should refactor this to use CSS width left/right align
-
 				
 				var arrowOffsetWidth = (screenWidth * 0.63)
 				
@@ -51,16 +53,23 @@
 			var imageWidth = $('.modal_image').attr('dataWidth') * 0.75
 			var imageHeight = $('.modal_image').attr('dataHeight') * 0.75
 			//Get the image array that contains the image_id of each preview image on the page.
-			var imageArray = $('#image_previews').attr('data-imageArray');		
+			var imageArray = $('#image_previews').attr('data-imageArray');
+
+			//Ended up reusing this functionality (yay) so this is a 'hack' (boo) to make it work on the index page
+			if (typeof imageArray == "undefined") {
+				var imageArray = $('#latest_images').attr('data-imageArray')
+				var onIndex = true
+			}	
 
 			//Create JqueryUI dialog modal/pop out
 			$( "#modal").dialog({
 				modal: true,
 				draggable: false,
 				resizable: false,
-				hide: {effect: "clip", duration: 250},
+				hide: {effect: "clip", duration: 250},				
 				minWidth: imageWidth,							
-				minHeight: imageHeight,		
+				minHeight: imageHeight,
+				position: "center",
 				title: $('.modal_image').prop('name'),
 				close: function (event, ui) {
 					$("#modal").html("");				
@@ -111,7 +120,10 @@
 					var returnedData = $.ajax({
 						type: "GET",
 						url: '/getModalPicture',
-						data: { image_id: data }			
+						data: { 
+							image_id: data,
+							onIndex: onIndex
+						}			
 					});
 
 					returnedData.done(function ( response, textStatus, jqXHR) {					

@@ -9,17 +9,21 @@
 	<link rel="stylesheet" href="/static/css/base.css" type="text/css">
     <link rel="stylesheet" href="/static/css/normalize.css" type="text/css">
     <link rel="stylesheet" href="/static/css/responsive.css" type="text/css">
-        
+    
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/ui-darkness/jquery-ui.min.css">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>   
-	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>         
-    <script type="text/javascript" src="/js/index.js"></script>    
+	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>     
+    <script type="text/javascript" src="/js/index.js"></script>
+    <script type="text/javascript" src="/js/event.js"></script>
+
 </head>
 
-<body>	
+<body>
+	
 	<div id = "container">
+	<div id = "modal"></div>
 		<div id = "site_title">The Johnsons</div>
-		<div id = "tag_nav">
-			
+		<div id = "tag_nav">			
 				%for tag in main_tags:
 					%try:   #Will catch any tags without images in them
 						<% failure_point = images[tag] %>
@@ -43,15 +47,16 @@
 			%endfor
 		</div>		
 
-		<div id = "latest_images">
+		<div id = "latest_images" data-imageArray = "${imageIDList}">
 			<div id = "latest_title">Latest Uploads</div>
 
 			<div id = "latest_image_container">
-				%for id, name, image_location, thumb_location, date_added, date_taken, caption, width, height in latest_uploads:
+				%for image_id, name, image_location, thumb_location, date_added, date_taken, caption, width, height in latest_uploads:
 					%try:
 						<% strippedLoc = thumb_location.split('/') %>
 						<% thumbLocation = "/thumbnails/" + strippedLoc[ len(strippedLoc) - 1 ] %>
-						<a href ="/"><img class = "latest_image" alt="Thumbnail of recent upload" src = "${thumbLocation}"></img></a>
+						<a class="nav_image" id = "${image_id}">
+						<img class = "latest_image thumbs" alt="Thumbnail of recent upload" src = "${thumbLocation}?name=${name}" style="border-width: 5px;"></a>
 					%except:
 						Boo
 					%endtry

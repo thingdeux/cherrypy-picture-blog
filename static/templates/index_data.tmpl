@@ -9,11 +9,11 @@
     <link rel="stylesheet" href="/static/css/normalize.css" type="text/css">
     <link rel="stylesheet" href="/static/css/responsive.css" type="text/css">
     
-    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/ui-darkness/jquery-ui.min.css">    
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/themes/ui-darkness/jquery-ui.min.css">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>   
-	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>          
+	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
     <script type="text/javascript" src="/js/index.js"></script>
-    <script type="text/javascript" src="/js/event.js"></script>    
+    <script type="text/javascript" src="/js/event.js"></script>   
 
 %if display_type == "Main": 
 	</head>
@@ -121,9 +121,7 @@
 					%endif
 					
 					%if len(images) == 12: #Make sure there are actually more pictures to see
-						<td><a class = "tag" href="/p/${event_main_tag}/${event_sub_tag}/${event_tag}/${(offset+12)}">Next Images</a></td>
-					%else:
-						<!-- <td><a class = "tag"><span style="visibility: hidden">Next Images<span></a></td> !-->
+						<td><a class = "tag" href="/p/${event_main_tag}/${event_sub_tag}/${event_tag}/${(offset+12)}">Next Images</a></td>					
 					%endif
 				</tr>
 			</table>
@@ -135,10 +133,12 @@
 				%try:
 					<% strippedLoc = thumb_location.split('/') %>
 					<% thumbLocation = "/thumbnails/" + strippedLoc[ len(strippedLoc) - 1 ] %>
+					
+					<!-- Catch the pictures with names too long to keep uniformity with the thumbnails and slice them to 20 chars !-->
 					%if len(name) > 20:
-					<table class = "nav_image" title = "${name}">
+						<table class = "nav_image" title = "${name}" style="display: inline-block; padding: 15px;">
 					%else:
-					<table class = "nav_image">
+						<table class = "nav_image" style="display: inline-block; padding: 15px;">
 					%endif
 						<tr><td>
 							<a class = "thumbs">
