@@ -182,10 +182,12 @@ class main_site(object):
     event_tags = database.get_event_tags()
     blogs = database.get_blogs("titles")    
     logs = database.get_top_30_logs()
+    upcoming = database.manage_upcoming_alerts("all")
 
     #Render the mako template
     self.mako_template_render = mako_template.render(main_tags = main_tags, sub_tags = sub_tags, 
-                                                     event_tags = event_tags, logs = logs, blogs = blogs)
+                                                     event_tags = event_tags, logs = logs, blogs = blogs,
+                                                     upcoming = upcoming)
 
     return self.mako_template_render
 
@@ -424,6 +426,42 @@ class main_site(object):
           log("Unable to Manage Blog - " + str(error), "WEB", "LOW")
     else:
       return (self.default())
+
+  @cherrypy.expose
+  def manageAlerts(self, *arguments, **kwargs):
+    Headers = cherrypy.request.headers
+    if isAllowedInAdminArea(Headers):
+      try:                
+        perform_action = kwargs['perform_action']        
+      except:
+        perform_action = ""
+
+
+      if perform_action == "show" or perform_action == "new":
+        try:
+          selected_alert = database.manage_upcoming_alerts('id', kwargs['alert_id'])
+        except:
+          selected_alert = "New"
+        mako_template = Template(filename=os.path.join(locations.current_folder(),'static/templates/manage_alerts.tmpl') )
+        self.mako_template_render = mako_template.render(perform_action = perform_action, alert = selected_alert)
+
+        return (self.mako_template_render)
+      elif perform_action == "delete":
+        selected_alert = kwargs['alert_id']
+        if database.manage_upcoming_alerts('delete', selected_alert):
+          return ("Alert Deleted")
+        else:
+          return ("Unable to delete Alert")
+      elif perform_action == "update":
+        if database.manage_upcoming_alerts('update', kwargs):
+          return ("Updated Alert")
+        else:
+          return ("Could not update Alert")      
+      elif perform_action == "insert":        
+        if database.manage_upcoming_alerts('insert', kwargs):
+          return ("Created New Alert")
+        else:
+          return ("Could not create Alert")
 
   @cherrypy.expose
   def getModalPicture(self, *args, **kwargs):

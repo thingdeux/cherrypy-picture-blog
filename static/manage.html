@@ -108,9 +108,23 @@
 				</ul>
 				<div id = "tags_selection" class = "ui_menu"></div>
 			</div>
-			<div id = "alerts">		
-				Alert | Status | Date_Added | Inactive_date
-			</div>
+			<div id = "alerts">
+				<ul id = "upcoming_menu" class = "ui_menu">
+					<li dataPostType="new"><a>Create New Date</a></li>
+					<li>-</li>
+
+					%for upcoming_id, upcoming_name, upcoming_status, upcoming_added, upcoming_inactive in upcoming:
+						<li dataAlertID = "${upcoming_id}" dataPostType="show"><a>
+							${upcoming_name[0:13]}
+							%if len(upcoming_name) > 13:
+							...
+							%endif
+						</a></li>
+					%endfor
+				</ul>
+				<div id = "selected_alert"></div>
+			</div>			
+
 			<div id = "blogs">
 				<ul id = "blogs_menu" class = "ui_menu">
 					<li dataPostType="new"><a>Create New Post</a></li>

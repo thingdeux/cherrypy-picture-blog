@@ -56,6 +56,18 @@ $(document).ready(function() {
 				});
 			}
 		}
+		else if ( $(this).is('#upcoming_menu') ) {
+			var data = {
+				alert_id: $(ui).attr('item').attr('dataAlertID'),
+				perform_action: $(ui).attr('item').attr('dataPostType')
+			}			
+			
+			var returnedTemplate = silentlySendDataWithPost("/manageAlerts/", data);
+			returnedTemplate.done (function (response, textStatus, jqXHR) {
+				$('#selected_alert').html(response);
+			});	
+		}
+
 		else if (  $(this).is('#blogs_menu')  ) {			
 			if ( $(ui).attr('item').attr('dataBlogId') ) {
 				var data = {
@@ -71,7 +83,7 @@ $(document).ready(function() {
 			returnedTemplate.done (function (response, textStatus, jqXHR) {
 				$('#blogs_selection').html(response);								
 			});			
-		}
+		}		
 
 	});
 	

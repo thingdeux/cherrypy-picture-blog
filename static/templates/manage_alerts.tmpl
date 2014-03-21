@@ -1,0 +1,151 @@
+%if perform_action == "new":
+	
+	<form id = 'update_alert' name = 'updated_alert_data'>
+			<table class="ui-widget ui-widget-content">
+				<tr><td>Event Name: </td>
+					<td><input name = "alert"></td></tr>
+
+				<tr><td>Date: </td>
+					<td><input name = "inactive_date"></td></tr>
+
+				<tr>					
+					<td>  </td>
+					<td>
+						<input id = "create_alert_button" type ="button" class = "image_button" value="Create"></input>	
+						<input id = "cancel_alert_button" type = "button" class = "image_button" value="Cancel"></input>
+					</td>
+				</tr>
+
+			</table>			
+	</form>
+
+
+%elif perform_action == "show":
+
+	<form id = 'update_alert' name = 'updated_alert_data'>
+		%for upcoming_id, upcoming_name, upcoming_status, upcoming_added, upcoming_inactive in alert:										
+			<table class="ui-widget ui-widget-content">
+				<tr><td>Event Name: </td>
+					<td><input id = "${upcoming_id}" name = "alert" value="${upcoming_name}"></td></tr>
+
+				<tr><td>Date: </td>
+					<td><input value = "${upcoming_inactive}" name = "inactive_date"></td></tr>
+
+				<tr>					
+					<td>  </td>
+					<td>
+						<input id = "update_alert_button" type ="button" class = "image_button" value="Update"></input>	
+						<input id = "delete_alert_button" type = "button" class = "image_button" value="Delete"></input>
+						<input id = "cancel_alert_button" type = "button" class = "image_button" value="Cancel"></input>
+					</td>
+				</tr>
+
+			</table>
+			<input id = "upcoming_id" type = "hidden" name = "upcoming_id" value="${upcoming_id}"></input>
+		%endfor
+	</form>
+	
+%endif
+
+<script>
+	function sendPostData(location, data) {				
+		var data = $.ajax({
+				type: "POST",
+				url: location,
+				data: data					
+			});
+
+		return (data)
+	}
+	
+	$(':button').button(); //Turn all buttons into JqueryUI buttons
+
+	$('.delete_alert_button').css({
+						"margin-left": "3px",
+						"font-size": "10px",
+						"color": "#A60000",
+	});
+
+	//Delete an image (and all tags associated)
+	$("#delete_alert_button").click(function() {
+		var response = confirm("Are you sure you want to completely delete this alert?");
+
+		if (response == true)
+		{				
+			//Send 'delete_requested' BOOLEAN to server and pass alert_id to delete
+			var data_to_delete = {
+				alert_id: $("#upcoming_id").val(),
+				perform_action: "delete"
+			}
+								
+			var returnedData = sendPostData("/manageAlerts", data_to_delete );
+			
+			returnedData.done(function (response, textStatus, jqXHR) {
+				//If the image has been deleted reload the page
+				if ( $(response).eq(0).html() == "Updated Alert"   ) {
+					location.reload();
+				}
+
+				$("#selected_alert").html(response);
+			});
+			
+		}
+		
+	});
+
+	//Post updated image metadata values to server.
+	$("#update_alert_button").click(function() {
+		var response = confirm("Update alert?");
+
+		if (response == true) {
+			var data = $(this.form).serializeArray()
+			
+			var action = {
+				name: 'perform_action',
+				value: 'update'
+			}
+			data.push(action)
+						
+			var returnedData = sendPostData("/manageAlerts", data);
+			
+			returnedData.done(function (response, textStatus, jqXHR) {					
+				$("#selected_alert").html(response);
+			});
+			location.reload();
+		}
+	});	
+
+	$("#create_alert_button").click(function() {
+		var response = confirm("Create this alert?")
+
+		if (response == true) {
+			var data = $(this.form).serializeArray()
+			var action = {
+				name: 'perform_action',
+				value: 'insert'
+			}			
+			
+			data.push(action);
+
+			
+			if ( data[0]['value'].length > 1 && data[1]['value'].length > 1 ) {
+				var returnedData = sendPostData("/manageAlerts", data);
+
+				returnedData.done(function (response, textStatus, jqXHR) {					
+					$("#selected_alert").html(response);
+				});
+
+				location.reload();
+			}
+			else {
+				alert("Please enter values in all fields");
+			}
+			
+			
+
+		}
+
+	});
+			
+
+</script>
