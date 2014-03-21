@@ -1,5 +1,6 @@
 [BLOCKING]
-UPDATE Responsive css rules for index page for new latest images and carousel image
+-(FRONTEND) - UPDATE Responsive css rules for index page for new latest images and carousel image
+-(SERVER) - Create Backup Job
 
 
 [High]

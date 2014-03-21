@@ -991,26 +991,59 @@ def get_blogs(query_type = "latest", blog_id = False):
 		for error in err:
 			log("Unable to get latest blog " + str(error), "DATABASE", "SEVERE")
 
-def manage_upcoming_alerts(query_type = "get"):
+def manage_upcoming_alerts(query_type = "get", *args, **kwargs):
 	try:
 		db_connection = connect_to_database()
 		db = db_connection.cursor()
 
-		#Get all of the alert id's that haven't reached their inactive date
-		if query_type == "get":
-			today = time.strftime("%Y-%m-%d", time.localtime() )
-			db.execute('''SELECT * FROM alerts  WHERE inactive_date >= ? ORDER BY inactive_date ASC''', (today,))
+		if query_type == "get" or query_type == "all" or query_type == "id":
+			#Get all of the alert id's that haven't reached their inactive date
+			if query_type == "get":
+				today = time.strftime("%Y-%m-%d", time.localtime() )
+				db.execute('''SELECT * FROM alerts  WHERE inactive_date >= ? ORDER BY inactive_date ASC''', (today,))				
+			#Return a list of all alerts
+			elif query_type == "all":			
+				db.execute('''SELECT * FROM alerts ORDER BY inactive_date ASC''')				
+			#Return an alert by ID
+			elif query_type == "id":
+				upcoming_id = args[0]
+				db.execute('''SELECT * FROM alerts WHERE id = ?''', (upcoming_id,))				
+
 			returned_alerts = db.fetchall()
 			db_connection.close()
 			return ( returned_alerts )
-		#Insert a new alert into the DB
-		elif query_type == "insert":			
-			db.execute('''SELECT * FROM alerts  WHERE inactive_date >= ? ORDER BY inactive_date ASC''', (today,))
-		#Delete an alert from the DB
-		elif query_type == "delete":
-			id_to_delete = args[0]
-			db.execute('''DELETE FROM alerts WHERE id = ?''', (id_to_delete,) )
-		
+		else:
+			#Insert a new alert into the DB
+			if query_type == "update":
+				try:						
+					data = args[0]					
+					upcoming_id = data['upcoming_id']
+					alert = data['alert']
+					inactive_date = data['inactive_date']
+
+					
+					db.execute('''UPDATE alerts SET alert = ?, inactive_date = ? WHERE id = ?''', (alert,inactive_date, upcoming_id,) )
+					db_connection.commit()
+					return (True)
+				except:
+					return (False)
+			#Delete an alert from the DB
+			elif query_type == "delete":
+				id_to_delete = args[0]
+				db.execute('''DELETE FROM alerts WHERE id = ?''', (id_to_delete,) )
+				db_connection.commit()				
+				return (True)
+			elif query_type == "insert":
+				data = args[0]				
+				alert = data['alert']
+				inactive_date = data['inactive_date']			
+				today = time.strftime("%Y-%m-%d", time.localtime() )
+				
+				db.execute('''INSERT INTO alerts  VALUES (?, ?, ?, ?, ?)''', (None,alert, "ACTIVE", today, inactive_date,) )
+				db_connection.commit()
+
+				return (True)
+
 		db_connection.close()		
 	except Exception, err:
 		tryToCloseDB(db_connection)

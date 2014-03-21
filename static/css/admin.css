@@ -161,7 +161,7 @@ a.silent_link:active {text-decoration: none; color:white;}
 	background-color: #B3B3BC;	
 }
 
-#image_tag_menu, #tags_menu, #tags_selection{
+#image_tag_menu, #tags_menu, #tags_selection, #upcoming_menu{
 	float: left;
 }
 
@@ -176,4 +176,8 @@ a.silent_link:active {text-decoration: none; color:white;}
 
 #title, #date_added, #author {
 	width: 340px;
-}	
+}
+
+#upcoming_menu {
+	width: 190px;
+}
