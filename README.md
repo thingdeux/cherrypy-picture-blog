@@ -1,6 +1,6 @@
-#Git repository for JoshandLinz.com
+#Git repository my personal picture/blog website
 
-## Personal picture hosting website built with cherrypy. ##
+## Built with Cherrypy. ##
 
 Requires:
 
