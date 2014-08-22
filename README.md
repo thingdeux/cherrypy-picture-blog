@@ -1,4 +1,4 @@
-#Git repository my personal picture/blog website
+#Git repository for my personal picture/blog website
 
 ## Built with Cherrypy. ##
 
