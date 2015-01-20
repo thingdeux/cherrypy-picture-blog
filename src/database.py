@@ -248,7 +248,7 @@ def insert_image_record(*args, **kwargs):
 	try:		
 		db.execute('INSERT INTO images VALUES (?,?,?,?,?,?,?,?,?)', (None, name, image_location, thumb_location, date_added, date_taken, caption, width, height) )
 		last_row = db.lastrowid
-		db_connection.commit()	
+		db_connection.commit()
 		db_connection.close()
 		return(last_row)	
 	except Exception, err:
@@ -1117,5 +1117,3 @@ class Posted_Data:
 		else:
 			self.isSuccesful = False
 
-
-	

@@ -537,7 +537,7 @@ if __name__ == "__main__":
     cherrypy.config.update({ 
                              'environment': 'production',
                              'log.screen': False,
-                             'log.error_file': '/home/thingdeux/webapps/dev/joshandlinz.com/error.log',
+                             'log.error_file': '/home/thingdeux/webapps/prod/joshandlinz.com/error.log',
                              'server.socket_host': '127.0.0.1',
                              'server.socket_port': 17472,
                              })
