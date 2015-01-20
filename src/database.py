@@ -248,7 +248,7 @@ def insert_image_record(*args, **kwargs):
 	try:		
 		db.execute('INSERT INTO images VALUES (?,?,?,?,?,?,?,?,?)', (None, name, image_location, thumb_location, date_added, date_taken, caption, width, height) )
 		last_row = db.lastrowid
-		db_connection.commit()	
+		db_connection.commit()
 		db_connection.close()
 		return(last_row)	
 	except Exception, err:
@@ -1036,7 +1036,7 @@ def manage_upcoming_alerts(query_type = "get", *args, **kwargs):
 			elif query_type == "insert":
 				data = args[0]				
 				alert = data['alert']
-				inactive_date = data['inactive_date']			
+				inactive_date = data['inactive_date']
 				today = time.strftime("%Y-%m-%d", time.localtime() )
 				
 				db.execute('''INSERT INTO alerts  VALUES (?, ?, ?, ?, ?)''', (None,alert, "ACTIVE", today, inactive_date,) )
