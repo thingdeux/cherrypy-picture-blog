@@ -1036,7 +1036,7 @@ def manage_upcoming_alerts(query_type = "get", *args, **kwargs):
 			elif query_type == "insert":
 				data = args[0]				
 				alert = data['alert']
-				inactive_date = data['inactive_date']
+				inactive_date = data['inactive_date']			
 				today = time.strftime("%Y-%m-%d", time.localtime() )
 				
 				db.execute('''INSERT INTO alerts  VALUES (?, ?, ?, ?, ?)''', (None,alert, "ACTIVE", today, inactive_date,) )
@@ -1117,5 +1117,3 @@ class Posted_Data:
 		else:
 			self.isSuccesful = False
 
-
-	

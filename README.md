@@ -1,3 +1,4 @@
+=======
 #Git repository for a personal picture blog web app.
 
 ## Built with Cherrypy. ##
